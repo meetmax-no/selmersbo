@@ -1,0 +1,65 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const items = await getCollection('udflugter', ({ data }) => !data.draft);
+  return items.map((item) => ({ params: { id: item.id }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+const d = item.data;
+const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
+const dateFmt = new Intl.DateTimeFormat('da-DK', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const dateLabel = (() => { const s = dateFmt.format(d.date); return s.charAt(0).toUpperCase() + s.slice(1); })();
+---
+<BaseLayout title={`${d.title} – Udflugt – Selmersbo`} description={d.summary}>
+  <PageHero eyebrow="Udflugt" title={d.title} icon="bus" />
+  <section class="section" style="padding-top:1.5rem">
+    <div class="container">
+      <a class="back" href="/udflugter"><Icon name="arrow" size={18} /> Alle udflugter</a>
+      {d.image && <img class="lead-img" src={d.image} alt={d.title} />}
+      <div class="meta">
+        <span class="chip"><Icon name="calendar" size={16} /> {dateLabel}</span>
+        {d.departure && <span class="chip chip--sand"><Icon name="clock" size={16} /> Afgang {d.departure}</span>}
+        {d.returnTime && <span class="chip chip--sand"><Icon name="pin" size={16} /> Hjemkomst {d.returnTime}</span>}
+        {d.price && <span class="chip chip--gold">{d.price}</span>}
+        {d.soldOut && <span class="chip chip--sold">Udsolgt</span>}
+      </div>
+      <article class="prose newsletter"><Content /></article>
+      <div class="signup">
+        {d.soldOut ? (
+          <p class="sold"><strong>Turen er udsolgt.</strong></p>
+        ) : d.signupUrl ? (
+          <a class="btn btn--primary" href={d.signupUrl} rel="noopener">Tilmeld online <Icon name="arrow" size={18} /></a>
+        ) : (
+          <>
+            <p>Betaling og tilmelding på kontoret.</p>
+            <a class="btn btn--primary" href={tel}><Icon name="phone" size={18} /> Ring {site.phone}</a>
+          </>
+        )}
+      </div>
+    </div>
+  </section>
+  <CtaBand
+    eyebrow="Vil du med?"
+    title="Tilmeld dig næste udflugt"
+    text={`Betaling og tilmelding sker på kontoret. Ring på ${site.phone}, så hjælper vi dig.`} />
+</BaseLayout>
+
+<style>
+  .back { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 650; margin-bottom: 1.2rem; }
+  .back :global(svg) { transform: rotate(180deg); }
+  .lead-img { width: 100%; max-width: 640px; max-height: 340px; object-fit: cover; border-radius: var(--radius); margin-bottom: 1rem; }
+  .meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .chip--gold { background: var(--gold-tint); color: #8a5e14; }
+  .chip--sold { background: var(--terra-tint); color: var(--terra); }
+  .signup { margin-top: 1.4rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+  .signup p { margin: 0 0 0.7rem; font-weight: 600; }
+  .sold { color: var(--terra); }
+</style>

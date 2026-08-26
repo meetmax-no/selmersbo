@@ -42,9 +42,10 @@ collections:
       - { name: departure, label: "Afgang", widget: string, required: false, hint: "F.eks. 10.00 fra Selmersbo" }
       - { name: returnTime, label: "Hjemkomst", widget: string, required: false, hint: "F.eks. ca. 15.00" }
       - { name: price, label: "Pris", widget: string, required: false, hint: "F.eks. 250 kr." }
-      - { name: summary, label: "Beskrivelse", widget: text, hint: "En kort beskrivelse af turen." }
+      - { name: summary, label: "Kort beskrivelse", widget: text, hint: "Vises på kortet." }
       - { name: image, label: "Billede", widget: image, required: false, hint: "Valgfrit foto fra turen." }
-      - { name: signupUrl, label: "Tilmeldingslink", widget: string, required: false, hint: "Valgfrit link til tilmelding." }
+      - { name: body, label: "Fuld beskrivelse", widget: markdown, required: false, hint: "Vises når man klikker på turen." }
+      - { name: signupUrl, label: "Tilmeldingslink", widget: string, required: false, hint: "Kun hvis der er online tilmelding – ellers vises 'tilmelding på kontoret'." }
       - { name: soldOut, label: "Udsolgt", widget: boolean, default: false }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 

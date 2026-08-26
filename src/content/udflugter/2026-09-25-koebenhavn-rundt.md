@@ -7,6 +7,15 @@ price: 250 kr.
 summary: >-
   En guidet bustur med mange spændende bygninger, boligformer, historie og
   kultur. Frokost på Bomhuset i Klampenborg og vinsmagning i Selmersbo bagefter.
+image: /uploads/udf-koebenhavn.jpg
 soldOut: true
 draft: false
 ---
+
+Denne dag skal vi opleve vores smukke hovedstad. Vi kører med bus fra Selmersbo kl. 9.00.
+
+Vi skal se og opleve mange spændende bygninger, boligformer, historie og kultur i og omkring København – med en guide, der fortæller undervejs.
+
+Efter turen nyder vi en frokost på Bomhuset i Klampenborg, og vi afslutter med et glas vin i Selmersbo.
+
+**Husk: først til mølle – betaling på kontoret.**

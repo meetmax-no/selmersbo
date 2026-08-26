@@ -1,56 +1,93 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
 
-// Content is managed in the CMS at /admin (collection "udflugter").
-const all = await getCollection('udflugter', ({ data }) => !data.draft);
-const trips = all.sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+const trips = (await getCollection('udflugter', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+const rendered = await Promise.all(
+  trips.map(async (item) => ({ item, Content: (await render(item)).Content })),
+);
+const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
 
-const dateFmt = new Intl.DateTimeFormat('da-DK', { weekday: 'long', day: 'numeric', month: 'long' });
+const dateFmt = new Intl.DateTimeFormat('da-DK', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 const formatDate = (d: Date) => {
   const s = dateFmt.format(d);
-  return s.charAt(0).toUpperCase() + s.slice(1); // "torsdag" -> "Torsdag"
+  return s.charAt(0).toUpperCase() + s.slice(1);
 };
 ---
 <BaseLayout title="Udflugter – Selmersbo" description="Kommende udflugter og ture med Aktivhuset Selmersbo.">
   <PageHero
     eyebrow="Ud i det blå"
     title="Udflugter"
-    lead="Nogle af årets bedste oplevelser sker uden for huset. Tag med på tur i godt selskab – bussen kører fra Selmersbo."
+    lead="Nogle af årets bedste oplevelser sker uden for huset. Tag med på tur i godt selskab – bussen kører fra Selmersbo. Klik på en udflugt for at læse mere."
     icon="bus" />
 
   <section class="section" style="padding-top:2rem">
     <div class="container">
-      {trips.length === 0 ? (
+      {rendered.length === 0 ? (
         <p class="empty">Der er ingen planlagte udflugter lige nu – kig forbi igen snart.</p>
       ) : (
-        <div class="grid grid--3">
-          {trips.map((t) => (
-            <article class={`trip${t.data.soldOut ? ' trip--sold' : ''}`}>
-              {t.data.image && <img class="trip-img" src={t.data.image} alt={t.data.title} loading="lazy" />}
-              <div class="trip-top">
-                <span class="chip"><Icon name="calendar" size={16} /> {formatDate(t.data.date)}</span>
-                {t.data.price && <span class="chip chip--gold">{t.data.price}</span>}
-                {t.data.soldOut && <span class="chip chip--sold">Udsolgt</span>}
-              </div>
-              <h3>{t.data.title}</h3>
-              <p>{t.data.summary}</p>
-              {(t.data.departure || t.data.returnTime) && (
-                <p class="trip-meta">
-                  {t.data.departure && <span><Icon name="clock" size={15} /> Afgang {t.data.departure}</span>}
-                  {t.data.returnTime && <span><Icon name="pin" size={15} /> Hjemkomst {t.data.returnTime}</span>}
-                </p>
-              )}
-              {t.data.soldOut ? (
-                <span class="btn btn--ghost is-disabled" aria-disabled="true">Udsolgt</span>
-              ) : (
-                <a class="btn btn--primary" href={t.data.signupUrl ?? '#bliv-medlem'}>Tilmeld <Icon name="arrow" size={18} /></a>
-              )}
-            </article>
-          ))}
+        <div class="udf-grid">
+          {rendered.map(({ item, Content }) => {
+            const d = item.data;
+            return (
+              <>
+                <a class="udf-card" href={`/udflugter/${item.id}`} data-udf={item.id}>
+                  <div class="udf-media">
+                    {d.image
+                      ? <img src={d.image} alt={d.title} loading="lazy" />
+                      : <span class="udf-media-icon"><Icon name="bus" size={30} /></span>}
+                    {d.soldOut && <span class="udf-sold">Udsolgt</span>}
+                  </div>
+                  <div class="udf-body">
+                    <span class="chip"><Icon name="calendar" size={15} /> {formatDate(d.date)}</span>
+                    <h3>{d.title}</h3>
+                    <p>{d.summary}</p>
+                    <span class="udf-open">Læs mere <Icon name="arrow" size={16} /></span>
+                  </div>
+                </a>
+
+                <dialog id={`udf-${item.id}`} class="udf-dialog" aria-label={d.title}>
+                  <div class="udf-dialog-inner">
+                    <header class="udf-dialog-head">
+                      <h2>{d.title}</h2>
+                      <button class="udf-close" type="button" data-close aria-label="Luk">✕</button>
+                    </header>
+                    <div class="udf-scroll">
+                      {d.image && <img class="udf-dialog-img" src={d.image} alt={d.title} />}
+                      <div class="udf-meta">
+                        <span class="chip"><Icon name="calendar" size={16} /> {formatDate(d.date)}</span>
+                        {d.departure && <span class="chip chip--sand"><Icon name="clock" size={16} /> Afgang {d.departure}</span>}
+                        {d.returnTime && <span class="chip chip--sand"><Icon name="pin" size={16} /> Hjemkomst {d.returnTime}</span>}
+                        {d.price && <span class="chip chip--gold">{d.price}</span>}
+                        {d.soldOut && <span class="chip chip--sold">Udsolgt</span>}
+                      </div>
+                      <article class="prose newsletter"><Content /></article>
+                      <div class="udf-signup">
+                        {d.soldOut ? (
+                          <p class="signup-sold"><strong>Turen er udsolgt.</strong></p>
+                        ) : d.signupUrl ? (
+                          <a class="btn btn--primary" href={d.signupUrl} rel="noopener">Tilmeld online <Icon name="arrow" size={18} /></a>
+                        ) : (
+                          <>
+                            <p>Betaling og tilmelding på kontoret.</p>
+                            <a class="btn btn--primary" href={tel}><Icon name="phone" size={18} /> Ring {site.phone}</a>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <footer class="udf-dialog-foot">
+                      <button class="btn btn--ghost" type="button" data-close>Luk</button>
+                    </footer>
+                  </div>
+                </dialog>
+              </>
+            );
+          })}
         </div>
       )}
     </div>
@@ -59,25 +96,67 @@ const formatDate = (d: Date) => {
   <CtaBand
     eyebrow="Vil du med?"
     title="Tilmeld dig næste udflugt"
-    text="Ring eller skriv, så hjælper vi dig med tilmelding og praktiske detaljer om turen." />
+    text={`Betaling og tilmelding sker på kontoret. Ring på ${site.phone}, så hjælper vi dig med de praktiske detaljer.`} />
 </BaseLayout>
 
+<script>
+  document.querySelectorAll('a[data-udf]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const el = a as HTMLAnchorElement;
+      const d = document.getElementById('udf-' + el.dataset.udf) as HTMLDialogElement | null;
+      if (d && typeof d.showModal === 'function') {
+        e.preventDefault();
+        d.showModal();
+        document.documentElement.style.overflow = 'hidden';
+      }
+    });
+  });
+  document.querySelectorAll('dialog.udf-dialog').forEach((node) => {
+    const d = node as HTMLDialogElement;
+    d.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => d.close()));
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+    d.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
+  });
+</script>
+
 <style>
-  .trip {
-    display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; height: 100%;
-    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow-sm); padding: 1.6rem;
+  .udf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2.5vw, 1.5rem); grid-auto-rows: 1fr; }
+  @media (max-width: 900px) { .udf-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .udf-grid { grid-template-columns: 1fr; } }
+
+  .udf-card {
+    display: flex; flex-direction: column; background: var(--paper); border: 1px solid var(--line);
+    border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm);
+    text-decoration: none; color: var(--ink); height: 100%;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
   }
-  .trip-img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 12px; margin-bottom: 0.3rem; }
-  .trip-top { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-  .trip h3 { margin: 0.2rem 0 0; }
-  .trip p { color: var(--muted); margin: 0; font-size: 1.02rem; }
-  .trip-meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; font-size: 0.95rem; }
-  .trip-meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
-  .trip-meta :global(svg) { color: var(--green); }
-  .trip .btn { margin-top: auto; }
+  .udf-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--green); }
+  .udf-media { flex: none; position: relative; height: 190px; background: var(--green-050); overflow: hidden; }
+  .udf-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .udf-media-icon { position: absolute; inset: 0; display: grid; place-items: center; color: var(--green-700); }
+  .udf-sold { position: absolute; left: 0.7rem; top: 0.7rem; font-size: 0.85rem; font-weight: 650; background: var(--terra); color: #fff; padding: 0.25rem 0.6rem; border-radius: 999px; }
+  .udf-body { padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+  .udf-body h3 { margin: 0.1rem 0 0; font-size: 1.2rem; }
+  .udf-body p { margin: 0; color: var(--muted); font-size: 1rem; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .udf-open { margin-top: auto; display: inline-flex; align-items: center; gap: 0.35rem; color: var(--green-700); font-weight: 650; padding-top: 0.4rem; }
+
+  .chip--gold { background: var(--gold-tint); color: #8a5e14; }
   .chip--sold { background: var(--terra-tint); color: var(--terra); }
-  .trip--sold { opacity: 0.92; }
-  .btn.is-disabled { pointer-events: none; opacity: 0.55; }
+
+  /* Modal */
+  .udf-dialog { width: min(680px, calc(100% - 2rem)); max-width: 680px; padding: 0; border: none; border-radius: var(--radius-lg); background: var(--paper); color: var(--ink); box-shadow: var(--shadow-lg); }
+  .udf-dialog::backdrop { background: rgba(20, 19, 15, 0.55); }
+  .udf-dialog-inner { display: flex; flex-direction: column; max-height: 88vh; }
+  .udf-dialog-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--line); }
+  .udf-dialog-head h2 { margin: 0; font-size: 1.4rem; }
+  .udf-close { flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 1.1rem; display: grid; place-items: center; }
+  .udf-close:hover { background: var(--sand); }
+  .udf-scroll { flex: 1 1 auto; overflow-y: auto; padding: 1.3rem 1.4rem; }
+  .udf-dialog-img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; }
+  .udf-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .udf-signup { margin-top: 1.2rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+  .udf-signup p { margin: 0 0 0.7rem; font-weight: 600; }
+  .signup-sold { color: var(--terra); }
+  .udf-dialog-foot { flex: none; padding: 0.9rem 1.4rem; border-top: 1px solid var(--line); text-align: right; }
   .empty { color: var(--muted); font-size: 1.1rem; }
 </style>

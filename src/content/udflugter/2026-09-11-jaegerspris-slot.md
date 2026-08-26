@@ -10,3 +10,11 @@ signupUrl: ''
 soldOut: false
 draft: false
 ---
+
+Denne dag skal vi opleve **Jægerspris Slot** med en rundvisning. Efterfølgende er der frokost på Gerlev Kro.
+
+Vi kører fra Selmersbo kl. 10.00 og er hjemme igen ca. kl. 15.00.
+
+Det bliver en rigtig dejlig dag med mange oplevelser – så glæd dig!
+
+**Betaling og tilmelding på kontoret.**
