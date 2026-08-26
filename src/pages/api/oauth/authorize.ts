@@ -8,6 +8,15 @@ const GITHUB_AUTHORIZE = 'https://github.com/login/oauth/authorize';
 
 const clientId = () => process.env.GITHUB_OAUTH_ID ?? import.meta.env.GITHUB_OAUTH_ID;
 
+// On Vercel serverless, request.url is often http://localhost/... — derive the
+// real public origin from the proxy headers instead.
+function publicOrigin(request: Request): string {
+  const proto = request.headers.get('x-forwarded-proto') ?? 'https';
+  const host = request.headers.get('x-forwarded-host') ?? request.headers.get('host');
+  if (host) return `${proto}://${host}`;
+  return new URL(request.url).origin;
+}
+
 export const GET: APIRoute = ({ request }) => {
   const id = clientId();
   if (!id) {
@@ -18,7 +27,7 @@ export const GET: APIRoute = ({ request }) => {
   const state = crypto.randomUUID();
   const params = new URLSearchParams({
     client_id: id,
-    redirect_uri: `${url.origin}/api/oauth/callback`,
+    redirect_uri: `${publicOrigin(request)}/api/oauth/callback`,
     scope,
     state,
     allow_signup: 'false',
