@@ -1,0 +1,97 @@
+---
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+---
+<footer class="site-footer" id="kontakt">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span class="brand-text">
+          <span class="brand-name">Selmersbo</span>
+          <span class="brand-tag">{site.tagline}</span>
+        </span>
+      </div>
+      <p class="footer-blurb">
+        Et aktivitets- og samværshus for seniorer i Hørsholm – med plads til
+        alle og god tilgængelighed i ét plan.
+      </p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Kontakt</h3>
+      <ul class="footer-list">
+        <li><Icon name="pin" size={20} /> <span>{site.address.street}, {site.address.zip} {site.address.city}</span></li>
+        <li><Icon name="phone" size={20} /> <a href={`tel:+45${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
+        <li><Icon name="mail" size={20} /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+      </ul>
+      <p class="footer-note">Sygeplejeklinik efter aftale: {site.clinicPhone}</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Åbningstider</h3>
+      <ul class="hours-list">
+        {site.hours.map((h) => (
+          <li class={h.closed ? 'is-closed' : ''}>
+            <span>{h.day}</span><span>{h.time}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Genveje</h3>
+      <ul class="footer-list plain">
+        <li><a href="#bliv-medlem">Bliv medlem</a></li>
+        <li><a href="/aktiviteter">Aktiviteter</a></li>
+        <li><a href="#">MobilePay</a></li>
+        <li><a href="#">Tilgængelighedserklæring</a></li>
+        <li><a href={site.facebook} rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>© {new Date().getFullYear()} {site.full} · {site.address.street}, {site.address.zip} {site.address.city}</p>
+    <p class="mockup-note">Designudkast 2026</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: #201f1b; color: #e9e3d7; padding-top: clamp(3rem, 6vw, 4.5rem); }
+  .footer-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem); padding-bottom: 2.5rem;
+  }
+  .brand { display: inline-flex; align-items: center; gap: 0.7rem; }
+  .brand-mark {
+    display: grid; place-items: center; width: 44px; height: 44px;
+    background: var(--green); color: #fff; font-family: var(--font-display);
+    font-weight: 600; font-size: 1.4rem; border-radius: 12px;
+  }
+  .brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; color: #fff; display: block; line-height: 1.1; }
+  .brand-tag { font-size: 0.8rem; color: #b7b0a2; }
+  .footer-blurb { color: #c3bcae; margin-top: 1rem; max-width: 34ch; font-size: 1rem; }
+
+  .footer-col h3 { color: #fff; font-size: 1.15rem; margin-bottom: 0.9rem; }
+  .footer-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+  .footer-list li { display: flex; align-items: center; gap: 0.6rem; color: #d8d1c4; font-size: 1rem; }
+  .footer-list :global(svg) { color: var(--gold); flex: none; }
+  .footer-list.plain li { display: block; }
+  .footer-list a, .footer-note a { color: #e9e3d7; text-decoration: none; }
+  .footer-list a:hover, .footer-note a:hover { color: var(--gold); text-decoration: underline; }
+  .footer-note { color: #a79f90; font-size: 0.92rem; margin-top: 0.8rem; }
+
+  .hours-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+  .hours-list li { display: flex; justify-content: space-between; gap: 1rem; color: #d8d1c4; font-size: 1rem; border-bottom: 1px dashed #3a382f; padding-bottom: 0.4rem; }
+  .hours-list li.is-closed { color: #9a9284; }
+
+  .footer-bottom {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+    border-top: 1px solid #35332b; padding-block: 1.4rem; color: #9a9284; font-size: 0.9rem;
+  }
+  .mockup-note { color: var(--gold); font-weight: 600; }
+
+  @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+</style>

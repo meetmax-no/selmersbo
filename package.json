@@ -1,0 +1,24 @@
+{
+  "name": "selmersbo",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Aktivhuset Selmersbo – ny hjemmeside (mockup / redesign 2026)",
+  "engines": {
+    "node": ">=20.3.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.14.1"
+  },
+  "devDependencies": {
+    "@fontsource-variable/fraunces": "^5.2.5",
+    "@fontsource-variable/inter": "^5.2.5"
+  }
+}

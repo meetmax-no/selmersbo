@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ActivityCard from '../components/ActivityCard.astro';
+import { site } from '../data/site';
+import { activities, weekPlan } from '../data/activities';
+---
+<BaseLayout
+  title="Aktiviteter – Selmersbo"
+  description="Se de mange aktiviteter på Aktivhuset Selmersbo i Hørsholm – kor, gymnastik, kortspil, foredrag, udflugter og meget mere.">
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow"><Icon name="calendar" size={18} /> Program</p>
+      <h1>Aktiviteter på Selmersbo</h1>
+      <p class="lead">
+        Der sker noget hver uge – fra sang og bevægelse til spil, foredrag og
+        fælles måltider. Kom og vær med; du behøver ingen erfaring, kun lyst til
+        samvær.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn--primary" href="#bliv-medlem">Bliv medlem <Icon name="arrow" size={20} /></a>
+        <a class="btn btn--ghost" href={`tel:+45${site.phone.replace(/\s/g, '')}`}>
+          <Icon name="phone" size={20} /> Ring {site.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO NOTICE ============ -->
+  <div class="container">
+    <p class="demo-note">
+      <Icon name="check" size={20} />
+      Aktiviteterne herunder er <strong>eksempler til designudkastet</strong> –
+      Selmersbo indsætter selv det aktuelle program.
+    </p>
+  </div>
+
+  <!-- ============ ACTIVITY GRID ============ -->
+  <section class="section" style="padding-top: 1.5rem;">
+    <div class="container">
+      <div class="grid grid--3">
+        {activities.map((a) => <ActivityCard activity={a} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WEEKLY RHYTHM ============ -->
+  <section class="section section--sand" id="ugeplan">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Ugens rytme</p>
+        <h2>En typisk uge på Selmersbo</h2>
+        <p class="lead">Huset er åbent for kaffe, aviser og hyggeligt samvær i hele åbningstiden.</p>
+      </div>
+      <div class="week">
+        {weekPlan.map((d) => {
+          const closed = d.items[0] === 'Lukket';
+          return (
+            <div class={`week-day${closed ? ' week-day--closed' : ''}`}>
+              <div class="week-day-name">{d.day}</div>
+              <ul>
+                {closed
+                  ? <li class="closed">Lukket</li>
+                  : d.items.map((i) => <li><Icon name="check" size={16} /> {i}</li>)}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW TO JOIN ============ -->
+  <section class="section">
+    <div class="container join">
+      <div class="join-step">
+        <span class="step-num">1</span>
+        <h3>Kig forbi</h3>
+        <p>Kom til en kop kaffe i åbningstiden og få en fornemmelse af huset og stemningen.</p>
+      </div>
+      <div class="join-step">
+        <span class="step-num">2</span>
+        <h3>Prøv en aktivitet</h3>
+        <p>Vælg det, der frister – du er velkommen til at prøve med, helt uforpligtende.</p>
+      </div>
+      <div class="join-step">
+        <span class="step-num">3</span>
+        <h3>Bliv medlem</h3>
+        <p>Kontakt {site.manager} på {site.phone}, så er du en del af fællesskabet.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEMBERSHIP CTA ============ -->
+  <section class="section section--green" id="bliv-medlem">
+    <div class="container cta">
+      <div>
+        <p class="eyebrow" style="color:#ffe6b8">Godt at vide</p>
+        <h2>Har du lyst til at være med?</h2>
+        <p class="cta-text">
+          Alle seniorer er velkomne. Ring eller skriv, så fortæller vi gerne mere
+          om aktiviteterne og om at blive medlem.
+        </p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn--onGreen" href={`tel:+45${site.phone.replace(/\s/g, '')}`}>
+          <Icon name="phone" size={20} /> Ring {site.phone}
+        </a>
+        <a class="btn btn--ghost cta-mail" href={`mailto:${site.email}`}>
+          <Icon name="mail" size={20} /> Send en mail
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(2.5rem, 6vw, 4.5rem) 1.5rem; }
+  .page-hero .lead { margin-bottom: 1.6rem; }
+  .hero-cta { display: flex; gap: 0.85rem; flex-wrap: wrap; }
+
+  .demo-note {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: var(--gold-tint); color: #7a5410;
+    border: 1px solid #ecd9a9; border-radius: 12px;
+    padding: 0.8rem 1.1rem; font-size: 1rem; max-width: none;
+  }
+  .demo-note :global(svg) { color: var(--gold); flex: none; }
+  .demo-note strong { color: #5e3f08; }
+
+  .week { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
+  .week-day { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+  .week-day-name { background: var(--green); color: #fff; font-weight: 650; padding: 0.7rem 1rem; font-size: 1.05rem; }
+  .week-day ul { list-style: none; margin: 0; padding: 0.9rem 1rem 1.1rem; display: grid; gap: 0.55rem; }
+  .week-day li { display: flex; align-items: center; gap: 0.45rem; color: var(--ink); font-size: 1rem; }
+  .week-day li :global(svg) { color: var(--green); flex: none; }
+  .week-day--closed .week-day-name { background: var(--sand-deep); color: var(--muted); }
+  .week-day li.closed { color: var(--muted); font-style: italic; }
+  @media (max-width: 900px) { .week { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .week { grid-template-columns: 1fr; } }
+
+  .join { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 3vw, 2rem); }
+  .join-step { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.8rem; }
+  .step-num {
+    display: grid; place-items: center; width: 46px; height: 46px;
+    background: var(--terra-tint); color: var(--terra); font-family: var(--font-display);
+    font-weight: 700; font-size: 1.4rem; border-radius: 50%; margin-bottom: 0.9rem;
+  }
+  .join-step h3 { margin: 0 0 0.4rem; }
+  .join-step p { color: var(--muted); margin: 0; }
+  @media (max-width: 780px) { .join { grid-template-columns: 1fr; } }
+
+  .cta { display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .cta-text { color: #eef4ee; max-width: 46ch; }
+  .cta-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .cta-mail { color: #fff; border-color: rgba(255,255,255,0.5); }
+  .cta-mail:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: #fff; }
+</style>

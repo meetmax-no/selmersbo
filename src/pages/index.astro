@@ -1,0 +1,303 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ActivityCard from '../components/ActivityCard.astro';
+import { site, news } from '../data/site';
+import { activities } from '../data/activities';
+
+const today = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'][new Date().getDay()];
+const todayHours = site.hours.find((h) => h.day === today);
+const preview = activities.slice(0, 6);
+---
+<BaseLayout title="Selmersbo – Aktivhuset i Hørsholm">
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow"><Icon name="users" size={18} /> Aktivhuset Selmersbo</p>
+        <h1>Et varmt fællesskab for seniorer i Hørsholm</h1>
+        <p class="lead">
+          Sang, bevægelse, foredrag, udflugter og hyggeligt samvær – midt i
+          Hørsholm, i lyse lokaler med god plads til alle.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn--primary" href="/aktiviteter">Se aktiviteter <Icon name="arrow" size={20} /></a>
+          <a class="btn btn--ghost" href="#bliv-medlem">Bliv medlem</a>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <img
+          src="/images/community-flags.jpg"
+          alt="Medlemmer af Selmersbo står samlet udenfor med danske flag og bogstavskilte, der staver Selmersbo"
+          width="1292" height="969" fetchpriority="high" />
+        <div class="hero-badge">
+          <Icon name="accessibility" size={22} />
+          <span>Alt i ét plan – god tilgængelighed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUICK INFO BAR ============ -->
+  <section class="quickbar">
+    <div class="container quickbar-inner">
+      <div class="quick-item">
+        <Icon name="clock" size={24} />
+        <div>
+          <span class="quick-label">Åbent i dag</span>
+          <strong>{todayHours ? (todayHours.closed ? 'Lukket' : todayHours.time) : 'Se åbningstider'}</strong>
+        </div>
+      </div>
+      <a class="quick-item" href={`tel:+45${site.phone.replace(/\s/g, '')}`}>
+        <Icon name="phone" size={24} />
+        <div>
+          <span class="quick-label">Ring til os</span>
+          <strong>{site.phone}</strong>
+        </div>
+      </a>
+      <a class="quick-item" href={site.address.mapsUrl} rel="noopener">
+        <Icon name="pin" size={24} />
+        <div>
+          <span class="quick-label">Find vej</span>
+          <strong>{site.address.street}, {site.address.city}</strong>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ WELCOME ============ -->
+  <section class="section" id="velkommen">
+    <div class="container welcome">
+      <div class="welcome-copy">
+        <p class="eyebrow">Velkommen</p>
+        <h2>Kære venner af Selmersbo</h2>
+        <p>
+          Selmersbo er et aktivitets- og samværshus for seniorer i Hørsholm.
+          Her mødes vi om det, vi holder af – uanset om det er sang og musik,
+          en gåtur, et godt foredrag eller en kop kaffe og en snak.
+        </p>
+        <p>
+          Følg med her på siden, hvor vi løbende fortæller om, hvad der sker på
+          Selmersbo. Alle er velkomne – og der er altid plads til én mere.
+        </p>
+        <ul class="welcome-points">
+          <li><Icon name="check" size={20} /> Nye venskaber og fast samvær hver uge</li>
+          <li><Icon name="check" size={20} /> Aktiviteter for alle – ingen erfaring nødvendig</li>
+          <li><Icon name="check" size={20} /> Handicapvenligt hus med niveaufri adgang</li>
+        </ul>
+      </div>
+      <figure class="welcome-figure">
+        <img
+          src="/images/koncert.jpg"
+          alt="Kor optræder i Selmersbos lyse aktivitetsrum, mens medlemmerne lytter i kurvestole"
+          width="922" height="922" loading="lazy" />
+        <figcaption>Koncert i aktivitetsrummet</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ NEWS ============ -->
+  <section class="section section--sand" id="nyheder">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Aktuelt</p>
+        <h2>Nyt fra Selmersbo</h2>
+        <p class="lead">Det seneste om program, presse og livet i og omkring huset.</p>
+      </div>
+      <div class="grid grid--3">
+        {news.map((n) => (
+          <a class="news-card" href="#">
+            <span class="chip chip--gold">{n.tag}</span>
+            <h3>{n.title}</h3>
+            <p>{n.text}</p>
+            <span class="news-cta">{n.cta} <Icon name="arrow" size={18} /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACTIVITIES PREVIEW ============ -->
+  <section class="section" id="aktiviteter-preview">
+    <div class="container">
+      <div class="section-head with-action">
+        <div>
+          <p class="eyebrow">Hver uge</p>
+          <h2>Aktiviteter for enhver</h2>
+          <p class="lead">Et udpluk af det, du kan være med til på Selmersbo.</p>
+        </div>
+        <a class="btn btn--ghost" href="/aktiviteter">Se alle aktiviteter <Icon name="arrow" size={20} /></a>
+      </div>
+      <div class="grid grid--3">
+        {preview.map((a) => <ActivityCard activity={a} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HER BOR VI ============ -->
+  <section class="section section--sand" id="her-bor-vi">
+    <div class="container practical">
+      <div class="practical-copy">
+        <p class="eyebrow">Her bor vi</p>
+        <h2>Kom forbi Selmersbo</h2>
+        <div class="info-block">
+          <h3><Icon name="clock" size={22} /> Åbningstider</h3>
+          <ul class="hours">
+            {site.hours.map((h) => (
+              <li class={h.closed ? 'closed' : ''}>
+                <span>{h.day}</span><span>{h.time}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3><Icon name="pin" size={22} /> Adresse & kontakt</h3>
+          <p class="info-lines">
+            {site.full}<br />
+            {site.address.street}, {site.address.zip} {site.address.city}<br />
+            Daglig leder: {site.manager}<br />
+            Telefon: <a href={`tel:+45${site.phone.replace(/\s/g, '')}`}>{site.phone}</a><br />
+            Sygeplejeklinik (efter aftale): {site.clinicPhone}
+          </p>
+        </div>
+      </div>
+
+      <aside class="map-card">
+        <div class="map-visual" aria-hidden="true">
+          <Icon name="pin" size={40} />
+        </div>
+        <div class="map-body">
+          <strong>{site.address.street}</strong>
+          <span>{site.address.zip} {site.address.city}, Danmark</span>
+          <a class="btn btn--primary" href={site.address.mapsUrl} rel="noopener">Åbn i Google Maps <Icon name="arrow" size={18} /></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ MEMBERSHIP CTA ============ -->
+  <section class="section section--green" id="bliv-medlem">
+    <div class="container cta">
+      <div>
+        <p class="eyebrow" style="color:#ffe6b8">Bliv en del af fællesskabet</p>
+        <h2>Bliv medlem af Selmersbo</h2>
+        <p class="cta-text">
+          Medlemskab giver adgang til alle husets aktiviteter og et varmt
+          fællesskab. Kontakt {site.manager} for at høre mere.
+        </p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn--onGreen" href={`tel:+45${site.phone.replace(/\s/g, '')}`}>
+          <Icon name="phone" size={20} /> Ring {site.phone}
+        </a>
+        <a class="btn btn--ghost cta-mail" href={`mailto:${site.email}`}>
+          <Icon name="mail" size={20} /> Send en mail
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero { padding-block: clamp(2.5rem, 6vw, 5rem); }
+  .hero-inner {
+    display: grid; grid-template-columns: 1.05fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem); align-items: center;
+  }
+  .hero h1 { margin-bottom: 0.5rem; }
+  .hero .lead { margin-bottom: 1.8rem; }
+  .hero-cta { display: flex; gap: 0.85rem; flex-wrap: wrap; }
+
+  .hero-media { position: relative; }
+  .hero-media img {
+    width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+  }
+  .hero-badge {
+    position: absolute; left: 1rem; bottom: 1rem;
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    background: var(--paper); color: var(--ink); font-weight: 600; font-size: 0.98rem;
+    padding: 0.7rem 1rem; border-radius: 999px; box-shadow: var(--shadow-md);
+  }
+  .hero-badge :global(svg) { color: var(--green); }
+
+  /* Quick bar */
+  .quickbar { margin-top: -1rem; }
+  .quickbar-inner {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow-md);
+    padding: 1.2rem 1.4rem;
+  }
+  .quick-item { display: flex; align-items: center; gap: 0.9rem; text-decoration: none; color: var(--ink); padding: 0.4rem 0.6rem; border-radius: 12px; }
+  .quick-item:hover { background: var(--sand); color: var(--ink); }
+  .quick-item :global(svg) { color: var(--green); flex: none; }
+  .quick-label { display: block; font-size: 0.9rem; color: var(--muted); }
+  .quick-item strong { font-size: 1.12rem; }
+
+  /* Welcome */
+  .welcome { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  .welcome-points { list-style: none; margin: 1.4rem 0 0; padding: 0; display: grid; gap: 0.7rem; }
+  .welcome-points li { display: flex; align-items: center; gap: 0.7rem; font-weight: 550; }
+  .welcome-points :global(svg) { color: var(--green); flex: none; }
+  .welcome-figure { margin: 0; }
+  .welcome-figure img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+  .welcome-figure figcaption { margin-top: 0.7rem; color: var(--muted); font-size: 0.98rem; text-align: center; }
+
+  /* Section head with action */
+  .with-action { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; max-width: none; }
+  @media (max-width: 720px) { .with-action { flex-direction: column; align-items: flex-start; } }
+
+  /* News cards */
+  .news-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem;
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow-sm); padding: 1.6rem; text-decoration: none; color: var(--ink);
+    height: 100%; transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .news-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--gold); }
+  .news-card h3 { margin: 0.2rem 0 0; }
+  .news-card p { color: var(--muted); margin: 0; font-size: 1.02rem; }
+  .news-cta { margin-top: auto; display: inline-flex; align-items: center; gap: 0.4rem; color: var(--green-700); font-weight: 650; }
+
+  /* Practical */
+  .practical { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: clamp(2rem, 5vw, 3.5rem); align-items: start; }
+  .info-block { margin-top: 1.8rem; }
+  .info-block h3 { display: flex; align-items: center; gap: 0.55rem; font-size: 1.3rem; }
+  .info-block h3 :global(svg) { color: var(--green); }
+  .hours { list-style: none; margin: 0; padding: 0; max-width: 30rem; }
+  .hours li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px solid var(--line); }
+  .hours li.closed span:last-child { color: var(--terra); font-weight: 600; }
+  .info-lines { color: var(--muted); }
+  .info-lines a { color: var(--green-700); }
+
+  .map-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; position: sticky; top: 96px; }
+  .map-visual {
+    height: 170px; display: grid; place-items: center; color: var(--terra);
+    background:
+      radial-gradient(circle at 30% 30%, #dfeede 0, transparent 45%),
+      radial-gradient(circle at 70% 60%, #f0e6d3 0, transparent 40%),
+      repeating-linear-gradient(0deg, #eef2ea 0 22px, #e7ede4 22px 24px),
+      repeating-linear-gradient(90deg, #eef2ea 0 22px, #e7ede4 22px 24px);
+  }
+  .map-body { padding: 1.3rem 1.4rem 1.5rem; display: grid; gap: 0.25rem; }
+  .map-body strong { font-size: 1.15rem; }
+  .map-body span { color: var(--muted); margin-bottom: 0.9rem; }
+
+  /* CTA */
+  .cta { display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .cta-text { color: #eef4ee; max-width: 46ch; }
+  .cta-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .cta-mail { color: #fff; border-color: rgba(255,255,255,0.5); }
+  .cta-mail:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: #fff; }
+
+  /* Responsive collapses */
+  @media (max-width: 860px) {
+    .hero-inner, .welcome, .practical { grid-template-columns: 1fr; }
+    .quickbar-inner { grid-template-columns: 1fr; gap: 0.3rem; }
+    .map-card { position: static; }
+    .hero-media { order: -1; }
+  }
+</style>
