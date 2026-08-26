@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+
+export async function getStaticPaths() {
+  const items = await getCollection('aktiviteter', ({ data }) => !data.draft);
+  return items.map((item) => ({ params: { id: item.id }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+const d = item.data;
+---
+<BaseLayout title={`${d.title} – Selmersbo`} description={d.text}>
+  <PageHero eyebrow="Aktivitet" title={d.title} icon={d.icon} />
+  <section class="section" style="padding-top:1.5rem">
+    <div class="container">
+      <a class="back" href="/aktiviteter"><Icon name="arrow" size={18} /> Alle aktiviteter</a>
+      {d.image && <img class="lead-img" src={d.image} alt={d.title} />}
+      <div class="meta">
+        <span class="chip"><Icon name="clock" size={16} /> {d.day}</span>
+        {d.status && <span class="chip chip--sold">{d.status}</span>}
+      </div>
+      <article class="prose newsletter"><Content /></article>
+    </div>
+  </section>
+  <CtaBand
+    eyebrow="Godt at vide"
+    title="Har du lyst til at være med?"
+    text="Alle seniorer er velkomne. Ring eller skriv, så fortæller vi gerne mere." />
+</BaseLayout>
+
+<style>
+  .back { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 650; margin-bottom: 1.2rem; }
+  .back :global(svg) { transform: rotate(180deg); }
+  .lead-img { width: 100%; max-width: 640px; max-height: 320px; object-fit: cover; border-radius: var(--radius); margin-bottom: 1rem; }
+  .meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .chip--sold { background: var(--terra-tint); color: var(--terra); }
+</style>

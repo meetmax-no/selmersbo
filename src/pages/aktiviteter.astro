@@ -1,145 +1,149 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Icon from '../components/Icon.astro';
-import ActivityCard from '../components/ActivityCard.astro';
+import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
-import { weekPlan } from '../data/activities';
 
 const activities = (await getCollection('aktiviteter', ({ data }) => !data.draft))
-  .sort((a, b) => a.data.order - b.data.order)
-  .map((e) => e.data);
+  .sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(
+  activities.map(async (item) => ({ item, Content: (await render(item)).Content })),
+);
+const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
 ---
 <BaseLayout
   title="Aktiviteter – Selmersbo"
-  description="Se de mange aktiviteter på Aktivhuset Selmersbo i Hørsholm – kor, gymnastik, kortspil, foredrag, udflugter og meget mere.">
+  description="Se de mange aktiviteter på Aktivhuset Selmersbo i Hørsholm – banko, bridge, gymnastik, foredrag, IT-hjælp, jazz og meget mere.">
 
-  <!-- ============ PAGE HERO ============ -->
-  <section class="page-hero">
+  <PageHero
+    eyebrow="Hver uge"
+    title="Aktiviteter på Selmersbo"
+    lead="Selmersbo har en række aktiviteter for vore faste og nye brugere. Har vi vakt din interesse, så kom og besøg os og få en fornemmelse af den hygge og gode stemning, som kendetegner Selmersbo. Klik på en aktivitet for at læse mere.">
+    <div class="hero-cta">
+      <a class="btn btn--primary" href="#bliv-medlem">Bliv medlem <Icon name="arrow" size={20} /></a>
+      <a class="btn btn--ghost" href={tel}><Icon name="phone" size={20} /> Ring {site.phone}</a>
+    </div>
+  </PageHero>
+
+  <section class="section" style="padding-top:2rem">
     <div class="container">
-      <p class="eyebrow"><Icon name="calendar" size={18} /> Program</p>
-      <h1>Aktiviteter på Selmersbo</h1>
-      <p class="lead">
-        Der sker noget hver uge – fra sang og bevægelse til spil, foredrag og
-        fælles måltider. Kom og vær med; du behøver ingen erfaring, kun lyst til
-        samvær.
-      </p>
-      <div class="hero-cta">
-        <a class="btn btn--primary" href="#bliv-medlem">Bliv medlem <Icon name="arrow" size={20} /></a>
-        <a class="btn btn--ghost" href={`tel:+45${site.phone.replace(/\s/g, '')}`}>
-          <Icon name="phone" size={20} /> Ring {site.phone}
-        </a>
+      <div class="akt-grid">
+        {rendered.map(({ item, Content }) => (
+          <>
+            <a class="akt-card" href={`/aktiviteter/${item.id}`} data-akt={item.id}>
+              <div class="akt-media">
+                {item.data.image
+                  ? <img src={item.data.image} alt={item.data.title} loading="lazy" />
+                  : <span class="akt-media-icon"><Icon name={item.data.icon} size={30} /></span>}
+                {item.data.status && <span class="akt-status">{item.data.status}</span>}
+              </div>
+              <div class="akt-body">
+                <div class="akt-head">
+                  <h3>{item.data.title}</h3>
+                  <span class="chip chip--sand">{item.data.day}</span>
+                </div>
+                <p>{item.data.text}</p>
+                <span class="akt-open">Læs mere <Icon name="arrow" size={16} /></span>
+              </div>
+            </a>
+
+            <dialog id={`akt-${item.id}`} class="akt-dialog" aria-label={item.data.title}>
+              <div class="akt-dialog-inner">
+                <header class="akt-dialog-head">
+                  <h2>{item.data.title}</h2>
+                  <button class="akt-close" type="button" data-close aria-label="Luk">✕</button>
+                </header>
+                <div class="akt-dialog-scroll">
+                  {item.data.image && <img class="akt-dialog-img" src={item.data.image} alt={item.data.title} />}
+                  <div class="akt-meta">
+                    <span class="chip"><Icon name="clock" size={16} /> {item.data.day}</span>
+                    {item.data.status && <span class="chip chip--sold">{item.data.status}</span>}
+                  </div>
+                  <article class="prose newsletter"><Content /></article>
+                </div>
+                <footer class="akt-dialog-foot">
+                  <button class="btn btn--ghost" type="button" data-close>Luk</button>
+                </footer>
+              </div>
+            </dialog>
+          </>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- ============ DEMO NOTICE ============ -->
-  <div class="container">
-    <p class="demo-note">
-      <Icon name="check" size={20} />
-      Aktiviteterne redigeres i CMS'et under <strong>/admin</strong> –
-      Selmersbo indsætter selv det aktuelle program.
-    </p>
-  </div>
-
-  <!-- ============ ACTIVITY GRID ============ -->
-  <section class="section" style="padding-top: 1.5rem;">
-    <div class="container">
-      <div class="grid grid--3">
-        {activities.map((a) => <ActivityCard activity={a} />)}
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ WEEKLY RHYTHM ============ -->
-  <section class="section section--sand" id="ugeplan">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Ugens rytme</p>
-        <h2>En typisk uge på Selmersbo</h2>
-        <p class="lead">Huset er åbent for kaffe, aviser og hyggeligt samvær i hele åbningstiden.</p>
-      </div>
-      <div class="week">
-        {weekPlan.map((d) => {
-          const closed = d.items[0] === 'Lukket';
-          return (
-            <div class={`week-day${closed ? ' week-day--closed' : ''}`}>
-              <div class="week-day-name">{d.day}</div>
-              <ul>
-                {closed
-                  ? <li class="closed">Lukket</li>
-                  : d.items.map((i) => <li><Icon name="check" size={16} /> {i}</li>)}
-              </ul>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ HOW TO JOIN ============ -->
-  <section class="section">
-    <div class="container join">
-      <div class="join-step">
-        <span class="step-num">1</span>
-        <h3>Kig forbi</h3>
-        <p>Kom til en kop kaffe i åbningstiden og få en fornemmelse af huset og stemningen.</p>
-      </div>
-      <div class="join-step">
-        <span class="step-num">2</span>
-        <h3>Prøv en aktivitet</h3>
-        <p>Vælg det, der frister – du er velkommen til at prøve med, helt uforpligtende.</p>
-      </div>
-      <div class="join-step">
-        <span class="step-num">3</span>
-        <h3>Bliv medlem</h3>
-        <p>Kontakt {site.manager} på {site.phone}, så er du en del af fællesskabet.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ MEMBERSHIP CTA ============ -->
   <CtaBand
     eyebrow="Godt at vide"
     title="Har du lyst til at være med?"
-    text="Alle seniorer er velkomne. Ring eller skriv, så fortæller vi gerne mere om aktiviteterne og om at blive medlem."
-  />
+    text="Alle seniorer er velkomne. Ring eller skriv, så fortæller vi gerne mere om aktiviteterne og om at blive medlem." />
 </BaseLayout>
 
+<script>
+  document.querySelectorAll('a[data-akt]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const el = a as HTMLAnchorElement;
+      const d = document.getElementById('akt-' + el.dataset.akt) as HTMLDialogElement | null;
+      if (d && typeof d.showModal === 'function') {
+        e.preventDefault();
+        d.showModal();
+        document.documentElement.style.overflow = 'hidden';
+      }
+    });
+  });
+  document.querySelectorAll('dialog.akt-dialog').forEach((node) => {
+    const d = node as HTMLDialogElement;
+    d.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => d.close()));
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+    d.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
+  });
+</script>
+
 <style>
-  .page-hero { padding-block: clamp(2.5rem, 6vw, 4.5rem) 1.5rem; }
-  .page-hero .lead { margin-bottom: 1.6rem; }
-  .hero-cta { display: flex; gap: 0.85rem; flex-wrap: wrap; }
+  .hero-cta { display: flex; gap: 0.85rem; flex-wrap: wrap; margin-top: 1.6rem; }
 
-  .demo-note {
-    display: flex; align-items: center; gap: 0.6rem;
-    background: var(--gold-tint); color: #7a5410;
-    border: 1px solid #ecd9a9; border-radius: 12px;
-    padding: 0.8rem 1.1rem; font-size: 1rem; max-width: none;
+  .akt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2.5vw, 1.5rem); }
+  @media (max-width: 900px) { .akt-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .akt-grid { grid-template-columns: 1fr; } }
+
+  .akt-card {
+    display: flex; flex-direction: column; background: var(--paper);
+    border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow-sm); text-decoration: none; color: var(--ink); height: 100%;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
   }
-  .demo-note :global(svg) { color: var(--gold); flex: none; }
-  .demo-note strong { color: #5e3f08; }
-
-  .week { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
-  .week-day { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
-  .week-day-name { background: var(--green); color: #fff; font-weight: 650; padding: 0.7rem 1rem; font-size: 1.05rem; }
-  .week-day ul { list-style: none; margin: 0; padding: 0.9rem 1rem 1.1rem; display: grid; gap: 0.55rem; }
-  .week-day li { display: flex; align-items: center; gap: 0.45rem; color: var(--ink); font-size: 1rem; }
-  .week-day li :global(svg) { color: var(--green); flex: none; }
-  .week-day--closed .week-day-name { background: var(--sand-deep); color: var(--muted); }
-  .week-day li.closed { color: var(--muted); font-style: italic; }
-  @media (max-width: 900px) { .week { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 520px) { .week { grid-template-columns: 1fr; } }
-
-  .join { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 3vw, 2rem); }
-  .join-step { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.8rem; }
-  .step-num {
-    display: grid; place-items: center; width: 46px; height: 46px;
-    background: var(--terra-tint); color: var(--terra); font-family: var(--font-display);
-    font-weight: 700; font-size: 1.4rem; border-radius: 50%; margin-bottom: 0.9rem;
+  .akt-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--green); }
+  .akt-media { position: relative; aspect-ratio: 16 / 9; background: var(--green-050); }
+  .akt-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .akt-media-icon { position: absolute; inset: 0; display: grid; place-items: center; color: var(--green-700); }
+  .akt-status {
+    position: absolute; left: 0.7rem; top: 0.7rem; font-size: 0.85rem; font-weight: 650;
+    background: var(--terra); color: #fff; padding: 0.25rem 0.6rem; border-radius: 999px;
   }
-  .join-step h3 { margin: 0 0 0.4rem; }
-  .join-step p { color: var(--muted); margin: 0; }
-  @media (max-width: 780px) { .join { grid-template-columns: 1fr; } }
+  .akt-body { padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+  .akt-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap; }
+  .akt-head h3 { margin: 0; font-size: 1.2rem; }
+  .akt-body p { margin: 0; color: var(--muted); font-size: 1rem; }
+  .akt-open { margin-top: auto; display: inline-flex; align-items: center; gap: 0.35rem; color: var(--green-700); font-weight: 650; padding-top: 0.4rem; }
+
+  /* Modal (shared look with the newsletters) */
+  .akt-dialog {
+    width: min(680px, calc(100% - 2rem)); max-width: 680px; padding: 0; border: none;
+    border-radius: var(--radius-lg); background: var(--paper); color: var(--ink); box-shadow: var(--shadow-lg);
+  }
+  .akt-dialog::backdrop { background: rgba(20, 19, 15, 0.55); }
+  .akt-dialog-inner { display: flex; flex-direction: column; max-height: 88vh; }
+  .akt-dialog-head {
+    flex: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--line);
+  }
+  .akt-dialog-head h2 { margin: 0; font-size: 1.4rem; }
+  .akt-close { flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 1.1rem; display: grid; place-items: center; }
+  .akt-close:hover { background: var(--sand); }
+  .akt-dialog-scroll { flex: 1 1 auto; overflow-y: auto; padding: 1.3rem 1.4rem; }
+  .akt-dialog-img { width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; }
+  .akt-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+  .chip--sold { background: var(--terra-tint); color: var(--terra); }
+  .akt-dialog-foot { flex: none; padding: 0.9rem 1.4rem; border-top: 1px solid var(--line); text-align: right; }
 </style>

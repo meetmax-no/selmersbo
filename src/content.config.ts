@@ -4,6 +4,7 @@ import { glob } from 'astro/loaders';
 // Icons an editor can pick for an activity (must exist in Icon.astro).
 export const ACTIVITY_ICONS = [
   'music', 'heart', 'cards', 'device', 'mic', 'thread', 'plate', 'bus', 'users', 'calendar',
+  'book', 'brush', 'film', 'coffee', 'dumbbell', 'chat',
 ] as const;
 
 // Udflugter (excursions) – edited through the CMS at /admin.
@@ -38,15 +39,19 @@ const nyheder = defineCollection({
 });
 
 // Aktiviteter (activities) – shown on the front page and on /aktiviteter.
+// Each card opens the full description (Markdown body) in a modal.
 const aktiviteter = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/aktiviteter' }),
   schema: z.object({
     title: z.string(),
-    icon: z.enum(ACTIVITY_ICONS).default('users'),
-    day: z.string(),
-    text: z.string(),
+    icon: z.enum(ACTIVITY_ICONS).default('users'), // fallback when no image
+    image: z.string().optional(), // public path, e.g. /uploads/akt-banko.jpg
+    day: z.string(), // short schedule shown on the card
+    text: z.string(), // short teaser (card + front page)
+    status: z.string().optional(), // e.g. "Ingen ledige pladser"
     order: z.number().default(0),
     draft: z.boolean().default(false),
+    // Markdown body = the full description shown in the modal / detail page.
   }),
 });
 

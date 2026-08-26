@@ -91,17 +91,25 @@ collections:
         default: users
         options:
           - { label: "Sang & musik", value: music }
-          - { label: "Bevægelse", value: heart }
-          - { label: "Spil", value: cards }
+          - { label: "Bevægelse / gymnastik", value: dumbbell }
+          - { label: "Hjerte / omsorg", value: heart }
+          - { label: "Spil / kort", value: cards }
           - { label: "IT & teknik", value: device }
           - { label: "Foredrag", value: mic }
           - { label: "Håndarbejde", value: thread }
-          - { label: "Mad & spisning", value: plate }
+          - { label: "Kreativt / maling", value: brush }
+          - { label: "Bøger / læsning", value: book }
+          - { label: "Film", value: film }
+          - { label: "Mad & kaffe", value: coffee }
+          - { label: "Samtale / snak", value: chat }
           - { label: "Udflugt", value: bus }
           - { label: "Fællesskab", value: users }
           - { label: "Kalender", value: calendar }
-      - { name: day, label: "Dag", widget: string, hint: "F.eks. Mandag, Fredag eller Månedligt." }
-      - { name: text, label: "Beskrivelse", widget: text }
+      - { name: image, label: "Billede", widget: image, required: false, hint: "Valgfrit foto. Uden billede vises ikonet." }
+      - { name: day, label: "Tid / dag", widget: string, hint: "F.eks. Hver onsdag kl. 13.00." }
+      - { name: text, label: "Kort tekst", widget: text, hint: "Vises på kortet." }
+      - { name: status, label: "Status", widget: string, required: false, hint: 'F.eks. "Ingen ledige pladser". Lad stå tom hvis åben.' }
+      - { name: body, label: "Fuld beskrivelse", widget: markdown, hint: "Vises når man klikker på aktiviteten." }
       - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
