@@ -1,6 +1,7 @@
 ---
 title: Puslespil
 icon: users
+image: /uploads/akt-puslespil.jpg
 day: Altid
 text: Der ligger altid et puslespil på bordet.
 order: 19
