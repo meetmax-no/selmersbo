@@ -1,73 +1,92 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
 
-const features = [
-  { icon: 'users', title: 'Plads til op til 60', text: 'Lyst fælleslokale med god plads til fest, reception eller møde.' },
-  { icon: 'plate', title: 'Køkken', text: 'Adgang til køkken med service, så I selv kan stå for forplejningen.' },
-  { icon: 'accessibility', title: 'God tilgængelighed', text: 'Alt i ét plan, brede døre og handicapvenligt toilet.' },
-  { icon: 'pin', title: 'Nem parkering', text: 'Gratis parkering tæt på indgangen på Selmersvej 13.' },
-];
+const entry = await getEntry('udlejning', 'index');
+const d = entry!.data;
+const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
+
+const priceGroups = [
+  { heading: 'Enkeltleje', rows: d.prices },
+  { heading: d.recurringHeading, rows: d.recurringPrices },
+  { heading: d.extraHeading, rows: d.extraPrices },
+].filter((g) => g.rows.length > 0);
 ---
-<BaseLayout title="Udlejning – Selmersbo" description="Lej Selmersbos lokaler til private arrangementer i Hørsholm.">
-  <PageHero
-    eyebrow="Lej huset"
-    title="Udlejning af lokaler"
-    lead="Selmersbos lyse lokaler kan lejes til private arrangementer – fødselsdag, reception, mindesamvær eller møde."
-    icon="calendar" />
+<BaseLayout title="Udlejning – Selmersbo" description="Lej Selmersbos lokaler til foredrag, møder eller fester i Hørsholm. Se priser og vilkår.">
+  <PageHero eyebrow="Lej huset" title={d.title} lead={d.lead} icon="calendar" />
 
   <section class="section" style="padding-top:2rem">
     <div class="container split">
       <div class="prose">
-        <h2>Rammer med hjertevarme</h2>
-        <p>
-          Huset ligger centralt i Hørsholm med rolige, indbydende omgivelser og
-          god plads. Lokalerne er velegnede til både mindre og større selskaber,
-          og den niveaufri adgang gør huset let at bruge for alle gæster.
-        </p>
-        <p>
-          Kontakt daglig leder {site.manager} for at høre om ledige datoer,
-          priser og de nærmere vilkår for udlejning.
-        </p>
-        <div class="grid grid--2" style="margin-top:1.5rem">
-          {features.map((f) => (
-            <div class="feature">
-              <div class="feature-icon" aria-hidden="true"><Icon name={f.icon} size={22} /></div>
-              <div>
-                <h3>{f.title}</h3>
-                <p>{f.text}</p>
-              </div>
-            </div>
+        <h2>Lokaleudlejning</h2>
+        <ul class="conditions">
+          {d.conditions.map((c) => (
+            <li><Icon name="check" size={20} /> <span>{c.text}</span></li>
           ))}
-        </div>
+        </ul>
+        {d.contactNote && <p class="contact-note"><Icon name="phone" size={20} /> {d.contactNote}</p>}
+        <a class="btn btn--ghost" href="/galleri">Gå til galleri <Icon name="arrow" size={18} /></a>
       </div>
 
       <aside class="book-card">
         <h3>Forespørg om leje</h3>
-        <p>Fortæl os om jeres arrangement, så vender vi tilbage med muligheder og pris.</p>
-        <a class="btn btn--primary" href={`tel:+45${site.phone.replace(/\s/g, '')}`}><Icon name="phone" size={20} /> Ring {site.phone}</a>
+        <p>Fortæl os om jeres arrangement, så vender vi tilbage med muligheder.</p>
+        <a class="btn btn--primary" href={tel}><Icon name="phone" size={20} /> Ring {site.phone}</a>
         <a class="btn btn--ghost" href={`mailto:${site.email}`}><Icon name="mail" size={20} /> Send en mail</a>
-        <p class="fineprint">Priser oplyses ved henvendelse.</p>
       </aside>
     </div>
   </section>
 
-  <CtaBand />
+  <section class="section section--sand" id="priser">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Priser</p>
+        <h2>Lokaleleje – priser</h2>
+        {d.priceHeading && <p class="lead">{d.priceHeading}</p>}
+      </div>
+      <div class="grid grid--3">
+        {priceGroups.map((g) => (
+          <div class="price-card">
+            <h3>{g.heading}</h3>
+            <ul class="price-list">
+              {g.rows.map((r) => (
+                <li><span>{r.label}</span><strong>{r.price}</strong></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    eyebrow="Klar til at leje?"
+    title="Book Selmersbo til jeres arrangement"
+    text={`Kontakt kontoret på ${site.phone}, så finder vi en ledig dato og de rette lokaler.`} />
 </BaseLayout>
 
 <style>
-  .feature { display: flex; gap: 0.8rem; align-items: flex-start; }
-  .feature-icon { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
-  .feature h3 { margin: 0 0 0.15rem; font-size: 1.15rem; }
-  .feature p { margin: 0; color: var(--muted); font-size: 1rem; }
+  .conditions { list-style: none; margin: 0 0 1.3rem; padding: 0; display: grid; gap: 0.7rem; }
+  .conditions li { display: flex; align-items: flex-start; gap: 0.6rem; }
+  .conditions :global(svg) { color: var(--green); flex: none; margin-top: 0.2rem; }
+  .contact-note { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; }
+  .contact-note :global(svg) { color: var(--green); flex: none; }
 
   .book-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.6rem; display: grid; gap: 0.7rem; position: sticky; top: 96px; }
   .book-card h3 { margin: 0; }
   .book-card > p { margin: 0 0 0.4rem; color: var(--muted); }
   .book-card .btn { width: 100%; }
-  .fineprint { font-size: 0.92rem; color: var(--muted); margin: 0.4rem 0 0; }
   @media (max-width: 860px) { .book-card { position: static; } }
+
+  .price-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.5rem; height: 100%; }
+  .price-card h3 { margin: 0 0 0.9rem; font-size: 1.2rem; }
+  .price-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.15rem; }
+  .price-list li { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; padding: 0.55rem 0; border-bottom: 1px solid var(--line); }
+  .price-list li:last-child { border-bottom: 0; }
+  .price-list span { color: var(--ink); }
+  .price-list strong { color: var(--green-700); white-space: nowrap; font-variant-numeric: tabular-nums; }
 </style>

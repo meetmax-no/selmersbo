@@ -50,4 +50,22 @@ const aktiviteter = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter };
+// Udlejning (rental) – a single editable page (one entry: index.md).
+const priceRow = z.object({ label: z.string(), price: z.string() });
+const udlejning = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/udlejning' }),
+  schema: z.object({
+    title: z.string().default('Udlejning'),
+    lead: z.string(),
+    conditions: z.array(z.object({ text: z.string() })).default([]),
+    contactNote: z.string().default(''),
+    priceHeading: z.string().default(''),
+    prices: z.array(priceRow).default([]),
+    recurringHeading: z.string().default(''),
+    recurringPrices: z.array(priceRow).default([]),
+    extraHeading: z.string().default(''),
+    extraPrices: z.array(priceRow).default([]),
+  }),
+});
+
+export const collections = { udflugter, nyheder, aktiviteter, udlejning };

@@ -66,6 +66,7 @@ koblet på:
 | **Udflugter** | /udflugter | `src/content/udflugter/` |
 | **Nyheder** | Forsiden + /nyheder | `src/content/nyheder/` |
 | **Aktiviteter** | Forsiden + /aktiviteter | `src/content/aktiviteter/` |
+| **Udlejning** (side + priser) | /udlejning | `src/content/udlejning/index.md` |
 
 Redaktøren udfylder felter (fx titel, dato, tekst, billede) og gemmer –
 ændringen bliver en commit i repoet, og Vercel bygger siden på ny.

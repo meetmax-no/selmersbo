@@ -104,3 +104,47 @@ collections:
       - { name: text, label: "Beskrivelse", widget: text }
       - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
+
+  # Enkeltsider (redigeres, men oprettes/slettes ikke)
+  - name: sider
+    label: "Sider"
+    files:
+      - name: udlejning
+        label: "Udlejning"
+        file: "src/content/udlejning/index.md"
+        description: "Tekst og priser på siden Udlejning."
+        fields:
+          - { name: title, label: "Sidetitel", widget: string, default: "Udlejning" }
+          - { name: lead, label: "Indledning", widget: text }
+          - name: conditions
+            label: "Vilkår"
+            widget: list
+            label_singular: "Vilkår"
+            summary: "{{fields.text}}"
+            fields:
+              - { name: text, label: "Tekst", widget: text }
+          - { name: contactNote, label: "Kontaktlinje", widget: string, required: false, hint: "F.eks. Henvendelse til kontoret på tlf.: 4849 4300." }
+          - { name: priceHeading, label: "Pris-indledning", widget: string, required: false }
+          - name: prices
+            label: "Priser – enkeltleje"
+            widget: list
+            summary: "{{fields.label}} – {{fields.price}}"
+            fields:
+              - { name: label, label: "Lokale", widget: string }
+              - { name: price, label: "Pris", widget: string }
+          - { name: recurringHeading, label: "Overskrift – fast leje", widget: string, required: false }
+          - name: recurringPrices
+            label: "Priser – fast leje"
+            widget: list
+            summary: "{{fields.label}} – {{fields.price}}"
+            fields:
+              - { name: label, label: "Lokale", widget: string }
+              - { name: price, label: "Pris", widget: string }
+          - { name: extraHeading, label: "Overskrift – udstyr", widget: string, required: false }
+          - name: extraPrices
+            label: "Priser – udstyr"
+            widget: list
+            summary: "{{fields.label}} – {{fields.price}}"
+            fields:
+              - { name: label, label: "Beskrivelse", widget: string }
+              - { name: price, label: "Pris", widget: string }
