@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+
+export async function getStaticPaths() {
+  const items = await getCollection('nyhedsbreve', ({ data }) => !data.draft);
+  return items.map((item) => ({ params: { id: item.id }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+---
+<BaseLayout title={`${item.data.title} – Selmersbo`} description={item.data.summary}>
+  <PageHero eyebrow="Nyhedsbrev" title={item.data.title} icon="mail" />
+  <section class="section" style="padding-top:1.5rem">
+    <div class="container">
+      <a class="back" href="/nyhedsbreve"><Icon name="arrow" size={18} /> Alle nyhedsbreve</a>
+      <article class="prose newsletter"><Content /></article>
+    </div>
+  </section>
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .back { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 650; margin-bottom: 1.2rem; }
+  .back :global(svg) { transform: rotate(180deg); }
+</style>

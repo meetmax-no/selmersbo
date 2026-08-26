@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
@@ -7,55 +7,118 @@ import Icon from '../components/Icon.astro';
 
 const monthFmt = new Intl.DateTimeFormat('da-DK', { month: 'long', year: 'numeric' });
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-const letters = (await getCollection('nyhedsbreve', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .map((e) => ({ ...e.data, dateLabel: cap(monthFmt.format(e.data.date)) }));
+
+const items = (await getCollection('nyhedsbreve', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const rendered = await Promise.all(
+  items.map(async (item) => ({ item, Content: (await render(item)).Content, label: cap(monthFmt.format(item.data.date)) })),
+);
 ---
-<BaseLayout title="Nyhedsbreve – Selmersbo" description="Læs og hent Selmersbos nyhedsbreve.">
+<BaseLayout title="Nyhedsbreve – Selmersbo" description="Læs Selmersbos nyhedsbreve – måned for måned.">
   <PageHero
     eyebrow="Arkiv"
     title="Nyhedsbreve"
-    lead="Vores nyhedsbreve samler det vigtigste fra huset. Læs med, eller hent dem som PDF."
+    lead="Her er en oversigt over de sidste måneders nyhedsbreve. Klik på en måned for at læse."
     icon="mail" />
 
   <section class="section" style="padding-top:2rem">
     <div class="container">
-      <ul class="letters">
-        {letters.map((l) => (
-          <li class="letter">
-            <div class="letter-icon" aria-hidden="true"><Icon name="mail" size={24} /></div>
-            <div class="letter-body">
-              <span class="chip chip--sand">{l.dateLabel}</span>
-              <h3>{l.title}</h3>
-              {l.summary && <p>{l.summary}</p>}
-            </div>
-            {l.file
-              ? <a class="btn btn--ghost" href={l.file} target="_blank" rel="noopener">Hent PDF <Icon name="arrow" size={18} /></a>
-              : <span class="btn btn--ghost is-disabled" aria-disabled="true">PDF kommer</span>}
-          </li>
+      <div class="nb-grid">
+        {rendered.map(({ item, Content, label }) => (
+          <>
+            <a class="nb-card" href={`/nyhedsbreve/${item.id}`} data-nb={item.id}>
+              <div class="nb-icon" aria-hidden="true"><Icon name="mail" size={22} /></div>
+              <div class="nb-card-body">
+                <h3>{label}</h3>
+                {item.data.summary && <p>{item.data.summary}</p>}
+              </div>
+              <span class="nb-open">Læs <Icon name="arrow" size={18} /></span>
+            </a>
+
+            <dialog id={`nb-${item.id}`} class="nb-dialog" aria-label={item.data.title}>
+              <div class="nb-dialog-inner">
+                <header class="nb-dialog-head">
+                  <h2>{item.data.title}</h2>
+                  <button class="nb-close" type="button" data-close aria-label="Luk">✕</button>
+                </header>
+                <div class="nb-body">
+                  <article class="prose newsletter"><Content /></article>
+                </div>
+                <footer class="nb-dialog-foot">
+                  <button class="btn btn--ghost" type="button" data-close>Luk</button>
+                </footer>
+              </div>
+            </dialog>
+          </>
         ))}
-      </ul>
-      <p class="demo-note"><Icon name="check" size={20} /><span>Nyhedsbreve redigeres i CMS'et under <strong>/admin</strong> – hvert brev kan få en PDF vedhæftet.</span></p>
+      </div>
     </div>
   </section>
 
   <CtaBand />
 </BaseLayout>
 
+<script>
+  // Progressive enhancement: open the newsletter in a modal.
+  // Without JS the card is a normal link to the readable /nyhedsbreve/{id} page.
+  document.querySelectorAll('a[data-nb]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const el = a as HTMLAnchorElement;
+      const d = document.getElementById('nb-' + el.dataset.nb) as HTMLDialogElement | null;
+      if (d && typeof d.showModal === 'function') {
+        e.preventDefault();
+        d.showModal();
+        document.documentElement.style.overflow = 'hidden';
+      }
+    });
+  });
+  document.querySelectorAll('dialog.nb-dialog').forEach((node) => {
+    const d = node as HTMLDialogElement;
+    d.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => d.close()));
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+    d.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
+  });
+</script>
+
 <style>
-  .letters { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; gap: 1rem; }
-  .letter {
+  .nb-grid { display: grid; gap: 1rem; }
+  .nb-card {
     display: flex; align-items: center; gap: 1.2rem;
     background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow-sm); padding: 1.3rem 1.5rem;
+    box-shadow: var(--shadow-sm); padding: 1.3rem 1.5rem; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
   }
-  .letter-icon { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
-  .letter-body { flex: 1; min-width: 0; }
-  .letter-body h3 { margin: 0.3rem 0 0.2rem; font-size: 1.25rem; }
-  .letter-body p { margin: 0; color: var(--muted); font-size: 1rem; }
-  .letter .btn { flex: none; }
+  .nb-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--green); }
+  .nb-icon { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .nb-card-body { flex: 1; min-width: 0; }
+  .nb-card-body h3 { margin: 0 0 0.15rem; font-size: 1.28rem; }
+  .nb-card-body p { margin: 0; color: var(--muted); font-size: 1rem; }
+  .nb-open { flex: none; display: inline-flex; align-items: center; gap: 0.4rem; color: var(--green-700); font-weight: 650; }
   @media (max-width: 620px) {
-    .letter { flex-wrap: wrap; }
-    .letter .btn { width: 100%; }
+    .nb-card { flex-wrap: wrap; }
+    .nb-open { width: 100%; }
   }
+
+  /* Modal */
+  .nb-dialog {
+    width: min(760px, calc(100% - 2rem)); max-width: 760px; padding: 0; border: none;
+    border-radius: var(--radius-lg); background: var(--paper); color: var(--ink);
+    box-shadow: var(--shadow-lg);
+  }
+  .nb-dialog::backdrop { background: rgba(20, 19, 15, 0.55); }
+  .nb-dialog-inner { display: flex; flex-direction: column; max-height: 86vh; }
+  .nb-dialog-head {
+    flex: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--line); background: var(--paper);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .nb-dialog-head h2 { margin: 0; font-size: 1.45rem; }
+  .nb-close {
+    flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    font-size: 1.1rem; line-height: 1; display: grid; place-items: center;
+  }
+  .nb-close:hover { background: var(--sand); }
+  .nb-body { flex: 1 1 auto; overflow-y: auto; padding: 1.4rem 1.5rem; }
+  .nb-dialog-foot { flex: none; padding: 1rem 1.5rem; border-top: 1px solid var(--line); text-align: right; }
 </style>

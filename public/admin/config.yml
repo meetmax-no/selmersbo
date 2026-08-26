@@ -115,14 +115,14 @@ collections:
     extension: md
     format: yaml-frontmatter
     identifier_field: title
-    slug: "{{year}}-{{month}}-{{title}}"
+    slug: "{{year}}-{{month}}"
     summary: "{{title}}"
     sortable_fields: [date, title]
     fields:
       - { name: title, label: "Titel", widget: string, hint: "F.eks. Nyhedsbrev – august 2026" }
       - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
-      - { name: summary, label: "Kort beskrivelse", widget: text, required: false }
-      - { name: file, label: "PDF-fil", widget: file, required: false, hint: "Upload nyhedsbrevet som PDF." }
+      - { name: summary, label: "Kort resumé", widget: text, required: false, hint: "Vises på oversigten." }
+      - { name: body, label: "Indhold", widget: markdown, hint: "Selve nyhedsbrevet – skrives som læsbar tekst (ingen PDF)." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
   - name: galleri

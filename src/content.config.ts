@@ -68,14 +68,14 @@ const udlejning = defineCollection({
   }),
 });
 
-// Nyhedsbreve (newsletters) – list with an optional PDF file.
+// Nyhedsbreve (newsletters) – readable web content (Markdown body), opened
+// in a modal on the list page. No PDF: better for seniors, mobile & a11y.
 const nyhedsbreve = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/nyhedsbreve' }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
     summary: z.string().optional(),
-    file: z.string().optional(), // public path to the PDF, e.g. /uploads/xxx.pdf
     draft: z.boolean().default(false),
   }),
 });
