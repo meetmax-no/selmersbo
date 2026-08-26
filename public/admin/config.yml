@@ -47,3 +47,60 @@ collections:
       - { name: signupUrl, label: "Tilmeldingslink", widget: string, required: false, hint: "Valgfrit link til tilmelding." }
       - { name: soldOut, label: "Udsolgt", widget: boolean, default: false }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
+
+  - name: nyheder
+    label: "Nyheder"
+    label_singular: "Nyhed"
+    description: "Nyheder der vises på forsiden og på siden Nyheder."
+    folder: "src/content/nyheder"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: "{{year}}-{{month}}-{{day}}-{{title}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: "Overskrift", widget: string }
+      - { name: tag, label: "Mærkat", widget: string, default: "Nyt", hint: "F.eks. Seniorsiden, I pressen, Hørsholm." }
+      - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+      - { name: summary, label: "Tekst", widget: text }
+      - { name: cta, label: "Knaptekst", widget: string, default: "Læs mere" }
+      - { name: url, label: "Link", widget: string, required: false, hint: "Hvor knappen fører hen (valgfrit)." }
+      - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
+
+  - name: aktiviteter
+    label: "Aktiviteter"
+    label_singular: "Aktivitet"
+    description: "Faste aktiviteter der vises på forsiden og på siden Aktiviteter."
+    folder: "src/content/aktiviteter"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: "{{fields.order}}-{{title}}"
+    summary: "{{title}} ({{day}})"
+    sortable_fields: [order, title]
+    fields:
+      - { name: title, label: "Titel", widget: string, hint: "F.eks. Kor & sang" }
+      - name: icon
+        label: "Ikon"
+        widget: select
+        default: users
+        options:
+          - { label: "Sang & musik", value: music }
+          - { label: "Bevægelse", value: heart }
+          - { label: "Spil", value: cards }
+          - { label: "IT & teknik", value: device }
+          - { label: "Foredrag", value: mic }
+          - { label: "Håndarbejde", value: thread }
+          - { label: "Mad & spisning", value: plate }
+          - { label: "Udflugt", value: bus }
+          - { label: "Fællesskab", value: users }
+          - { label: "Kalender", value: calendar }
+      - { name: day, label: "Dag", widget: string, hint: "F.eks. Mandag, Fredag eller Månedligt." }
+      - { name: text, label: "Beskrivelse", widget: text }
+      - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
+      - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }

@@ -1,9 +1,13 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
-import { news } from '../data/site';
+
+const news = (await getCollection('nyheder', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((e) => e.data);
 ---
 <BaseLayout title="Nyheder – Selmersbo" description="Seneste nyt fra Aktivhuset Selmersbo i Hørsholm.">
   <PageHero
@@ -16,17 +20,17 @@ import { news } from '../data/site';
     <div class="container">
       <div class="grid grid--3">
         {news.map((n) => (
-          <a class="news-card" href="#">
+          <a class="news-card" href={n.url ?? '#'}>
             <span class="chip chip--gold">{n.tag}</span>
             <h3>{n.title}</h3>
-            <p>{n.text}</p>
+            <p>{n.summary}</p>
             <span class="news-cta">{n.cta} <Icon name="arrow" size={18} /></span>
           </a>
         ))}
       </div>
       <p class="demo-note">
         <Icon name="check" size={20} />
-        <span>Nyhederne herunder er <strong>eksempler til designudkastet</strong> – Selmersbo skriver selv de aktuelle nyheder her.</span>
+        <span>Nyhederne redigeres i CMS'et under <strong>/admin</strong> – Selmersbo skriver selv de aktuelle nyheder her.</span>
       </p>
     </div>
   </section>

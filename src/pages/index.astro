@@ -1,14 +1,23 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import ActivityCard from '../components/ActivityCard.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { site, news } from '../data/site';
-import { activities } from '../data/activities';
+import { site } from '../data/site';
 
 const today = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'][new Date().getDay()];
 const todayHours = site.hours.find((h) => h.day === today);
-const preview = activities.slice(0, 6);
+
+// Content from the CMS collections
+const news = (await getCollection('nyheder', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3)
+  .map((e) => e.data);
+const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 6)
+  .map((e) => e.data);
 ---
 <BaseLayout title="Selmersbo – Aktivhuset i Hørsholm">
   <!-- ============ HERO ============ -->
@@ -108,10 +117,10 @@ const preview = activities.slice(0, 6);
       </div>
       <div class="grid grid--3">
         {news.map((n) => (
-          <a class="news-card" href="#">
+          <a class="news-card" href={n.url ?? '#'}>
             <span class="chip chip--gold">{n.tag}</span>
             <h3>{n.title}</h3>
-            <p>{n.text}</p>
+            <p>{n.summary}</p>
             <span class="news-cta">{n.cta} <Icon name="arrow" size={18} /></span>
           </a>
         ))}

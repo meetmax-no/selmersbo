@@ -39,24 +39,5 @@ export const nav = [
   { label: 'Om os', href: '/om-os' },
 ] as const;
 
-// News / highlights – replaces the coral "error-looking" blocks on the old site.
-export const news = [
-  {
-    tag: 'Seniorsiden',
-    title: 'Seniorsiden for august og september 2026',
-    text: 'Se det samlede program for de kommende to måneder – foredrag, udflugter og faste aktiviteter.',
-    cta: 'Se seniorsiden',
-  },
-  {
-    tag: 'I pressen',
-    title: 'Artikel i Ugebladet, august 2026',
-    text: 'Om Trommens samarbejde med aktivitetscentrene i Hørsholm Kommune.',
-    cta: 'Læs artiklen',
-  },
-  {
-    tag: 'Hørsholm',
-    title: 'Oplev Hørsholm – ny hjemmeside',
-    text: 'Kommunens nye side samler oplevelser, kultur og fællesskaber ét sted.',
-    cta: 'Besøg Oplev Hørsholm',
-  },
-] as const;
+// News lives in the "nyheder" content collection (src/content/nyheder/),
+// edited through the CMS.

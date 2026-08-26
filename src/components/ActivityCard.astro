@@ -1,7 +1,8 @@
 ---
 import Icon from './Icon.astro';
-import type { Activity } from '../data/activities';
-interface Props { activity: Activity; }
+interface Props {
+  activity: { title: string; icon: string; day: string; text: string };
+}
 const { activity } = Astro.props;
 ---
 <article class="activity">

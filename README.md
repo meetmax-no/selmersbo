@@ -56,11 +56,19 @@ src/
     api/oauth/         GitHub-login til CMS (kører på Vercel)
 ```
 
-## Redigering: Sveltia CMS (spike på Udflugter)
+## Redigering: Sveltia CMS
 
-Indholdet på **Udflugter** styres nu gennem en headless CMS på `/admin`.
-Redaktøren udfylder felter (titel, dato, pris, beskrivelse, billede, udsolgt)
-og gemmer – ændringen bliver en commit i repoet, og Vercel bygger siden på ny.
+Indholdet styres gennem en headless CMS på `/admin`. Tre collections er
+koblet på:
+
+| Collection | Sider | Filer |
+| --- | --- | --- |
+| **Udflugter** | /udflugter | `src/content/udflugter/` |
+| **Nyheder** | Forsiden + /nyheder | `src/content/nyheder/` |
+| **Aktiviteter** | Forsiden + /aktiviteter | `src/content/aktiviteter/` |
+
+Redaktøren udfylder felter (fx titel, dato, tekst, billede) og gemmer –
+ændringen bliver en commit i repoet, og Vercel bygger siden på ny.
 
 **Prøv lokalt uden opsætning:**
 1. `npm run dev`

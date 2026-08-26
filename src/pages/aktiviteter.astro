@@ -1,10 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import ActivityCard from '../components/ActivityCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { site } from '../data/site';
-import { activities, weekPlan } from '../data/activities';
+import { weekPlan } from '../data/activities';
+
+const activities = (await getCollection('aktiviteter', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((e) => e.data);
 ---
 <BaseLayout
   title="Aktiviteter – Selmersbo"
@@ -33,7 +38,7 @@ import { activities, weekPlan } from '../data/activities';
   <div class="container">
     <p class="demo-note">
       <Icon name="check" size={20} />
-      Aktiviteterne herunder er <strong>eksempler til designudkastet</strong> –
+      Aktiviteterne redigeres i CMS'et under <strong>/admin</strong> –
       Selmersbo indsætter selv det aktuelle program.
     </p>
   </div>
