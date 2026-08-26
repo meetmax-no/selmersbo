@@ -239,6 +239,23 @@ p { margin: 0 0 1rem; max-width: 68ch; }
   .grid--3, .grid--2 { grid-template-columns: 1fr; }
 }
 
+/* Demo / placeholder notice */
+.demo-note {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: var(--gold-tint); color: #7a5410;
+  border: 1px solid #ecd9a9; border-radius: 12px;
+  padding: 0.8rem 1.1rem; font-size: 1rem; max-width: none;
+}
+.demo-note svg { color: var(--gold); flex: none; }
+.demo-note strong { color: #5e3f08; }
+
+/* Simple two-column prose + aside layout for content pages */
+.prose { max-width: 68ch; }
+.prose h2 { margin-top: 2rem; }
+.prose h2:first-child { margin-top: 0; }
+.split { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: clamp(2rem, 5vw, 3.5rem); align-items: start; }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+
 /* Utility */
 .visually-hidden {
   position: absolute; width: 1px; height: 1px;

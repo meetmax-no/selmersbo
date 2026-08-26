@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import ActivityCard from '../components/ActivityCard.astro';
+import CtaBand from '../components/CtaBand.astro';
 import { site, news } from '../data/site';
 import { activities } from '../data/activities';
 
@@ -177,26 +178,7 @@ const preview = activities.slice(0, 6);
   </section>
 
   <!-- ============ MEMBERSHIP CTA ============ -->
-  <section class="section section--green" id="bliv-medlem">
-    <div class="container cta">
-      <div>
-        <p class="eyebrow" style="color:#ffe6b8">Bliv en del af fællesskabet</p>
-        <h2>Bliv medlem af Selmersbo</h2>
-        <p class="cta-text">
-          Medlemskab giver adgang til alle husets aktiviteter og et varmt
-          fællesskab. Kontakt {site.manager} for at høre mere.
-        </p>
-      </div>
-      <div class="cta-actions">
-        <a class="btn btn--onGreen" href={`tel:+45${site.phone.replace(/\s/g, '')}`}>
-          <Icon name="phone" size={20} /> Ring {site.phone}
-        </a>
-        <a class="btn btn--ghost cta-mail" href={`mailto:${site.email}`}>
-          <Icon name="mail" size={20} /> Send en mail
-        </a>
-      </div>
-    </div>
-  </section>
+  <CtaBand />
 </BaseLayout>
 
 <style>
@@ -287,12 +269,6 @@ const preview = activities.slice(0, 6);
   .map-body span { color: var(--muted); margin-bottom: 0.9rem; }
 
   /* CTA */
-  .cta { display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
-  .cta-text { color: #eef4ee; max-width: 46ch; }
-  .cta-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-  .cta-mail { color: #fff; border-color: rgba(255,255,255,0.5); }
-  .cta-mail:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: #fff; }
-
   /* Responsive collapses */
   @media (max-width: 860px) {
     .hero-inner, .welcome, .practical { grid-template-columns: 1fr; }

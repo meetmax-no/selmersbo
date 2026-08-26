@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+
+const letters = [
+  { title: 'Nyhedsbrev – august 2026', date: 'August 2026', text: 'Sommerens højdepunkter og programmet for det nye halvår.' },
+  { title: 'Nyhedsbrev – juni 2026', date: 'Juni 2026', text: 'Sankthans, sommerudflugt og ferieåbningstider.' },
+  { title: 'Nyhedsbrev – april 2026', date: 'April 2026', text: 'Forårets nye hold og generalforsamlingen.' },
+  { title: 'Nyhedsbrev – februar 2026', date: 'Februar 2026', text: 'Vinterens foredragsrække og fastelavn i huset.' },
+];
+---
+<BaseLayout title="Nyhedsbreve – Selmersbo" description="Læs og hent Selmersbos nyhedsbreve.">
+  <PageHero
+    eyebrow="Arkiv"
+    title="Nyhedsbreve"
+    lead="Vores nyhedsbreve samler det vigtigste fra huset. Læs med, eller hent dem som PDF."
+    icon="mail" />
+
+  <section class="section" style="padding-top:2rem">
+    <div class="container">
+      <ul class="letters">
+        {letters.map((l) => (
+          <li class="letter">
+            <div class="letter-icon" aria-hidden="true"><Icon name="mail" size={24} /></div>
+            <div class="letter-body">
+              <span class="chip chip--sand">{l.date}</span>
+              <h3>{l.title}</h3>
+              <p>{l.text}</p>
+            </div>
+            <a class="btn btn--ghost" href="#">Hent PDF <Icon name="arrow" size={18} /></a>
+          </li>
+        ))}
+      </ul>
+      <p class="demo-note"><Icon name="check" size={20} /><span><strong>Eksempler til designudkastet</strong> – de rigtige nyhedsbreve lægges op her som PDF.</span></p>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .letters { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; gap: 1rem; }
+  .letter {
+    display: flex; align-items: center; gap: 1.2rem;
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow-sm); padding: 1.3rem 1.5rem;
+  }
+  .letter-icon { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .letter-body { flex: 1; min-width: 0; }
+  .letter-body h3 { margin: 0.3rem 0 0.2rem; font-size: 1.25rem; }
+  .letter-body p { margin: 0; color: var(--muted); font-size: 1rem; }
+  .letter .btn { flex: none; }
+  @media (max-width: 620px) {
+    .letter { flex-wrap: wrap; }
+    .letter .btn { width: 100%; }
+  }
+</style>

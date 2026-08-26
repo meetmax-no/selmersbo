@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+
+const trips = [
+  { title: 'Louisiana – kunst og udsigt', date: 'Torsdag 17. september', price: '150 kr.', text: 'Bustur til Louisiana i Humlebæk med tid til udstillinger, frokost og den smukke skulpturpark.' },
+  { title: 'Frederiksborg Slot', date: 'Onsdag 8. oktober', price: '120 kr.', text: 'Rundvisning på det imponerende renæssanceslot i Hillerød, efterfulgt af kaffe i slotshaven.' },
+  { title: 'Efterårstur til Nordsjælland', date: 'Tirsdag 4. november', price: '100 kr.', text: 'En rolig køretur gennem efterårsskoven med stop ved kysten og fælles frokost undervejs.' },
+];
+---
+<BaseLayout title="Udflugter – Selmersbo" description="Kommende udflugter og ture med Aktivhuset Selmersbo.">
+  <PageHero
+    eyebrow="Ud i det blå"
+    title="Udflugter"
+    lead="Nogle af årets bedste oplevelser sker uden for huset. Tag med på tur i godt selskab – bussen kører fra Selmersbo."
+    icon="bus" />
+
+  <section class="section" style="padding-top:2rem">
+    <div class="container">
+      <div class="grid grid--3">
+        {trips.map((t) => (
+          <article class="trip">
+            <div class="trip-top">
+              <span class="chip"><Icon name="calendar" size={16} /> {t.date}</span>
+              <span class="chip chip--gold">{t.price}</span>
+            </div>
+            <h3>{t.title}</h3>
+            <p>{t.text}</p>
+            <a class="btn btn--primary" href="#">Tilmeld <Icon name="arrow" size={18} /></a>
+          </article>
+        ))}
+      </div>
+      <p class="demo-note"><Icon name="check" size={20} /><span><strong>Eksempler til designudkastet</strong> – Selmersbo indsætter de aktuelle udflugter med dato, pris og tilmelding.</span></p>
+    </div>
+  </section>
+
+  <CtaBand
+    eyebrow="Vil du med?"
+    title="Tilmeld dig næste udflugt"
+    text="Ring eller skriv, så hjælper vi dig med tilmelding og praktiske detaljer om turen." />
+</BaseLayout>
+
+<style>
+  .trip {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; height: 100%;
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow-sm); padding: 1.6rem;
+  }
+  .trip-top { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .trip h3 { margin: 0.2rem 0 0; }
+  .trip p { color: var(--muted); margin: 0; font-size: 1.02rem; }
+  .trip .btn { margin-top: auto; }
+</style>

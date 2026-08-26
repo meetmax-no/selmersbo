@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+<BaseLayout title="Tilgængelighedserklæring – Selmersbo" description="Tilgængelighedserklæring for selmersbo.dk.">
+  <PageHero
+    eyebrow="Erklæring"
+    title="Tilgængelighedserklæring"
+    lead="Vi ønsker, at alle kan bruge selmersbo.dk – uanset syn, hørelse, motorik eller hvilken enhed man bruger."
+    icon="accessibility" />
+
+  <section class="section" style="padding-top:2rem">
+    <div class="container">
+      <div class="prose">
+        <h2>Sådan arbejder vi med tilgængelighed</h2>
+        <p>
+          Denne hjemmeside er bygget med fokus på god tilgængelighed og følger så
+          vidt muligt WCAG 2.1 på niveau AA. Det betyder blandt andet:
+        </p>
+        <ul class="checklist">
+          <li><Icon name="check" size={20} /> Store, letlæselige tekster og god linjeafstand</li>
+          <li><Icon name="check" size={20} /> Tydelig farvekontrast mellem tekst og baggrund</li>
+          <li><Icon name="check" size={20} /> Kan betjenes med tastatur, med synligt fokus</li>
+          <li><Icon name="check" size={20} /> Beskrivende alternativ tekst på billeder</li>
+          <li><Icon name="check" size={20} /> Responsivt design, der virker på mobil, tablet og computer</li>
+          <li><Icon name="check" size={20} /> “Spring til indhold”-link øverst på hver side</li>
+        </ul>
+
+        <h2>Huset er også tilgængeligt</h2>
+        <p>
+          Selve Aktivhuset Selmersbo er indrettet i ét plan med niveaufri adgang,
+          brede døre og handicapvenligt toilet, så alle kan komme trygt rundt.
+        </p>
+
+        <h2>Fandt du en barriere?</h2>
+        <p>
+          Oplever du noget på siden, du ikke kan bruge, hører vi meget gerne fra
+          dig – så retter vi det. Kontakt os på
+          <a href={`tel:+45${site.phone.replace(/\s/g, '')}`}>{site.phone}</a> eller
+          <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+        <p class="demo-note"><Icon name="check" size={20} /><span>Dette er en <strong>eksempel-erklæring</strong> til designudkastet og skal tilpasses de officielle krav inden brug.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .checklist { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: 0.6rem; }
+  .checklist li { display: flex; align-items: center; gap: 0.6rem; }
+  .checklist :global(svg) { color: var(--green); flex: none; }
+</style>

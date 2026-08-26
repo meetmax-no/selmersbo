@@ -25,15 +25,18 @@ export const site = {
   ],
 } as const;
 
-// Main navigation – mirrors the current site's structure.
+// Main navigation – mirrors the current site's structure, all real routes.
 export const nav = [
   { label: 'Forside', href: '/' },
-  { label: 'Nyheder', href: '#nyheder' },
+  { label: 'Nyheder', href: '/nyheder' },
+  { label: 'Nyhedsbreve', href: '/nyhedsbreve' },
+  { label: 'Udflugter', href: '/udflugter' },
   { label: 'Aktiviteter', href: '/aktiviteter' },
-  { label: 'Udflugter', href: '#' },
-  { label: 'Galleri', href: '#' },
-  { label: 'Udlejning', href: '#' },
-  { label: 'Om os', href: '#her-bor-vi' },
+  { label: 'Galleri', href: '/galleri' },
+  { label: 'Udlejning', href: '/udlejning' },
+  { label: 'Mobile Pay', href: '/mobilepay' },
+  { label: 'Generalforsamling', href: '/generalforsamling' },
+  { label: 'Om os', href: '/om-os' },
 ] as const;
 
 // News / highlights – replaces the coral "error-looking" blocks on the old site.

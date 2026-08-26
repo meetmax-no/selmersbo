@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+
+const agenda = [
+  'Valg af dirigent og referent',
+  'Formandens beretning',
+  'Fremlæggelse af regnskab',
+  'Indkomne forslag',
+  'Fastsættelse af kontingent',
+  'Valg til bestyrelsen',
+  'Eventuelt',
+];
+const docs = [
+  'Dagsorden 2026 (PDF)',
+  'Regnskab 2025 (PDF)',
+  'Referat fra sidste år (PDF)',
+];
+---
+<BaseLayout title="Generalforsamling – Selmersbo" description="Information om Selmersbos generalforsamling – dato, dagsorden og dokumenter.">
+  <PageHero
+    eyebrow="For medlemmer"
+    title="Generalforsamling"
+    lead="Den årlige generalforsamling er, hvor vi sammen sætter retning for Selmersbo. Alle medlemmer er velkomne."
+    icon="users" />
+
+  <section class="section" style="padding-top:2rem">
+    <div class="container split">
+      <div class="prose">
+        <div class="when card">
+          <div class="when-icon" aria-hidden="true"><Icon name="calendar" size={26} /></div>
+          <div>
+            <span class="chip chip--gold">Næste møde</span>
+            <h2 style="margin:.3rem 0 0">Onsdag den 25. marts 2026, kl. 14.00</h2>
+            <p style="margin:.3rem 0 0;color:var(--muted)">I fælleslokalet på Selmersbo, Selmersvej 13, Hørsholm.</p>
+          </div>
+        </div>
+
+        <h2>Dagsorden</h2>
+        <ol class="agenda">
+          {agenda.map((a) => <li><Icon name="check" size={18} /> {a}</li>)}
+        </ol>
+        <p class="demo-note"><Icon name="check" size={20} /><span>Dato og dagsorden er <strong>eksempler</strong> til udkastet – opdateres af bestyrelsen.</span></p>
+      </div>
+
+      <aside class="docs-card">
+        <h3>Dokumenter</h3>
+        <ul>
+          {docs.map((d) => (
+            <li><a href="#"><Icon name="mail" size={18} /> {d}</a></li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .when { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 2rem; }
+  .when-icon { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .agenda { list-style: none; margin: 0 0 1.5rem; padding: 0; display: grid; gap: 0.6rem; counter-reset: item; max-width: 55ch; }
+  .agenda li { display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 0.9rem; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
+  .agenda li :global(svg) { color: var(--green); flex: none; }
+
+  .docs-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.6rem; position: sticky; top: 96px; }
+  .docs-card h3 { margin: 0 0 0.8rem; }
+  .docs-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+  .docs-card a { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--green-700); font-weight: 600; padding: 0.5rem 0; border-bottom: 1px solid var(--line); }
+  .docs-card a:hover { color: var(--terra); }
+  @media (max-width: 860px) { .docs-card { position: static; } }
+</style>

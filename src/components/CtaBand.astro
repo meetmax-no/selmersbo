@@ -1,0 +1,37 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  text?: string;
+}
+const {
+  eyebrow = 'Bliv en del af fællesskabet',
+  title = 'Bliv medlem af Selmersbo',
+  text = `Medlemskab giver adgang til alle husets aktiviteter og et varmt fællesskab. Kontakt ${site.manager} for at høre mere.`,
+} = Astro.props;
+const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
+---
+<section class="section section--green" id="bliv-medlem">
+  <div class="container cta">
+    <div>
+      <p class="eyebrow cta-eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+      <p class="cta-text">{text}</p>
+    </div>
+    <div class="cta-actions">
+      <a class="btn btn--onGreen" href={tel}><Icon name="phone" size={20} /> Ring {site.phone}</a>
+      <a class="btn btn--ghost cta-mail" href={`mailto:${site.email}`}><Icon name="mail" size={20} /> Send en mail</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta { display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .cta-eyebrow { color: #ffe6b8; }
+  .cta-text { color: #eef4ee; max-width: 46ch; }
+  .cta-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .cta-mail { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+  .cta-mail:hover { background: rgba(255, 255, 255, 0.12); color: #fff; border-color: #fff; }
+</style>

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import ActivityCard from '../components/ActivityCard.astro';
+import CtaBand from '../components/CtaBand.astro';
 import { site } from '../data/site';
 import { activities, weekPlan } from '../data/activities';
 ---
@@ -94,26 +95,11 @@ import { activities, weekPlan } from '../data/activities';
   </section>
 
   <!-- ============ MEMBERSHIP CTA ============ -->
-  <section class="section section--green" id="bliv-medlem">
-    <div class="container cta">
-      <div>
-        <p class="eyebrow" style="color:#ffe6b8">Godt at vide</p>
-        <h2>Har du lyst til at være med?</h2>
-        <p class="cta-text">
-          Alle seniorer er velkomne. Ring eller skriv, så fortæller vi gerne mere
-          om aktiviteterne og om at blive medlem.
-        </p>
-      </div>
-      <div class="cta-actions">
-        <a class="btn btn--onGreen" href={`tel:+45${site.phone.replace(/\s/g, '')}`}>
-          <Icon name="phone" size={20} /> Ring {site.phone}
-        </a>
-        <a class="btn btn--ghost cta-mail" href={`mailto:${site.email}`}>
-          <Icon name="mail" size={20} /> Send en mail
-        </a>
-      </div>
-    </div>
-  </section>
+  <CtaBand
+    eyebrow="Godt at vide"
+    title="Har du lyst til at være med?"
+    text="Alle seniorer er velkomne. Ring eller skriv, så fortæller vi gerne mere om aktiviteterne og om at blive medlem."
+  />
 </BaseLayout>
 
 <style>
@@ -151,10 +137,4 @@ import { activities, weekPlan } from '../data/activities';
   .join-step h3 { margin: 0 0 0.4rem; }
   .join-step p { color: var(--muted); margin: 0; }
   @media (max-width: 780px) { .join { grid-template-columns: 1fr; } }
-
-  .cta { display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
-  .cta-text { color: #eef4ee; max-width: 46ch; }
-  .cta-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-  .cta-mail { color: #fff; border-color: rgba(255,255,255,0.5); }
-  .cta-mail:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: #fff; }
 </style>
