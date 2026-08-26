@@ -12,11 +12,16 @@ const clientSecret = () => process.env.GITHUB_OAUTH_SECRET ?? import.meta.env.GI
 /** Renders the tiny page that postMessages the result to the opener (the CMS). */
 function respond(status: 'success' | 'error', content: Record<string, unknown>): Response {
   const message = `authorization:github:${status}:` + JSON.stringify(content);
+  // Canonical Decap/Sveltia OAuth handshake: announce to the opener, then on
+  // its reply (any message) send the result to that window's origin.
   const script = `
     (function () {
+      if (!window.opener) { document.body.innerHTML = 'Åbn CMS i hovedvinduet og prøv igen.'; return; }
+      var sent = false;
       function receive(e) {
-        if (!e.data || e.data !== 'authorizing:github') return;
-        window.opener.postMessage(${JSON.stringify(message)}, e.origin);
+        if (sent) return;
+        sent = true;
+        window.opener.postMessage(${JSON.stringify(message)}, e.origin || '*');
         window.removeEventListener('message', receive, false);
       }
       window.addEventListener('message', receive, false);
