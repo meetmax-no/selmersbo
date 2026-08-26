@@ -1,15 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 
-const letters = [
-  { title: 'Nyhedsbrev – august 2026', date: 'August 2026', text: 'Sommerens højdepunkter og programmet for det nye halvår.' },
-  { title: 'Nyhedsbrev – juni 2026', date: 'Juni 2026', text: 'Sankthans, sommerudflugt og ferieåbningstider.' },
-  { title: 'Nyhedsbrev – april 2026', date: 'April 2026', text: 'Forårets nye hold og generalforsamlingen.' },
-  { title: 'Nyhedsbrev – februar 2026', date: 'Februar 2026', text: 'Vinterens foredragsrække og fastelavn i huset.' },
-];
+const monthFmt = new Intl.DateTimeFormat('da-DK', { month: 'long', year: 'numeric' });
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const letters = (await getCollection('nyhedsbreve', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((e) => ({ ...e.data, dateLabel: cap(monthFmt.format(e.data.date)) }));
 ---
 <BaseLayout title="Nyhedsbreve – Selmersbo" description="Læs og hent Selmersbos nyhedsbreve.">
   <PageHero
@@ -25,15 +25,17 @@ const letters = [
           <li class="letter">
             <div class="letter-icon" aria-hidden="true"><Icon name="mail" size={24} /></div>
             <div class="letter-body">
-              <span class="chip chip--sand">{l.date}</span>
+              <span class="chip chip--sand">{l.dateLabel}</span>
               <h3>{l.title}</h3>
-              <p>{l.text}</p>
+              {l.summary && <p>{l.summary}</p>}
             </div>
-            <a class="btn btn--ghost" href="#">Hent PDF <Icon name="arrow" size={18} /></a>
+            {l.file
+              ? <a class="btn btn--ghost" href={l.file} target="_blank" rel="noopener">Hent PDF <Icon name="arrow" size={18} /></a>
+              : <span class="btn btn--ghost is-disabled" aria-disabled="true">PDF kommer</span>}
           </li>
         ))}
       </ul>
-      <p class="demo-note"><Icon name="check" size={20} /><span><strong>Eksempler til designudkastet</strong> – de rigtige nyhedsbreve lægges op her som PDF.</span></p>
+      <p class="demo-note"><Icon name="check" size={20} /><span>Nyhedsbreve redigeres i CMS'et under <strong>/admin</strong> – hvert brev kan få en PDF vedhæftet.</span></p>
     </div>
   </section>
 

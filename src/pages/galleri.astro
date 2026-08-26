@@ -1,14 +1,13 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 
-const photos = [
-  { src: '/images/community-flags.jpg', alt: 'Medlemmerne samlet udenfor med flag og bogstavskilte, der staver Selmersbo', big: true },
-  { src: '/images/koncert.jpg', alt: 'Kor optræder i det lyse aktivitetsrum' },
-];
-const placeholders = ['Sommerfest', 'Fællesspisning', 'Udflugt', 'Håndarbejde', 'Foredrag'];
+const photos = (await getCollection('galleri', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((e) => e.data);
 ---
 <BaseLayout title="Galleri – Selmersbo" description="Billeder fra livet på Aktivhuset Selmersbo.">
   <PageHero
@@ -19,20 +18,19 @@ const placeholders = ['Sommerfest', 'Fællesspisning', 'Udflugt', 'Håndarbejde'
 
   <section class="section" style="padding-top:2rem">
     <div class="container">
-      <div class="gallery">
-        {photos.map((p) => (
-          <figure class={`shot${p.big ? ' shot--wide' : ''}`}>
-            <img src={p.src} alt={p.alt} loading="lazy" />
-          </figure>
-        ))}
-        {placeholders.map((label) => (
-          <figure class="shot shot--placeholder" aria-hidden="true">
-            <Icon name="users" size={30} />
-            <span>{label}</span>
-          </figure>
-        ))}
-      </div>
-      <p class="demo-note"><Icon name="check" size={20} /><span>De to fotos er rigtige fra Selmersbo. De øvrige felter er <strong>pladsholdere</strong> – her lægger I selv flere billeder op.</span></p>
+      {photos.length === 0 ? (
+        <p class="empty">Der er ingen billeder endnu – kig forbi igen snart.</p>
+      ) : (
+        <div class="gallery">
+          {photos.map((p) => (
+            <figure class="shot">
+              <img src={p.image} alt={p.caption ?? 'Foto fra Selmersbo'} loading="lazy" />
+              {p.caption && <figcaption>{p.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      )}
+      <p class="demo-note"><Icon name="check" size={20} /><span>Billeder redigeres i CMS'et under <strong>/admin</strong> – upload nye fotos og giv dem en billedtekst.</span></p>
     </div>
   </section>
 
@@ -40,17 +38,19 @@ const placeholders = ['Sommerfest', 'Fællesspisning', 'Udflugt', 'Håndarbejde'
 </BaseLayout>
 
 <style>
-  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; grid-auto-rows: 220px; }
-  .shot { margin: 0; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--line); }
-  .shot img { width: 100%; height: 100%; object-fit: cover; }
-  .shot--wide { grid-column: span 2; grid-row: span 2; }
-  .shot--placeholder {
-    display: grid; place-content: center; justify-items: center; gap: 0.5rem;
-    background: var(--sand-deep); color: var(--muted); font-weight: 600;
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; grid-auto-rows: 240px; }
+  .shot { margin: 0; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--line); position: relative; }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* First photo gets a larger, featured tile */
+  .shot:first-child { grid-column: span 2; grid-row: span 2; }
+  .shot figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #fff; font-weight: 600;
+    background: linear-gradient(transparent, rgba(20, 19, 15, 0.72));
   }
-  .shot--placeholder :global(svg) { color: var(--green); opacity: 0.6; }
+  .empty { color: var(--muted); font-size: 1.1rem; }
   @media (max-width: 720px) {
-    .gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
-    .shot--wide { grid-column: span 2; grid-row: span 1; height: 240px; }
+    .gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 170px; }
+    .shot:first-child { grid-column: span 2; grid-row: span 1; height: 240px; }
   }
 </style>

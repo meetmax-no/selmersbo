@@ -10,9 +10,9 @@ backend:
   base_url: https://selmersbo.vercel.app
   auth_endpoint: api/oauth/authorize
 
-# Where uploaded images are stored in the repo, and how they're referenced on the site.
-media_folder: "public/images/udflugter"
-public_folder: "/images/udflugter"
+# One predictable upload folder for all media (images + PDFs).
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
 # Danish editor UI + content.
 locale: da
@@ -102,6 +102,45 @@ collections:
           - { label: "Kalender", value: calendar }
       - { name: day, label: "Dag", widget: string, hint: "F.eks. Mandag, Fredag eller Månedligt." }
       - { name: text, label: "Beskrivelse", widget: text }
+      - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
+      - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
+
+  - name: nyhedsbreve
+    label: "Nyhedsbreve"
+    label_singular: "Nyhedsbrev"
+    description: "Nyhedsbreve der vises på siden Nyhedsbreve."
+    folder: "src/content/nyhedsbreve"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: "{{year}}-{{month}}-{{title}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: "Titel", widget: string, hint: "F.eks. Nyhedsbrev – august 2026" }
+      - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+      - { name: summary, label: "Kort beskrivelse", widget: text, required: false }
+      - { name: file, label: "PDF-fil", widget: file, required: false, hint: "Upload nyhedsbrevet som PDF." }
+      - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
+
+  - name: galleri
+    label: "Galleri"
+    label_singular: "Billede"
+    description: "Billeder der vises i galleriet."
+    folder: "src/content/galleri"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: caption
+    slug: "{{fields.order}}-{{caption}}"
+    summary: "{{caption}}"
+    sortable_fields: [order, caption]
+    fields:
+      - { name: image, label: "Billede", widget: image }
+      - { name: caption, label: "Billedtekst", widget: string, required: false }
       - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 

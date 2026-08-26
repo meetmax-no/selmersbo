@@ -68,4 +68,27 @@ const udlejning = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning };
+// Nyhedsbreve (newsletters) – list with an optional PDF file.
+const nyhedsbreve = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/nyhedsbreve' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    summary: z.string().optional(),
+    file: z.string().optional(), // public path to the PDF, e.g. /uploads/xxx.pdf
+    draft: z.boolean().default(false),
+  }),
+});
+
+// Galleri (gallery) – list of photos with a caption.
+const galleri = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/galleri' }),
+  schema: z.object({
+    caption: z.string().optional(),
+    image: z.string(), // public path, e.g. /uploads/foto.jpg
+    order: z.number().default(0),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri };
