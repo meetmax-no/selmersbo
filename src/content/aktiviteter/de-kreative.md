@@ -1,6 +1,7 @@
 ---
 title: De kreative
 icon: brush
+image: /uploads/akt-dekreative.jpg
 day: Onsdage kl. 13.00
 text: Akryl, akvarel, decoupage og hyggeligt samvær.
 order: 6
