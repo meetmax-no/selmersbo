@@ -15,6 +15,7 @@ const isActive = (href: string) =>
     </a>
 
     <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden />
+    <a class="btn btn--accent header-cta-mobile" href="#bliv-medlem">Bliv medlem</a>
     <label for="nav-toggle" class="nav-burger" aria-label="Åbn menu">
       <span></span><span></span><span></span>
     </label>
@@ -81,6 +82,7 @@ const isActive = (href: string) =>
   /* Mobile menu (CSS-only, checkbox toggle) */
   .nav-burger { display: none; }
   .nav-toggle { display: none; }
+  .header-cta-mobile { display: none; }
 
   @media (max-width: 1360px) {
     .nav-burger {
@@ -89,6 +91,14 @@ const isActive = (href: string) =>
       border: 1px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer;
     }
     .nav-burger span { width: 22px; height: 2.5px; background: var(--ink); border-radius: 2px; transition: 0.2s; }
+
+    /* Keep the primary CTA visible next to the burger */
+    .header-cta-mobile {
+      display: inline-flex; margin-left: auto;
+      padding: 0.6rem 1.05rem; min-height: 44px; font-size: 1rem;
+      color: #ffffff; border-color: transparent; white-space: nowrap;
+    }
+    .header-cta-mobile:hover { color: #ffffff; }
 
     .site-nav {
       position: absolute; inset: 78px 0 auto 0;
@@ -100,11 +110,26 @@ const isActive = (href: string) =>
     }
     .site-nav ul { flex-direction: column; gap: 0.2rem; }
     .site-nav a { padding: 0.75rem 0; font-size: 1.15rem; border-bottom: 1px solid var(--line); }
-    .nav-cta { margin-top: 0.75rem; align-self: flex-start; }
+    /* The CTA now lives next to the burger, so hide the in-menu copy */
+    .site-nav .nav-cta { display: none; }
 
     .nav-toggle:checked ~ .site-nav { transform: translateY(0); visibility: visible; }
     .nav-toggle:checked ~ .nav-burger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
     .nav-toggle:checked ~ .nav-burger span:nth-child(2) { opacity: 0; }
     .nav-toggle:checked ~ .nav-burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+  }
+
+  /* Very small phones: give the CTA + burger room */
+  @media (max-width: 430px) {
+    .brand-tag { display: none; }
+    .brand-name { font-size: 1.3rem; }
+    .header-cta-mobile { padding: 0.55rem 0.85rem; font-size: 0.95rem; }
+  }
+  @media (max-width: 380px) {
+    .header-inner { gap: 0.5rem; padding-inline: 0.8rem; }
+    .brand-mark { width: 40px; height: 40px; font-size: 1.25rem; }
+    .brand-name { font-size: 1.1rem; }
+    .header-cta-mobile { padding: 0.5rem 0.7rem; font-size: 0.9rem; min-height: 42px; }
+    .nav-burger { width: 44px; height: 44px; }
   }
 </style>

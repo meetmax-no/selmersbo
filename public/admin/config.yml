@@ -1,0 +1,49 @@
+# Sveltia CMS – configuration
+# Docs: https://github.com/sveltia/sveltia-cms
+
+backend:
+  name: github
+  repo: meetmax-no/selmersbo
+  branch: main
+  # IMPORTANT: base_url must be the exact domain where this site (and the
+  # /api/oauth endpoints) is served. Change it if your Vercel domain differs.
+  base_url: https://selmersbo.vercel.app
+  auth_endpoint: api/oauth/authorize
+
+# Where uploaded images are stored in the repo, and how they're referenced on the site.
+media_folder: "public/images/udflugter"
+public_folder: "/images/udflugter"
+
+# Danish editor UI + content.
+locale: da
+site_url: https://selmersbo.dk
+display_url: https://selmersbo.dk
+
+collections:
+  - name: udflugter
+    label: "Udflugter"
+    label_singular: "Udflugt"
+    description: "Ture og udflugter der vises på siden Udflugter."
+    folder: "src/content/udflugter"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: "{{year}}-{{month}}-{{day}}-{{title}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    view_filters:
+      - { label: "Kun udsolgte", field: soldOut, pattern: true }
+      - { label: "Kladder", field: draft, pattern: true }
+    fields:
+      - { name: title, label: "Titel", widget: string, hint: "F.eks. Jægerspris Slot" }
+      - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+      - { name: departure, label: "Afgang", widget: string, required: false, hint: "F.eks. 10.00 fra Selmersbo" }
+      - { name: returnTime, label: "Hjemkomst", widget: string, required: false, hint: "F.eks. ca. 15.00" }
+      - { name: price, label: "Pris", widget: string, required: false, hint: "F.eks. 250 kr." }
+      - { name: summary, label: "Beskrivelse", widget: text, hint: "En kort beskrivelse af turen." }
+      - { name: image, label: "Billede", widget: image, required: false, hint: "Valgfrit foto fra turen." }
+      - { name: signupUrl, label: "Tilmeldingslink", widget: string, required: false, hint: "Valgfrit link til tilmelding." }
+      - { name: soldOut, label: "Udsolgt", widget: boolean, default: false }
+      - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }

@@ -1,14 +1,19 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 
-const trips = [
-  { title: 'Louisiana – kunst og udsigt', date: 'Torsdag 17. september', price: '150 kr.', text: 'Bustur til Louisiana i Humlebæk med tid til udstillinger, frokost og den smukke skulpturpark.' },
-  { title: 'Frederiksborg Slot', date: 'Onsdag 8. oktober', price: '120 kr.', text: 'Rundvisning på det imponerende renæssanceslot i Hillerød, efterfulgt af kaffe i slotshaven.' },
-  { title: 'Efterårstur til Nordsjælland', date: 'Tirsdag 4. november', price: '100 kr.', text: 'En rolig køretur gennem efterårsskoven med stop ved kysten og fælles frokost undervejs.' },
-];
+// Content is managed in the CMS at /admin (collection "udflugter").
+const all = await getCollection('udflugter', ({ data }) => !data.draft);
+const trips = all.sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+const dateFmt = new Intl.DateTimeFormat('da-DK', { weekday: 'long', day: 'numeric', month: 'long' });
+const formatDate = (d: Date) => {
+  const s = dateFmt.format(d);
+  return s.charAt(0).toUpperCase() + s.slice(1); // "torsdag" -> "Torsdag"
+};
 ---
 <BaseLayout title="Udflugter – Selmersbo" description="Kommende udflugter og ture med Aktivhuset Selmersbo.">
   <PageHero
@@ -19,20 +24,35 @@ const trips = [
 
   <section class="section" style="padding-top:2rem">
     <div class="container">
-      <div class="grid grid--3">
-        {trips.map((t) => (
-          <article class="trip">
-            <div class="trip-top">
-              <span class="chip"><Icon name="calendar" size={16} /> {t.date}</span>
-              <span class="chip chip--gold">{t.price}</span>
-            </div>
-            <h3>{t.title}</h3>
-            <p>{t.text}</p>
-            <a class="btn btn--primary" href="#">Tilmeld <Icon name="arrow" size={18} /></a>
-          </article>
-        ))}
-      </div>
-      <p class="demo-note"><Icon name="check" size={20} /><span><strong>Eksempler til designudkastet</strong> – Selmersbo indsætter de aktuelle udflugter med dato, pris og tilmelding.</span></p>
+      {trips.length === 0 ? (
+        <p class="empty">Der er ingen planlagte udflugter lige nu – kig forbi igen snart.</p>
+      ) : (
+        <div class="grid grid--3">
+          {trips.map((t) => (
+            <article class={`trip${t.data.soldOut ? ' trip--sold' : ''}`}>
+              {t.data.image && <img class="trip-img" src={t.data.image} alt={t.data.title} loading="lazy" />}
+              <div class="trip-top">
+                <span class="chip"><Icon name="calendar" size={16} /> {formatDate(t.data.date)}</span>
+                {t.data.price && <span class="chip chip--gold">{t.data.price}</span>}
+                {t.data.soldOut && <span class="chip chip--sold">Udsolgt</span>}
+              </div>
+              <h3>{t.data.title}</h3>
+              <p>{t.data.summary}</p>
+              {(t.data.departure || t.data.returnTime) && (
+                <p class="trip-meta">
+                  {t.data.departure && <span><Icon name="clock" size={15} /> Afgang {t.data.departure}</span>}
+                  {t.data.returnTime && <span><Icon name="pin" size={15} /> Hjemkomst {t.data.returnTime}</span>}
+                </p>
+              )}
+              {t.data.soldOut ? (
+                <span class="btn btn--ghost is-disabled" aria-disabled="true">Udsolgt</span>
+              ) : (
+                <a class="btn btn--primary" href={t.data.signupUrl ?? '#bliv-medlem'}>Tilmeld <Icon name="arrow" size={18} /></a>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   </section>
 
@@ -48,8 +68,16 @@ const trips = [
     background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
     box-shadow: var(--shadow-sm); padding: 1.6rem;
   }
+  .trip-img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 12px; margin-bottom: 0.3rem; }
   .trip-top { display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .trip h3 { margin: 0.2rem 0 0; }
   .trip p { color: var(--muted); margin: 0; font-size: 1.02rem; }
+  .trip-meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; font-size: 0.95rem; }
+  .trip-meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .trip-meta :global(svg) { color: var(--green); }
   .trip .btn { margin-top: auto; }
+  .chip--sold { background: var(--terra-tint); color: var(--terra); }
+  .trip--sold { opacity: 0.92; }
+  .btn.is-disabled { pointer-events: none; opacity: 0.55; }
+  .empty { color: var(--muted); font-size: 1.1rem; }
 </style>

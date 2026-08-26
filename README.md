@@ -40,19 +40,51 @@ npm run preview    # forhåndsvis produktionsbuild
 ## Struktur
 
 ```
-public/images/        Rigtige fotos fra Selmersbo
+public/
+  admin/              Sveltia CMS (redigering) – index.html + config.yml + bundle
+  images/             Fotos (CMS uploader udflugts-billeder til images/udflugter)
 src/
+  content.config.ts   Skema for "udflugter"-collection (valideres ved build)
+  content/udflugter/  Én Markdown-fil pr. udflugt (redigeres via CMS)
   data/site.ts        Kontaktinfo, åbningstider, menu, nyheder
   data/activities.ts  Aktiviteter (eksempeldata til udkastet)
-  components/          Header, Footer, ActivityCard, Icon
+  components/          Header, Footer, ActivityCard, Icon, PageHero, CtaBand
   layouts/            BaseLayout
   pages/
     index.astro       Forsiden
-    aktiviteter.astro Aktiviteter
+    aktiviteter.astro Aktiviteter (+ de øvrige sider)
+    api/oauth/         GitHub-login til CMS (kører på Vercel)
 ```
+
+## Redigering: Sveltia CMS (spike på Udflugter)
+
+Indholdet på **Udflugter** styres nu gennem en headless CMS på `/admin`.
+Redaktøren udfylder felter (titel, dato, pris, beskrivelse, billede, udsolgt)
+og gemmer – ændringen bliver en commit i repoet, og Vercel bygger siden på ny.
+
+**Prøv lokalt uden opsætning:**
+1. `npm run dev`
+2. Åbn `http://localhost:4321/admin/`
+3. Klik **“Work with Local Repository”** og vælg denne mappe. Nu kan du oprette
+   og redigere udflugter, og filerne skrives direkte i `src/content/udflugter/`.
+
+**Produktion på Vercel (så redaktører kan logge ind i browseren):**
+1. Opret en **GitHub OAuth App** (Settings → Developer settings → OAuth Apps):
+   - *Homepage URL*: jeres Vercel-domæne
+   - *Authorization callback URL*: `https://<domæne>/api/oauth/callback`
+2. Sæt to **Environment Variables** i Vercel:
+   - `GITHUB_OAUTH_ID` = OAuth App'ens Client ID
+   - `GITHUB_OAUTH_SECRET` = Client Secret
+3. Ret `base_url` i `public/admin/config.yml` til det domæne, der serverer siden.
+4. Inviter redaktørerne som collaborators på `meetmax-no/selmersbo`.
+
+Redaktørerne logger derefter ind med deres (gratis) GitHub-konto via
+**“Sign In with GitHub”**. Kun 1–2 personer skal have adgang.
+
+> Vi startede med **Udflugter** som spike. Resten af indholdet (nyheder,
+> aktiviteter, m.m.) kan flyttes ind i tilsvarende collections på samme måde.
 
 ## Bemærk
 
-Aktivitetsdata og nogle nyheder er **eksempelindhold** til udkastet.
-Rigtige fotos stammer fra den nuværende selmersbo.dk og bruges her som
-pladsholdere for redesignet.
+Aktivitetsdata og nogle nyheder er stadig **eksempelindhold** til udkastet.
+Fotos stammer fra den nuværende selmersbo.dk og bruges som pladsholdere.
