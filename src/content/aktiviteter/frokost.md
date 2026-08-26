@@ -1,6 +1,7 @@
 ---
 title: Frokost
 icon: coffee
+image: /uploads/akt-frokost.jpg
 day: Hver fredag kl. 12.00
 text: Fælles frokost i caféen.
 order: 9
