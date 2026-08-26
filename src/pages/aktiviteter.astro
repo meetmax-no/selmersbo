@@ -103,7 +103,7 @@ const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
 <style>
   .hero-cta { display: flex; gap: 0.85rem; flex-wrap: wrap; margin-top: 1.6rem; }
 
-  .akt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2.5vw, 1.5rem); }
+  .akt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2.5vw, 1.5rem); grid-auto-rows: 1fr; }
   @media (max-width: 900px) { .akt-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .akt-grid { grid-template-columns: 1fr; } }
 
@@ -114,7 +114,7 @@ const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
     transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
   }
   .akt-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--green); }
-  .akt-media { position: relative; aspect-ratio: 16 / 9; background: var(--green-050); }
+  .akt-media { flex: none; position: relative; height: 190px; background: var(--green-050); overflow: hidden; }
   .akt-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .akt-media-icon { position: absolute; inset: 0; display: grid; place-items: center; color: var(--green-700); }
   .akt-status {
@@ -124,7 +124,7 @@ const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
   .akt-body { padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
   .akt-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap; }
   .akt-head h3 { margin: 0; font-size: 1.2rem; }
-  .akt-body p { margin: 0; color: var(--muted); font-size: 1rem; }
+  .akt-body p { margin: 0; color: var(--muted); font-size: 1rem; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .akt-open { margin-top: auto; display: inline-flex; align-items: center; gap: 0.35rem; color: var(--green-700); font-weight: 650; padding-top: 0.4rem; }
 
   /* Modal (shared look with the newsletters) */
