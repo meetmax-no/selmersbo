@@ -7,9 +7,10 @@ import { getSettings } from '../lib/settings';
 const site = await getSettings();
 
 const number = site.mobilepay || '95956';
-// Officielt MobilePay-betalingslink til et MyShop-nummer. Åbner MobilePay
-// (app på telefon) med Selmersbos nummer – beløb og tekst skrives af brugeren.
-const payLink = `https://mobilepay.dk/erhverv/betalingslink/betalingslink-svar?phone=${number.replace(/\s/g, '')}`;
+// Officielt MobilePay-betalingslink til Selmersbos MyShop-/merchantnummer.
+// Åbner MobilePay-appens betalingslink-flow (ikke en mobiloverførsel) –
+// beløb og tekst skriver brugeren selv.
+const payLink = `https://qr.mobilepay.dk/paymentlink?phone=${number.replace(/\s/g, '')}`;
 const steps = [
   'Tryk på knappen “Betal med MobilePay” – eller åbn MobilePay på din telefon.',
   `Indtast Selmersbos nummer: ${number} (hvis du ikke brugte knappen).`,
