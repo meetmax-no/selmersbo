@@ -1,6 +1,7 @@
 ---
 import { nav } from '../data/site';
 import { getSettings } from '../lib/settings';
+import Icon from './Icon.astro';
 const site = await getSettings();
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
@@ -18,6 +19,9 @@ const isActive = (href: string) =>
 
     <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden />
     <a class="btn btn--accent header-cta-mobile" href="#bliv-medlem">Bliv medlem</a>
+    <a class="header-search-mobile" href="/soeg" aria-label="Søg på siden" aria-current={isActive('/soeg') ? 'page' : undefined}>
+      <Icon name="search" size={22} />
+    </a>
     <label for="nav-toggle" class="nav-burger" aria-label="Åbn menu">
       <span></span><span></span><span></span>
     </label>
@@ -32,6 +36,9 @@ const isActive = (href: string) =>
           </li>
         ))}
       </ul>
+      <a class="nav-search" href="/soeg" aria-current={isActive('/soeg') ? 'page' : undefined}>
+        <Icon name="search" size={20} /> <span>Søg</span>
+      </a>
       <a class="btn btn--accent nav-cta" href="#bliv-medlem">Bliv medlem</a>
     </nav>
   </div>
@@ -81,6 +88,12 @@ const isActive = (href: string) =>
   .site-nav a.nav-cta { color: #ffffff; border-color: transparent; padding: 0.7rem 1.15rem; min-height: 46px; }
   .site-nav a.nav-cta:hover { color: #ffffff; }
 
+  /* Search entry points */
+  .nav-search { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--ink); text-decoration: none; font-weight: 550; font-size: 0.98rem; white-space: nowrap; }
+  .nav-search :global(svg) { color: var(--green-700); }
+  .nav-search:hover, .nav-search[aria-current='page'] { color: var(--green-700); }
+  .header-search-mobile { display: none; }
+
   /* Mobile menu (CSS-only, checkbox toggle) */
   .nav-burger { display: none; }
   .nav-toggle { display: none; }
@@ -114,6 +127,13 @@ const isActive = (href: string) =>
     .site-nav a { padding: 0.75rem 0; font-size: 1.15rem; border-bottom: 1px solid var(--line); }
     /* The CTA now lives next to the burger, so hide the in-menu copy */
     .site-nav .nav-cta { display: none; }
+    /* Search appears both as a menu item and as an icon next to the burger */
+    .nav-search { padding: 0.75rem 0; font-size: 1.15rem; border-bottom: 1px solid var(--line); }
+    .header-search-mobile {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px; flex: none; margin-left: 0.5rem;
+      border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--green-700);
+    }
 
     .nav-toggle:checked ~ .site-nav { transform: translateY(0); visibility: visible; }
     .nav-toggle:checked ~ .nav-burger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
@@ -121,11 +141,12 @@ const isActive = (href: string) =>
     .nav-toggle:checked ~ .nav-burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
   }
 
-  /* Very small phones: give the CTA + burger room */
+  /* Very small phones: give the CTA + burger room (search stays in the menu) */
   @media (max-width: 430px) {
     .brand-tag { display: none; }
     .brand-name { font-size: 1.3rem; }
     .header-cta-mobile { padding: 0.55rem 0.85rem; font-size: 0.95rem; }
+    .header-search-mobile { display: none; }
   }
   @media (max-width: 380px) {
     .header-inner { gap: 0.5rem; padding-inline: 0.8rem; }
