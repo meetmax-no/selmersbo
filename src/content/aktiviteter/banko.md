@@ -3,7 +3,10 @@ title: Banko
 icon: cards
 image: /uploads/akt-banko.jpg
 day: Mandage kl. 13.00
-text: Bankospil og hygge – kun for medlemmer.
+text: |-
+  Bankospil og hygge – kun for medlemmer. 
+  Se datoer.
+status: ''
 order: 1
 draft: false
 ---
