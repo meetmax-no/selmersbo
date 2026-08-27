@@ -1,5 +1,5 @@
 ---
-theme: vinter
+theme: foraar
 name: Selmersbo
 full: Aktivhuset Selmersbo
 tagline: Aktivhuset i Hørsholm
