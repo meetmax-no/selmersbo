@@ -200,6 +200,19 @@ const dokumenter = defineCollection({
   }),
 });
 
+// Quiz – referater fra husets quizzer med vinderbilleder. Egen side,
+// linket fra Quiz-aktiviteten. Redigeres i CMS (én post pr. quiz).
+const quiz = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/quiz' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    image: z.string().optional(),
+    winners: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
 // Galleri (gallery) – list of photos with a caption.
 const galleri = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/galleri' }),
@@ -211,4 +224,4 @@ const galleri = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside };
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz };

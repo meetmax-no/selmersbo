@@ -1,0 +1,70 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+
+const dateFmt = new Intl.DateTimeFormat('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+const items = (await getCollection('quiz', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const rendered = await Promise.all(items.map(async (item) => ({ item, Content: (await render(item)).Content })));
+---
+<BaseLayout title="Quiz – Selmersbo" description="Referater og vindere fra quizzerne på Aktivhuset Selmersbo.">
+  <PageHero
+    eyebrow="Quiz på Selmersbo"
+    title="Quiz"
+    lead="Hver måned mødes vi til en hyggelig quiz med kaffe og kage. Her er referater og vindere fra de seneste quizzer."
+    icon="chat" />
+
+  <section class="section" style="padding-top:2rem">
+    <div class="container quiz-wrap">
+      <a class="back" href="/aktiviteter"><Icon name="arrow" size={18} /> Alle aktiviteter</a>
+
+      {rendered.length === 0 ? (
+        <p class="empty">Der er ingen quiz-referater endnu – kig forbi igen snart.</p>
+      ) : (
+        <div class="quiz-list">
+          {rendered.map(({ item, Content }) => (
+            <article class={`quiz-item${item.data.image ? ' has-media' : ''}`}>
+              {item.data.image && (
+                <div class="quiz-media"><img src={item.data.image} alt={`Vindere – ${item.data.title}`} loading="lazy" /></div>
+              )}
+              <div class="quiz-body">
+                <div class="quiz-meta"><span class="chip chip--gold">Quiz</span><time datetime={item.data.date.toISOString()}>{dateFmt.format(item.data.date)}</time></div>
+                <h2>{item.data.title}</h2>
+                <div class="prose newsletter"><Content /></div>
+                {item.data.winners && (
+                  <p class="winners"><Icon name="check" size={18} /> <span><strong>Vinderhold:</strong> {item.data.winners}</span></p>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .quiz-wrap { display: grid; gap: 1.4rem; }
+  .back { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 650; }
+  .back :global(svg) { transform: rotate(180deg); }
+  .quiz-list { display: grid; gap: 1.2rem; }
+  .quiz-item {
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow-sm); padding: clamp(1.3rem, 3vw, 1.7rem);
+  }
+  .quiz-item.has-media { display: grid; grid-template-columns: 300px 1fr; gap: clamp(1rem, 3vw, 1.6rem); align-items: start; }
+  .quiz-media { border-radius: 14px; overflow: hidden; }
+  .quiz-media img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
+  .quiz-meta { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.4rem; }
+  .quiz-meta time { color: var(--muted); }
+  .quiz-item h2 { margin: 0 0 0.5rem; font-size: clamp(1.4rem, 3vw, 1.8rem); }
+  .winners { display: flex; align-items: center; gap: 0.5rem; margin: 0.6rem 0 0; background: var(--gold-tint); border-radius: 12px; padding: 0.7rem 1rem; }
+  .winners :global(svg) { color: var(--gold-ink); flex: none; }
+  .empty { color: var(--muted); font-size: 1.1rem; }
+  @media (max-width: 680px) { .quiz-item.has-media { grid-template-columns: 1fr; } }
+</style>

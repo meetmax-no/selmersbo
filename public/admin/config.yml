@@ -138,6 +138,27 @@ collections:
       - { name: body, label: "Indhold", widget: markdown, hint: "Selve nyhedsbrevet – skrives som læsbar tekst (ingen PDF)." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
+  - name: quiz
+    label: "Quiz"
+    label_singular: "Quiz"
+    description: "Referater og vindere fra husets quizzer. Én post pr. quiz."
+    folder: "src/content/quiz"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: "{{year}}-{{month}}-{{day}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: "Titel", widget: string, hint: "F.eks. Quiz 23. februar 2026." }
+      - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+      - { name: image, label: "Vinderbillede", widget: image, required: false }
+      - { name: winners, label: "Vinderhold", widget: string, required: false, hint: "Navnene på vinderholdet." }
+      - { name: body, label: "Referat", widget: markdown, required: false, hint: "Kort referat fra quizzen." }
+      - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
+
   - name: galleri
     label: "Galleri"
     label_singular: "Billede"
