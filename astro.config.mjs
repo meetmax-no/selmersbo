@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,4 +10,8 @@ export default defineConfig({
   // (the CMS OAuth endpoints under /api/oauth) via `export const prerender = false`.
   output: 'static',
   adapter: vercel(),
+  integrations: [sitemap({
+    // Hold /admin og API-endpoints ude af sitemap.
+    filter: (page) => !page.includes('/admin') && !page.includes('/api/'),
+  })],
 });
