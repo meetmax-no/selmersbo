@@ -32,7 +32,11 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 
 ### D. Design & lancering 🛠
 5. **Domæne-cutover** `selmersbo.dk` → Vercel (og skift evt. `site` i astro.config hvis nødvendigt)
-6. *(valgfrit)* **Vercel Web Analytics** (cookieless besøgstal)
+6. **Statistik-side** (`/statistik`) – bygget. Henter live besøgstal fra Vercel
+   Web Analytics. **Kræver miljøvariabel `VERCEL_TOKEN`** i Vercel (Project →
+   Settings → Environment Variables). Team/projekt-id er hardkodet i
+   `src/lib/analytics.ts` (kan overstyres med `VERCEL_TEAM_ID`/`VERCEL_PROJECT_ID`).
+   Siden caches i 8 t, så den opdaterer sig selv ~3×/dag – ingen cron nødvendig.
 
 ## Nyligt færdigt
 
