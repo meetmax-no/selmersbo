@@ -1,59 +1,43 @@
 # TODO – Selmersbo
 
-Status og resterende opgaver for den nye selmersbo.dk.
+Status for den nye selmersbo.dk.
 Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på `/admin`).
 
-## ✅ Færdigt og live (CMS-styret)
+## ✅ Færdigt og live
 
-- **Forside** – inkl. **Aktuelle links** (seniorside, avisartikel, Oplev Hørsholm) redigerbare i CMS
-- **Nyheder** – fast besked, planlagte foredrag og månedens program (i modal)
-- **Aktiviteter** – 25 aktiviteter med billeder, status og "læs mere"-modal
-- **Udflugter** – med modal og tilmelding på kontoret
+- **Forside** – hero + velkomst + **Aktuelle links** (seniorside, avisartikel, Oplev Hørsholm), alt i CMS
+- **Nyheder** – fast besked, foredrag og månedens program (modal)
+- **Aktiviteter** – 25 aktiviteter med status og "læs mere"-modal
+- **Udflugter** – modal + tilmelding på kontoret
 - **Udlejning** – rigtige vilkår og priser
-- **Nyhedsbreve** – 13 måneder som læsbar tekst i modal (ingen PDF)
-- **Galleri**
-- **Om os** – formål, daglig ledelse, bestyrelse (med portrætter), de frivillige
+- **Nyhedsbreve** – 13 måneder som læsbar tekst (modal)
+- **Galleri** (14 billeder) + **Quiz**-side
+- **Om os** – formål, daglig ledelse, bestyrelse (portrætter), frivillige
+- **Generalforsamling** – dagsorden, indkaldelse, beretning, referater
 - **Vedtægter** + **Privatlivspolitik** – egne sider, linket fra bunden
-- **MobilePay** – rigtigt nummer (95956) + officielt logo + CMS
-- **Indstillinger** – kontakt + åbningstider ét sted, vises overalt
-- **Årstidstemaer** – efterår / vinter / forår / sommer (vælges i CMS)
-- **Søg** – søger i hele siden (også personer), ingen cookies
-- **Genveje** i bunden – redigerbare i CMS
-- CMS på `/admin`, automatisk deploy til Vercel
+- **MobilePay** – nummer 95956 + logo + klikbar knap (skjules på iPad, hvor appen ikke findes)
+- **Aktuelle links** peger på lokalt hostede PDF'er (tilbage-knappen virker)
+- **Indstillinger** – kontakt + åbningstider ét sted
+- **Årstidstemaer** (efterår/vinter/forår/sommer) · **Søg** · **Genveje** – alt i CMS
+- **Statisk kort** på forsiden der linker til Google Maps (ingen cookies)
+- **404-side** · **SEO** (sitemap, robots.txt, OG-billede, canonical/Open Graph)
+- **Redaktør-guide** på dansk (REDAKTOER-GUIDE.md + delt printvenlig side)
+- **Statistik-side** (`/statistik`, kun for bestyrelsen): besøgstal, mest besøgte sider,
+  mest åbnede aktiviteter / udflugter / nyhedsbreve, telefon/PC. Live fra Vercel Web
+  Analytics, anonymt/cookiefrit, opdaterer sig selv (~10 min cache). Kræver
+  miljøvariablen `VERCEL_TOKEN` i Vercel (er sat op).
+- **Redirect** `/mobile-pay` → `/mobilepay`
+- CMS på `/admin` med GitHub-login, automatisk deploy til Vercel
 
 ## 🔧 Gjenstår
 
-### B. Indhold I selv udfylder 👤 (via CMS)
-1. Resterende **aktivitetsbilleder** (dem vi endnu ikke har koblet på)
-2. Flere **galleribilleder** efter behov (14 rigtige er lagt ind)
+### Indhold I selv udfylder 👤 (via CMS – ikke nødvendigt for lancering)
+1. Billeder til de sidste **12 aktiviteter** (bibliotek, bridge, film-café, gymnastik,
+   gymnastik-dans, hjerteforeningen, jazz, quiz, strikke/sy/sludre, sygeplejeklinik,
+   tysk, yoga). De virker fint uden – de viser et ikon.
+2. Flere **galleribilleder** efter behov.
 
-### C. Funktionelle detaljer 🛠
-3. **Redirect** `/mobile-pay` → `/mobilepay` (+ redirects fra gamle Bricksite-URL'er)
-
-### D. Design & lancering 🛠
-5. **Domæne-cutover** `selmersbo.dk` → Vercel (og skift evt. `site` i astro.config hvis nødvendigt)
-6. **Statistik-side** (`/statistik`) – bygget. Henter live besøgstal fra Vercel
-   Web Analytics. **Kræver miljøvariabel `VERCEL_TOKEN`** i Vercel (Project →
-   Settings → Environment Variables). Team/projekt-id er hardkodet i
-   `src/lib/analytics.ts` (kan overstyres med `VERCEL_TEAM_ID`/`VERCEL_PROJECT_ID`).
-   Siden caches i 8 t, så den opdaterer sig selv ~3×/dag – ingen cron nødvendig.
-
-## Nyligt færdigt
-
-- Om os · Vedtægter · Privatlivspolitik
-- MobilePay (nummer, logo, klikbar betalingsknap)
-- Indstillinger · Genveje · 4 årstidstemaer · Søg
-- Forside (hero + velkomst) redigerbar i CMS
-- Galleri (14 rigtige billeder) + Quiz-side
-- **Generalforsamling** (dagsorden + indkaldelse, beretning, referater)
-- Rigtigt **logo** i top og bund
-- Tilgængelighedserklæring fjernet (efter aftale)
-- **SEO**: sitemap, robots.txt, OG-delebillede, canonical/Open Graph
-- **Redaktør-guide** på dansk (REDAKTOER-GUIDE.md + delt side)
-- **Google-kort** indlejret på forsiden
-
-## Anbefalet rækkefølge
-
-1. Redirects + kort (funktionelle detaljer)
-2. SEO (polish)
-3. Domæne-cutover + redaktør-guide → lancering
+### Lancering 🛠
+3. **Domæne-cutover**: peg `selmersbo.dk` mod Vercel (kræver adgang til hvor domænet
+   er registreret / DNS). Indtil da lever siden på `selmersbo.vercel.app`.
+   Skift evt. `site` i `astro.config.mjs` hvis nødvendigt.
