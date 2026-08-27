@@ -290,10 +290,10 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
   .map-visual {
     height: 170px; display: grid; place-items: center; color: var(--terra);
     background:
-      radial-gradient(circle at 30% 30%, #dfeede 0, transparent 45%),
-      radial-gradient(circle at 70% 60%, #f0e6d3 0, transparent 40%),
-      repeating-linear-gradient(0deg, #eef2ea 0 22px, #e7ede4 22px 24px),
-      repeating-linear-gradient(90deg, #eef2ea 0 22px, #e7ede4 22px 24px);
+      radial-gradient(circle at 30% 30%, var(--green-050) 0, transparent 45%),
+      radial-gradient(circle at 70% 60%, var(--gold-tint) 0, transparent 40%),
+      repeating-linear-gradient(0deg, var(--sand) 0 22px, var(--sand-deep) 22px 24px),
+      repeating-linear-gradient(90deg, var(--sand) 0 22px, var(--sand-deep) 22px 24px);
   }
   .map-body { padding: 1.3rem 1.4rem 1.5rem; display: grid; gap: 0.25rem; }
   .map-body strong { font-size: 1.15rem; }

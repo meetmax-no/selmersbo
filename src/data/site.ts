@@ -2,6 +2,7 @@
 // Content taken from the current selmersbo.dk – edit here to update the whole site.
 
 export const site = {
+  theme: 'efteraar',
   name: 'Selmersbo',
   full: 'Aktivhuset Selmersbo',
   tagline: 'Aktivhuset i Hørsholm',

@@ -167,6 +167,16 @@ collections:
         file: "src/content/indstillinger/index.md"
         description: "Adresse, telefon, e-mail og åbningstider."
         fields:
+          - name: theme
+            label: "Farvetema (årstid)"
+            widget: select
+            default: efteraar
+            hint: "Skifter hele sidens farver. Efterår er den varme standard."
+            options:
+              - { label: "🍂 Efterår (varm – standard)", value: efteraar }
+              - { label: "❄️ Vinter (kølig blå-grøn)", value: vinter }
+              - { label: "🌸 Forår (frisk grøn og rosa)", value: foraar }
+              - { label: "☀️ Sommer (solrig grøn og koral)", value: sommer }
           - { name: name, label: "Kort navn", widget: string, default: "Selmersbo" }
           - { name: full, label: "Fulde navn", widget: string, default: "Aktivhuset Selmersbo" }
           - { name: tagline, label: "Undertekst", widget: string, default: "Aktivhuset i Hørsholm", hint: "Vises under navnet i top og bund." }

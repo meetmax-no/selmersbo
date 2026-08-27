@@ -143,17 +143,17 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
     background: var(--paper); border: 1px solid var(--line); color: var(--ink);
     font-weight: 600; font-size: 1rem; text-decoration: none;
   }
-  .jump-link:hover { border-color: var(--green-400, #7fae86); color: var(--green-700); }
+  .jump-link:hover { border-color: var(--green-400); color: var(--green-700); }
 
   /* Fast besked */
   .notice {
-    background: var(--gold-tint); border: 1px solid #ecd9a9; border-left: 5px solid var(--gold);
+    background: var(--gold-tint); border: 1px solid var(--gold-line); border-left: 5px solid var(--gold);
     border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.8rem); scroll-margin-top: 90px;
   }
   .notice.has-media { display: grid; grid-template-columns: 220px 1fr; gap: clamp(1rem, 3vw, 1.6rem); }
   .notice-media { border-radius: 14px; overflow: hidden; align-self: start; }
   .notice-media img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
-  .notice-tag { display: inline-flex; align-items: center; gap: 0.45rem; margin: 0 0 0.4rem; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; color: #8a5e14; }
+  .notice-tag { display: inline-flex; align-items: center; gap: 0.45rem; margin: 0 0 0.4rem; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold-ink); }
   .notice-tag :global(svg) { color: var(--gold); }
   .notice h2 { margin: 0 0 0.5rem; font-size: clamp(1.5rem, 3vw, 1.9rem); }
 
@@ -172,11 +172,11 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
   /* Månedens program – stor klikbar genvej */
   .program {
     display: flex; align-items: center; gap: 1.1rem; text-decoration: none;
-    background: var(--green-050, #eef5ef); border: 1px solid var(--green-200, #cfe3d1);
+    background: var(--green-050); border: 1px solid var(--green-200);
     border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.7rem); color: var(--ink);
     scroll-margin-top: 90px;
   }
-  .program:hover { border-color: var(--green-400, #7fae86); box-shadow: var(--shadow-sm); }
+  .program:hover { border-color: var(--green-400); box-shadow: var(--shadow-sm); }
   .program-icon { flex: none; width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; background: var(--green-700); color: #fff; }
   .program-body { flex: 1; min-width: 0; }
   .program-kicker { margin: 0 0 0.2rem; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green-700); }

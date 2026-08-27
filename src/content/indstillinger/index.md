@@ -1,4 +1,5 @@
 ---
+theme: efteraar
 name: Selmersbo
 full: Aktivhuset Selmersbo
 tagline: Aktivhuset i Hørsholm

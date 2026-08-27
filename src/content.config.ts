@@ -97,6 +97,8 @@ const nyhedsbreve = defineCollection({
 const indstillinger = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/indstillinger' }),
   schema: z.object({
+    // Årstidspalet – styrer sidens farver (efterår er standard/varm).
+    theme: z.enum(['efteraar', 'vinter', 'foraar', 'sommer']).default('efteraar'),
     name: z.string().default('Selmersbo'),
     full: z.string().default('Aktivhuset Selmersbo'),
     tagline: z.string().default('Aktivhuset i Hørsholm'),
