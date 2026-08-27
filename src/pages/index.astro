@@ -10,10 +10,31 @@ const today = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'L
 const todayHours = site.hours.find((h) => h.day === today);
 
 // Content from the CMS collections
-const news = (await getCollection('nyheder', ({ data }) => !data.draft && !data.pinned))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3)
-  .map((e) => e.data);
+const anchor = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const monthFmt = new Intl.DateTimeFormat('da-DK', { month: 'long', year: 'numeric' });
+
+const news = (await getCollection('nyheder', ({ data }) => !data.draft))
+  .sort((a, b) => (a.data.order - b.data.order) || (b.data.date.getTime() - a.data.date.getTime()))
+  .slice(0, 2)
+  .map((e) => ({
+    tag: e.data.tag,
+    title: e.data.title,
+    summary: e.data.summary ?? '',
+    cta: 'Læs mere',
+    href: `/nyheder#${anchor(e.data.title)}`,
+  }));
+
+const latestLetter = (await getCollection('nyhedsbreve', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
+if (latestLetter) {
+  news.push({
+    tag: 'Program',
+    title: `Program for ${monthFmt.format(latestLetter.data.date)}`,
+    summary: 'Alle aktiviteter, foredrag og arrangementer – måned for måned.',
+    cta: 'Se programmet',
+    href: `/nyhedsbreve/${latestLetter.id}`,
+  });
+}
 const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 6)
@@ -117,7 +138,7 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
       </div>
       <div class="grid grid--3">
         {news.map((n) => (
-          <a class="news-card" href={n.url && n.url !== '#' ? n.url : '/nyheder'}>
+          <a class="news-card" href={n.href}>
             <span class="chip chip--gold">{n.tag}</span>
             <h3>{n.title}</h3>
             <p>{n.summary}</p>

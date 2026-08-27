@@ -6,14 +6,30 @@ import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 
 const dateFmt = new Intl.DateTimeFormat('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+const monthFmt = new Intl.DateTimeFormat('da-DK', { month: 'long', year: 'numeric' });
+
+// News (Køb-besked, foredrag …). Everything is shown in full inline – no "read more".
 const items = await getCollection('nyheder', ({ data }) => !data.draft);
 const rendered = await Promise.all(items.map(async (item) => ({ item, Content: (await render(item)).Content })));
-const byDate = (a: any, b: any) => b.item.data.date.getTime() - a.item.data.date.getTime();
-const pinned = rendered.filter((r) => r.item.data.pinned).sort(byDate);
-const news = rendered.filter((r) => !r.item.data.pinned).sort(byDate);
-const hasLink = (u?: string) => !!u && u !== '#';
+const byOrder = (a: any, b: any) =>
+  (a.item.data.order - b.item.data.order) || (b.item.data.date.getTime() - a.item.data.date.getTime());
+const pinned = rendered.filter((r) => r.item.data.pinned).sort(byOrder);
+const news = rendered.filter((r) => !r.item.data.pinned).sort(byOrder);
+
+// Månedens program = the newest newsletter (kalenderen for måneden).
+const letters = (await getCollection('nyhedsbreve', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const latest = letters[0];
+const latestMonth = latest ? monthFmt.format(latest.data.date) : '';
+
+const anchor = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const jump = [
+  ...pinned.map((r) => ({ id: anchor(r.item.data.title), label: r.item.data.title })),
+  ...news.map((r) => ({ id: anchor(r.item.data.title), label: r.item.data.title })),
+];
+if (latest) jump.push({ id: 'program', label: `Månedens program` });
 ---
-<BaseLayout title="Nyheder – Selmersbo" description="Seneste nyt og faste beskeder fra Aktivhuset Selmersbo.">
+<BaseLayout title="Nyheder – Selmersbo" description="Seneste nyt, faste beskeder og planlagte foredrag fra Aktivhuset Selmersbo.">
   <PageHero
     eyebrow="Aktuelt"
     title="Nyheder"
@@ -23,39 +39,55 @@ const hasLink = (u?: string) => !!u && u !== '#';
   <section class="section" style="padding-top:2rem">
     <div class="container news-wrap">
 
-      {pinned.length > 0 && (
-        <div class="notices">
-          {pinned.map(({ item, Content }) => (
-            <aside class="notice">
-              <p class="notice-tag"><Icon name="check" size={18} /> {item.data.tag}</p>
-              <h2>{item.data.title}</h2>
-              <div class="prose newsletter"><Content /></div>
-            </aside>
-          ))}
-        </div>
+      {jump.length > 1 && (
+        <nav class="jump" aria-label="På denne side">
+          <span class="jump-label">På denne side:</span>
+          {jump.map((j) => <a href={`#${j.id}`} class="jump-link">{j.label}</a>)}
+        </nav>
       )}
 
-      {news.length > 0 && (
-        <div class="news-list">
-          {pinned.length > 0 && <h2 class="news-heading">Seneste nyt</h2>}
-          {news.map(({ item, Content }) => (
-            <article class="news-item">
-              <div class="news-meta">
-                <span class="chip chip--gold">{item.data.tag}</span>
-                <time datetime={item.data.date.toISOString()}>{dateFmt.format(item.data.date)}</time>
-              </div>
-              <h3>{item.data.title}</h3>
-              {item.data.summary && <p class="news-lead">{item.data.summary}</p>}
-              <div class="prose newsletter"><Content /></div>
-              {hasLink(item.data.url) && (
-                <a class="news-link" href={item.data.url} rel="noopener">{item.data.cta} <Icon name="arrow" size={18} /></a>
-              )}
-            </article>
-          ))}
-        </div>
+      {pinned.map(({ item, Content }) => (
+        <aside class={`notice${item.data.image ? ' has-media' : ''}`} id={anchor(item.data.title)}>
+          {item.data.image && (
+            <div class="notice-media"><img src={item.data.image} alt="" loading="lazy" /></div>
+          )}
+          <div class="notice-body">
+            <p class="notice-tag"><Icon name="check" size={18} /> {item.data.tag}</p>
+            <h2>{item.data.title}</h2>
+            <div class="prose newsletter"><Content /></div>
+          </div>
+        </aside>
+      ))}
+
+      {news.map(({ item, Content }) => (
+        <article class={`news-item${item.data.image ? ' has-media' : ''}`} id={anchor(item.data.title)}>
+          {item.data.image && (
+            <div class="news-media"><img src={item.data.image} alt="" loading="lazy" /></div>
+          )}
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="chip chip--gold">{item.data.tag}</span>
+            </div>
+            <h2>{item.data.title}</h2>
+            {item.data.summary && <p class="news-lead">{item.data.summary}</p>}
+            <div class="prose newsletter"><Content /></div>
+          </div>
+        </article>
+      ))}
+
+      {latest && (
+        <a class="program" id="program" href={`/nyhedsbreve/${latest.id}`}>
+          <div class="program-icon" aria-hidden="true"><Icon name="calendar" size={28} /></div>
+          <div class="program-body">
+            <p class="program-kicker">Månedens program</p>
+            <h2>Se hele programmet for {latestMonth}</h2>
+            <p class="program-text">Alle aktiviteter, foredrag og arrangementer måned for måned. Du kan læse det direkte på siden – ingen PDF.</p>
+          </div>
+          <span class="program-go"><Icon name="arrow" size={22} /></span>
+        </a>
       )}
 
-      {pinned.length === 0 && news.length === 0 && (
+      {pinned.length === 0 && news.length === 0 && !latest && (
         <p class="empty">Der er ingen nyheder lige nu – kig forbi igen snart.</p>
       )}
     </div>
@@ -65,29 +97,63 @@ const hasLink = (u?: string) => !!u && u !== '#';
 </BaseLayout>
 
 <style>
-  .news-wrap { display: grid; gap: clamp(1.5rem, 4vw, 2.5rem); }
+  .news-wrap { display: grid; gap: clamp(1.4rem, 3.5vw, 2.2rem); }
 
-  /* Faste beskeder */
-  .notices { display: grid; gap: 1rem; }
+  /* Snarveje øverst */
+  .jump { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+  .jump-label { font-weight: 650; color: var(--muted); }
+  .jump-link {
+    display: inline-flex; align-items: center; padding: 0.4rem 0.9rem; border-radius: 999px;
+    background: var(--paper); border: 1px solid var(--line); color: var(--ink);
+    font-weight: 600; font-size: 1rem; text-decoration: none;
+  }
+  .jump-link:hover { border-color: var(--green-400, #7fae86); color: var(--green-700); }
+
+  /* Fast besked */
   .notice {
     background: var(--gold-tint); border: 1px solid #ecd9a9; border-left: 5px solid var(--gold);
-    border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.8rem);
+    border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.8rem); scroll-margin-top: 90px;
   }
+  .notice.has-media { display: grid; grid-template-columns: 220px 1fr; gap: clamp(1rem, 3vw, 1.6rem); }
+  .notice-media { border-radius: 14px; overflow: hidden; align-self: start; }
+  .notice-media img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
   .notice-tag { display: inline-flex; align-items: center; gap: 0.45rem; margin: 0 0 0.4rem; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; color: #8a5e14; }
   .notice-tag :global(svg) { color: var(--gold); }
   .notice h2 { margin: 0 0 0.5rem; font-size: clamp(1.5rem, 3vw, 1.9rem); }
 
-  /* Daterte nyheder – vist i fuld tekst */
-  .news-heading { font-size: clamp(1.6rem, 3.2vw, 2.1rem); margin: 0 0 0.5rem; }
-  .news-list { display: grid; gap: 1.2rem; }
+  /* Nyheder – vist i fuld tekst */
   .news-item {
     background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow-sm); padding: clamp(1.3rem, 3vw, 1.8rem);
+    box-shadow: var(--shadow-sm); padding: clamp(1.3rem, 3vw, 1.8rem); scroll-margin-top: 90px;
   }
+  .news-item.has-media { display: grid; grid-template-columns: 220px 1fr; gap: clamp(1rem, 3vw, 1.6rem); }
+  .news-media { border-radius: 14px; overflow: hidden; align-self: start; }
+  .news-media img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
   .news-meta { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
-  .news-meta time { color: var(--muted); font-size: 0.98rem; }
-  .news-item h3 { margin: 0 0 0.4rem; font-size: 1.5rem; }
-  .news-lead { font-size: 1.1rem; color: var(--ink); margin: 0 0 0.6rem; }
-  .news-link { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.6rem; font-weight: 650; color: var(--green-700); }
+  .news-item h2 { margin: 0 0 0.4rem; font-size: clamp(1.5rem, 3vw, 1.9rem); }
+  .news-lead { font-size: 1.1rem; color: var(--ink); margin: 0 0 0.6rem; font-weight: 550; }
+
+  /* Månedens program – stor klikbar genvej */
+  .program {
+    display: flex; align-items: center; gap: 1.1rem; text-decoration: none;
+    background: var(--green-050, #eef5ef); border: 1px solid var(--green-200, #cfe3d1);
+    border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.7rem); color: var(--ink);
+    scroll-margin-top: 90px;
+  }
+  .program:hover { border-color: var(--green-400, #7fae86); box-shadow: var(--shadow-sm); }
+  .program-icon { flex: none; width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; background: var(--green-700); color: #fff; }
+  .program-body { flex: 1; min-width: 0; }
+  .program-kicker { margin: 0 0 0.2rem; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green-700); }
+  .program h2 { margin: 0 0 0.3rem; font-size: clamp(1.4rem, 3vw, 1.75rem); }
+  .program-text { margin: 0; color: var(--muted); font-size: 1.05rem; }
+  .program-go { flex: none; color: var(--green-700); }
+
   .empty { color: var(--muted); font-size: 1.1rem; }
+
+  @media (max-width: 640px) {
+    .notice.has-media, .news-item.has-media { grid-template-columns: 1fr; }
+    .notice-media img, .news-media img { aspect-ratio: 16 / 9; }
+    .program { flex-wrap: wrap; }
+    .program-go { display: none; }
+  }
 </style>

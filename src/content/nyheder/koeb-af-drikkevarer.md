@@ -3,6 +3,8 @@ title: Køb af drikkevarer
 tag: Besked
 date: 2026-08-01
 pinned: true
+order: 1
+summary: Køb jeres drikkevarer i Selmersbo – mange bække små gør en stor å. Tak fordi I støtter huset.
 draft: false
 ---
 

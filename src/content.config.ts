@@ -33,12 +33,14 @@ const nyheder = defineCollection({
     title: z.string(),
     tag: z.string().default('Nyt'),
     date: z.coerce.date(),
-    summary: z.string().optional(), // short text for dated news / front page
-    pinned: z.boolean().default(false), // "fast besked" → shown at the top
+    summary: z.string().optional(), // short text for the front page
+    image: z.string().optional(),
+    order: z.number().default(0), // section order on /nyheder
+    pinned: z.boolean().default(false), // "fast besked" → highlighted notice
     cta: z.string().default('Læs mere'),
     url: z.string().optional(), // only a real external link
     draft: z.boolean().default(false),
-    // Markdown body = full text (used for pinned notices and longer news).
+    // Markdown body = full text shown inline.
   }),
 });
 

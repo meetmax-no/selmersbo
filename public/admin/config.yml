@@ -61,12 +61,14 @@ collections:
     identifier_field: title
     slug: "{{year}}-{{month}}-{{day}}-{{title}}"
     summary: "{{title}}"
-    sortable_fields: [date, title]
+    sortable_fields: [order, date, title]
     fields:
       - { name: title, label: "Overskrift", widget: string }
-      - { name: tag, label: "Mærkat", widget: string, default: "Nyt", hint: "F.eks. Besked, Seniorsiden, I pressen." }
+      - { name: tag, label: "Mærkat", widget: string, default: "Nyt", hint: "F.eks. Besked, Foredrag, Seniorsiden." }
       - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
       - { name: pinned, label: "Fast besked (vises øverst, altid åben)", widget: boolean, default: false }
+      - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først på Nyheder-siden." }
+      - { name: image, label: "Billede", widget: image, required: false, hint: "Valgfrit foto. Vises ved siden af teksten." }
       - { name: summary, label: "Kort tekst", widget: text, required: false, hint: "Vises på forsiden og som indledning." }
       - { name: body, label: "Uddybende tekst", widget: markdown, required: false, hint: "Vises i fuld længde på siden (til faste beskeder og længere nyheder)." }
       - { name: url, label: "Eksternt link", widget: string, required: false, hint: "Kun hvis nyheden peger ud af siden (f.eks. en artikel)." }
