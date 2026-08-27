@@ -6,8 +6,10 @@ import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { getStats, type Stats } from '../lib/analytics';
 
-// Server-renderet og cachet i ~8 timer, så Vercels API kun rammes få gange i døgnet.
-Astro.response.headers.set('Cache-Control', 'public, s-maxage=28800, stale-while-revalidate=86400');
+// Server-renderet og cachet i 1 time (stale-while-revalidate i et døgn), så
+// Vercels API kun rammes nogle få gange i timen. Kort cache gør også, at siden
+// hurtigt retter sig selv, hvis et enkelt kald skulle fejle.
+Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
 
 // Live besøgstal fra Vercel. Falder tilbage til "tom" tilstand hvis der ikke er
 // token/data endnu, så siden aldrig fejler.
