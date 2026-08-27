@@ -37,65 +37,78 @@ const DEVICE_LABELS: Record<string, string> = {
 const stripSlash = (p: string) => (p.length > 1 ? p.replace(/\/+$/, '') : p);
 const ymd = (d: Date) => d.toISOString().slice(0, 10);
 
-async function q(path: string, params: Record<string, string>, token: string) {
+// Ét kald. Returnerer data-arrayet/objektet, eller null ved fejl (kaster ikke,
+// så ét fejlende kald ikke tømmer hele siden).
+async function q(path: string, params: Record<string, string>, token: string): Promise<any> {
   const url = new URL(`https://api.vercel.com/v1/query/web-analytics/${path}`);
   url.searchParams.set('teamId', TEAM_ID);
   url.searchParams.set('projectId', PROJECT_ID);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
-  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-  if (!res.ok) throw new Error(`Vercel analytics ${path}: ${res.status}`);
-  return (await res.json()).data;
+  try {
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) { console.error(`[statistik] ${path} → HTTP ${res.status}`); return null; }
+    return (await res.json()).data;
+  } catch (err) {
+    console.error(`[statistik] ${path} fejlede:`, err);
+    return null;
+  }
 }
 
-// Returnerer besøgstal, eller null hvis der ikke er token / data endnu / API-fejl.
+// Returnerer besøgstal, eller null hvis der hverken er token eller data endnu.
 export async function getStats(): Promise<Stats | null> {
   const token = process.env.VERCEL_TOKEN;
   if (!token) return null;
 
-  // VIGTIGT: send tidspunkter som millisekunder (ikke kun dato). En dato-streng
-  // som "2026-08-27" fortolkes af aggregate-API'et som kl. 01:00 samme dag i
-  // projektets tidszone og afskærer dermed dagens besøg (→ tomme lister).
   const nowMs = Date.now();
-  const range = { since: String(nowMs - RANGE_DAYS * 86_400_000), until: String(nowMs) };
+  const dayMs = 86_400_000;
+  // De to endpoints fortolker datoer forskelligt:
+  //  - count er gladest for dato-strenge (og medtager hele slutdagen).
+  //  - aggregate KRÆVER ms-tidsstempler; en dato-streng afskæres til kl. 01:00
+  //    i projektets tidszone og udelader dermed dagens besøg (→ tomme lister).
+  const dateRange = { since: ymd(new Date(nowMs - RANGE_DAYS * dayMs)), until: ymd(new Date(nowMs + dayMs)) };
+  const msRange = { since: String(nowMs - RANGE_DAYS * dayMs), until: String(nowMs) };
 
-  try {
-    const [count, byPath, byDevice] = await Promise.all([
-      q('visits/count', range, token),
-      q('visits/aggregate', { ...range, by: 'requestPath', limit: '50' }, token),
-      q('visits/aggregate', { ...range, by: 'deviceType', limit: '6' }, token),
-    ]);
+  const [count, byPath, byDevice] = await Promise.all([
+    q('visits/count', dateRange, token),
+    q('visits/aggregate', { ...msRange, by: 'requestPath', limit: '50' }, token),
+    q('visits/aggregate', { ...msRange, by: 'deviceType', limit: '6' }, token),
+  ]);
 
-    const pages: StatEntry[] = (byPath ?? [])
-      .map((r: any) => ({ path: stripSlash(r.requestPath ?? ''), views: r.pageviews ?? 0 }))
-      .filter((r: StatEntry) => r.path)
-      .sort((a: StatEntry, b: StatEntry) => b.views - a.views);
+  // Kom der intet svar overhovedet, så vis "tom" tilstand.
+  if (!count && !byPath && !byDevice) return null;
 
-    const topPages = pages.slice(0, 10);
-    const topActivities = pages
-      .filter((r) => r.path.startsWith('/aktiviteter/') && r.path !== '/aktiviteter')
-      .slice(0, 10);
+  const pages: StatEntry[] = (byPath ?? [])
+    .map((r: any) => ({ path: stripSlash(r.requestPath ?? ''), views: r.pageviews ?? 0 }))
+    .filter((r: StatEntry) => r.path)
+    .sort((a: StatEntry, b: StatEntry) => b.views - a.views);
 
-    const devRows = (byDevice ?? []).map((r: any) => ({
-      type: DEVICE_LABELS[String(r.deviceType ?? '').toLowerCase()] ?? (r.deviceType || 'Andet'),
-      views: r.pageviews ?? 0,
-    }));
-    const devTotal = devRows.reduce((s: number, r: any) => s + r.views, 0) || 1;
-    const devices: DeviceEntry[] = devRows
-      .sort((a: any, b: any) => b.views - a.views)
-      .map((r: any) => ({ type: r.type, share: Math.round((r.views / devTotal) * 100) }));
+  const topPages = pages.slice(0, 10);
+  const topActivities = pages
+    .filter((r) => r.path.startsWith('/aktiviteter/') && r.path !== '/aktiviteter')
+    .slice(0, 10);
 
-    return {
-      updated: ymd(new Date(nowMs)),
-      rangeDays: RANGE_DAYS,
-      collecting: true,
-      visitors: count?.visitors ?? 0,
-      pageviews: count?.pageviews ?? 0,
-      topPages,
-      topActivities,
-      devices,
-    };
-  } catch (err) {
-    console.error('[statistik] kunne ikke hente besøgstal:', err);
-    return null;
-  }
+  const devRows = (byDevice ?? []).map((r: any) => ({
+    type: DEVICE_LABELS[String(r.deviceType ?? '').toLowerCase()] ?? (r.deviceType || 'Andet'),
+    views: r.pageviews ?? 0,
+  }));
+  const devTotal = devRows.reduce((s: number, r: any) => s + r.views, 0) || 1;
+  const devices: DeviceEntry[] = devRows
+    .sort((a: any, b: any) => b.views - a.views)
+    .map((r: any) => ({ type: r.type, share: Math.round((r.views / devTotal) * 100) }));
+
+  // Totaler fra count; falder count ud, udledes sidevisninger fra listen, så
+  // siden stadig viser noget (og ikke tom-tilstanden).
+  const pageviews = count?.pageviews ?? pages.reduce((s, r) => s + r.views, 0);
+  const visitors = count?.visitors ?? 0;
+
+  return {
+    updated: ymd(new Date(nowMs)),
+    rangeDays: RANGE_DAYS,
+    collecting: true,
+    visitors,
+    pageviews,
+    topPages,
+    topActivities,
+    devices,
+  };
 }
