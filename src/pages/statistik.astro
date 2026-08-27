@@ -1,9 +1,18 @@
 ---
+export const prerender = false;
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import stats from '../data/stats.json';
+import { getStats, type Stats } from '../lib/analytics';
+
+// Server-renderet og cachet i ~8 timer, så Vercels API kun rammes få gange i døgnet.
+Astro.response.headers.set('Cache-Control', 'public, s-maxage=28800, stale-while-revalidate=86400');
+
+// Live besøgstal fra Vercel. Falder tilbage til "tom" tilstand hvis der ikke er
+// token/data endnu, så siden aldrig fejler.
+const EMPTY: Stats = { updated: new Date().toISOString().slice(0, 10), rangeDays: 30, collecting: false, visitors: 0, pageviews: 0, topPages: [], topActivities: [], devices: [] };
+const stats: Stats = (await getStats()) ?? EMPTY;
 
 // Pæne danske sidenavne til de mest almindelige stier.
 const BASE_LABELS: Record<string, string> = {
