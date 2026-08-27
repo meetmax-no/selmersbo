@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
-import Icon from '../components/Icon.astro';
 
 const photos = (await getCollection('galleri', ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order)
@@ -30,7 +29,6 @@ const photos = (await getCollection('galleri', ({ data }) => !data.draft))
           ))}
         </div>
       )}
-      <p class="demo-note"><Icon name="check" size={20} /><span>Billeder redigeres i CMS'et under <strong>/admin</strong> – upload nye fotos og giv dem en billedtekst.</span></p>
     </div>
   </section>
 
