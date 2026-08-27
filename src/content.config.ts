@@ -148,6 +148,14 @@ const forside = defineCollection({
     heroImage: z.string().default('/images/community-flags.jpg'),
     heroImageAlt: z.string().default(''),
     heroBadge: z.string().default('Alt i ét plan – god tilgængelighed'),
+    // Aktuelle genveje / links (fx seniorside, avisartikel, ekstern side).
+    highlightsHeading: z.string().default('Aktuelt at læse'),
+    highlights: z.array(z.object({
+      label: z.string(),
+      note: z.string().optional(),
+      url: z.string(),
+      icon: z.string().default('document'),
+    })).default([]),
     welcomeEyebrow: z.string().default('Velkommen'),
     welcomeTitle: z.string(),
     welcomeText: z.string(),

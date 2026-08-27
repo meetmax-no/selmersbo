@@ -288,6 +288,29 @@ collections:
           - { name: heroImage, label: "Forsidens billede", widget: image }
           - { name: heroImageAlt, label: "Billedtekst (til skærmlæser)", widget: string, required: false }
           - { name: heroBadge, label: "Mærkat på billedet", widget: string, required: false }
+          - { name: highlightsHeading, label: "Aktuelle links – overskrift", widget: string, required: false, default: "Aktuelt at læse" }
+          - name: highlights
+            label: "Aktuelle links (vises øverst på forsiden)"
+            label_singular: "Link"
+            widget: list
+            required: false
+            summary: "{{fields.label}}"
+            hint: "Fx seniorsiden, en avisartikel eller en ekstern side. Åbnes i ny fane."
+            fields:
+              - { name: label, label: "Tekst på knappen", widget: string }
+              - { name: note, label: "Lille undertekst", widget: string, required: false }
+              - { name: url, label: "Link (adresse)", widget: string, hint: "Indsæt hele adressen, fx https://…" }
+              - name: icon
+                label: "Ikon"
+                widget: select
+                default: document
+                options:
+                  - { label: "Dokument / PDF", value: document }
+                  - { label: "Avis", value: newspaper }
+                  - { label: "Kalender / program", value: calendar }
+                  - { label: "Ekstern side", value: external }
+                  - { label: "Billede", value: image }
+                  - { label: "Info", value: chat }
           - { name: welcomeEyebrow, label: "Velkomst – lille overskrift", widget: string }
           - { name: welcomeTitle, label: "Velkomst – overskrift", widget: string }
           - { name: welcomeText, label: "Velkomst – tekst", widget: text, hint: "Adskil afsnit med en tom linje." }

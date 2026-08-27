@@ -7,6 +7,20 @@ heroLead: >-
 heroImage: /images/community-flags.jpg
 heroImageAlt: Medlemmer af Selmersbo står samlet udenfor med danske flag og bogstavskilte, der staver Selmersbo
 heroBadge: Alt i ét plan – god tilgængelighed
+highlightsHeading: Aktuelt at læse
+highlights:
+  - label: Se seniorsiden for august og september 2026
+    note: Aktivitetsoversigt for centrene (åbner som PDF)
+    url: https://drive.google.com/file/d/1IyVrY4d7_3pKgr6orVanS9G_oAfNr6dW/view?usp=drive_link
+    icon: calendar
+  - label: Artikel i Ugebladet – august 2026
+    note: Trommens samarbejde med aktivitetscentrene (åbner som PDF)
+    url: https://drive.google.com/file/d/16qhEfF9vYB2hgRmZq4_AsZFceFz7AKhD/view?usp=drive_link
+    icon: newspaper
+  - label: Oplev Hørsholm – ny hjemmeside
+    note: Kommunens nye side med oplevelser og arrangementer
+    url: https://oplev.horsholm.dk/
+    icon: external
 welcomeEyebrow: Velkommen
 welcomeTitle: Kære venner af Selmersbo
 welcomeText: >-

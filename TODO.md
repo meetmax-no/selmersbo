@@ -5,7 +5,7 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 
 ## ✅ Færdigt og live (CMS-styret)
 
-- **Forside**
+- **Forside** – inkl. **Aktuelle links** (seniorside, avisartikel, Oplev Hørsholm) redigerbare i CMS
 - **Nyheder** – fast besked, planlagte foredrag og månedens program (i modal)
 - **Aktiviteter** – 25 aktiviteter med billeder, status og "læs mere"-modal
 - **Udflugter** – med modal og tilmelding på kontoret
