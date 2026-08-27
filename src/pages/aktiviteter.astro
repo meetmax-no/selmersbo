@@ -33,7 +33,7 @@ const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
       <div class="akt-grid">
         {rendered.map(({ item, Content }) => (
           <>
-            <a class="akt-card" href={`/aktiviteter/${item.id}`} data-akt={item.id}>
+            <a class="akt-card" href={`/aktiviteter/${item.id}`} data-akt={item.id} data-akt-title={item.data.title}>
               <div class="akt-media">
                 {item.data.image
                   ? <img src={item.data.image} alt={item.data.title} loading="lazy" />
@@ -80,6 +80,7 @@ const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
 </BaseLayout>
 
 <script>
+  import { track } from '@vercel/analytics';
   document.querySelectorAll('a[data-akt]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const el = a as HTMLAnchorElement;
@@ -88,6 +89,8 @@ const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
         e.preventDefault();
         d.showModal();
         document.documentElement.style.overflow = 'hidden';
+        // Anonymt event, så vi kan se hvilke aktiviteter folk åbner.
+        try { track('Aktivitet åbnet', { navn: el.dataset.aktTitle || el.dataset.akt || '' }); } catch {}
       }
     });
   });
