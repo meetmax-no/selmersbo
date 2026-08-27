@@ -213,6 +213,19 @@ const quiz = defineCollection({
   }),
 });
 
+// Generalforsamling – indkaldelser, beretninger og referater. Egne læsbare
+// sider, listet på /generalforsamling. Redigeres i CMS (én post pr. dokument).
+const generalforsamling = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/generalforsamling' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date().optional(),
+    summary: z.string().optional(),
+    order: z.number().default(0),
+    draft: z.boolean().default(false),
+  }),
+});
+
 // Galleri (gallery) – list of photos with a caption.
 const galleri = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/galleri' }),
@@ -224,4 +237,4 @@ const galleri = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz };
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz, generalforsamling };

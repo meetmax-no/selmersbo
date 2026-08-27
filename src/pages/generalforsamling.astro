@@ -1,57 +1,69 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 
+const dateFmt = new Intl.DateTimeFormat('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+const docs = (await getCollection('generalforsamling', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
 const agenda = [
-  'Valg af dirigent og referent',
+  'Valg af dirigent',
+  'Valg af referent',
+  'Valg af 2 stemmetællere',
   'Formandens beretning',
-  'Fremlæggelse af regnskab',
-  'Indkomne forslag',
-  'Fastsættelse af kontingent',
-  'Valg til bestyrelsen',
+  'Fremlæggelse af foreningens regnskab/budget',
+  'Behandling af indkomne forslag',
+  'Valg af bestyrelsesmedlemmer og suppleanter',
   'Eventuelt',
 ];
-const docs = [
-  'Dagsorden 2026 (PDF)',
-  'Regnskab 2025 (PDF)',
-  'Referat fra sidste år (PDF)',
-];
 ---
-<BaseLayout title="Generalforsamling – Selmersbo" description="Information om Selmersbos generalforsamling – dato, dagsorden og dokumenter.">
+<BaseLayout title="Generalforsamling – Selmersbo" description="Information om Selmersbos generalforsamling – dagsorden, indkaldelser, beretninger og referater.">
   <PageHero
     eyebrow="For medlemmer"
     title="Generalforsamling"
-    lead="Den årlige generalforsamling er, hvor vi sammen sætter retning for Selmersbo. Alle medlemmer er velkomne."
+    lead="Generalforsamlingen er Selmersbos øverste organ, hvor vi sammen sætter retning for huset. Alle medlemmer er velkomne."
     icon="users" />
 
   <section class="section" style="padding-top:2rem">
     <div class="container split">
       <div class="prose">
-        <div class="when card">
-          <div class="when-icon" aria-hidden="true"><Icon name="calendar" size={26} /></div>
-          <div>
-            <span class="chip chip--gold">Næste møde</span>
-            <h2 style="margin:.3rem 0 0">Onsdag den 25. marts 2026, kl. 14.00</h2>
-            <p style="margin:.3rem 0 0;color:var(--muted)">I fælleslokalet på Selmersbo, Selmersvej 13, Hørsholm.</p>
-          </div>
-        </div>
+        <h2>Om generalforsamlingen</h2>
+        <p>
+          Generalforsamlingen afholdes hvert år i april eller maj måned. Indkaldelse sker med mindst
+          4 ugers varsel ved opslag i Aktivhuset og i den lokale presse. Forslag, der ønskes behandlet,
+          skal være formanden skriftligt i hænde senest 14 dage før generalforsamlingen.
+        </p>
+        <p>Se de fulde regler i <a href="/dokumenter/vedtaegter">vedtægterne</a> (§§ 4–7).</p>
 
-        <h2>Dagsorden</h2>
+        <h2>Fast dagsorden</h2>
         <ol class="agenda">
           {agenda.map((a) => <li><Icon name="check" size={18} /> {a}</li>)}
         </ol>
-        <p class="demo-note"><Icon name="check" size={20} /><span>Dato og dagsorden er <strong>eksempler</strong> til udkastet – opdateres af bestyrelsen.</span></p>
       </div>
 
       <aside class="docs-card">
         <h3>Dokumenter</h3>
-        <ul>
-          {docs.map((d) => (
-            <li><a href="#"><Icon name="mail" size={18} /> {d}</a></li>
-          ))}
-        </ul>
+        {docs.length === 0 ? (
+          <p class="empty">Der er ingen dokumenter endnu.</p>
+        ) : (
+          <ul>
+            {docs.map((d) => (
+              <li>
+                <a href={`/generalforsamling/${d.id}`}>
+                  <span class="doc-ic" aria-hidden="true"><Icon name="book" size={18} /></span>
+                  <span class="doc-txt">
+                    <strong>{d.data.title}</strong>
+                    {d.data.date && <time datetime={d.data.date.toISOString()}>{dateFmt.format(d.data.date)}</time>}
+                  </span>
+                  <Icon name="arrow" size={18} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </aside>
     </div>
   </section>
@@ -60,16 +72,21 @@ const docs = [
 </BaseLayout>
 
 <style>
-  .when { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 2rem; }
-  .when-icon { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
-  .agenda { list-style: none; margin: 0 0 1.5rem; padding: 0; display: grid; gap: 0.6rem; counter-reset: item; max-width: 55ch; }
-  .agenda li { display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 0.9rem; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
+  .agenda { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: 0.55rem; max-width: 55ch; }
+  .agenda li { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.9rem; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
   .agenda li :global(svg) { color: var(--green); flex: none; }
 
   .docs-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.6rem; position: sticky; top: 96px; }
-  .docs-card h3 { margin: 0 0 0.8rem; }
-  .docs-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
-  .docs-card a { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--green-700); font-weight: 600; padding: 0.5rem 0; border-bottom: 1px solid var(--line); }
-  .docs-card a:hover { color: var(--terra); }
+  .docs-card h3 { margin: 0 0 0.8rem; font-size: 1.3rem; }
+  .docs-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+  .docs-card a { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--ink); padding: 0.7rem 0.2rem; border-bottom: 1px solid var(--line); }
+  .docs-card li:last-child a { border-bottom: none; }
+  .doc-ic { flex: none; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .doc-txt { flex: 1; min-width: 0; display: grid; }
+  .doc-txt strong { font-size: 1.05rem; }
+  .doc-txt time { color: var(--muted); font-size: 0.9rem; }
+  .docs-card a :global(svg:last-child) { color: var(--green-700); flex: none; }
+  .docs-card a:hover strong { color: var(--green-700); }
+  .empty { color: var(--muted); }
   @media (max-width: 860px) { .docs-card { position: static; } }
 </style>

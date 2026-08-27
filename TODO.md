@@ -23,29 +23,33 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 
 ## 🔧 Gjenstår
 
-### A. Indhold der skal flyttes / gøres redigerbart 🛠
-1. **Generalforsamling** – rigtig dato, dagsorden og dokumenter + CMS
-2. **Forsidens velkomsttekst / hero** gøres redigerbar i CMS
-
 ### B. Indhold I selv udfylder 👤 (via CMS)
-3. Resterende **aktivitetsbilleder** (dem vi endnu ikke har koblet på)
-4. Rigtige **galleribilleder**
-5. **Tilgængelighedserklæring** – officiel tekst (er eksempel nu)
+1. Resterende **aktivitetsbilleder** (dem vi endnu ikke har koblet på)
+2. Flere **galleribilleder** efter behov (14 rigtige er lagt ind)
 
 ### C. Funktionelle detaljer 🛠
-6. **Redirect** `/mobile-pay` → `/mobilepay` (+ redirects fra gamle Bricksite-URL'er)
-7. **Kort** på forsiden: rigtigt indlejret kort eller behold link
+3. **Redirect** `/mobile-pay` → `/mobilepay` (+ redirects fra gamle Bricksite-URL'er)
+4. **Kort** på forsiden: rigtigt indlejret kort eller behold link
 
 ### D. Design & lancering 🛠
-8. Rigtigt **logo/wordmark** (er stiliseret "S" nu)
-9. **SEO**: OG-delebillede, `sitemap.xml`, `robots.txt`
-10. **Domæne-cutover** `selmersbo.dk` → Vercel
-11. Kort **redaktør-guide** ("sådan logger du ind og redigerer")
-12. *(valgfrit)* **Vercel Web Analytics** (cookieless besøgstal)
+5. **SEO**: OG-delebillede, `sitemap.xml`, `robots.txt`
+6. **Domæne-cutover** `selmersbo.dk` → Vercel
+7. Kort **redaktør-guide** ("sådan logger du ind og redigerer")
+8. *(valgfrit)* **Vercel Web Analytics** (cookieless besøgstal)
+
+## Nyligt færdigt
+
+- Om os · Vedtægter · Privatlivspolitik
+- MobilePay (nummer, logo, klikbar betalingsknap)
+- Indstillinger · Genveje · 4 årstidstemaer · Søg
+- Forside (hero + velkomst) redigerbar i CMS
+- Galleri (14 rigtige billeder) + Quiz-side
+- **Generalforsamling** (dagsorden + indkaldelse, beretning, referater)
+- Rigtigt **logo** i top og bund
+- Tilgængelighedserklæring fjernet (efter aftale)
 
 ## Anbefalet rækkefølge
 
-1. Generalforsamling + hero-tekst redigerbar (sidste indhold)
-2. Redirects + kort (funktionelle detaljer)
-3. Logo + SEO (polish)
-4. Domæne-cutover + redaktør-guide → lancering
+1. Redirects + kort (funktionelle detaljer)
+2. SEO (polish)
+3. Domæne-cutover + redaktør-guide → lancering

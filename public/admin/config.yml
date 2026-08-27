@@ -138,6 +138,27 @@ collections:
       - { name: body, label: "Indhold", widget: markdown, hint: "Selve nyhedsbrevet – skrives som læsbar tekst (ingen PDF)." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
+  - name: generalforsamling
+    label: "Generalforsamling"
+    label_singular: "Dokument"
+    description: "Indkaldelser, beretninger og referater. Én post pr. dokument."
+    folder: "src/content/generalforsamling"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: "{{fields.order}}-{{title}}"
+    summary: "{{title}}"
+    sortable_fields: [order, date, title]
+    fields:
+      - { name: title, label: "Titel", widget: string, hint: "F.eks. Indkaldelse til generalforsamling 2026." }
+      - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false, required: false }
+      - { name: summary, label: "Kort resumé", widget: text, required: false }
+      - { name: body, label: "Indhold", widget: markdown, hint: "Selve dokumentet." }
+      - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
+      - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
+
   - name: quiz
     label: "Quiz"
     label_singular: "Quiz"

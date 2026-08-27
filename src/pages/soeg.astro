@@ -35,6 +35,9 @@ for (const d of await getCollection('dokumenter'))
 for (const q of await getCollection('quiz', ({ data }) => !data.draft))
   idx.push({ t: q.data.title, ty: 'Quiz', u: '/quiz', x: strip([q.data.winners, 'quiz vindere referat', q.body]), ic: 'chat' });
 
+for (const g of await getCollection('generalforsamling', ({ data }) => !data.draft))
+  idx.push({ t: g.data.title, ty: 'Generalforsamling', u: `/generalforsamling/${g.id}`, x: strip([g.data.summary, 'generalforsamling bestyrelse beretning referat', g.body]), ic: 'users' });
+
 const omos = (await getCollection('omos'))[0];
 if (omos) {
   idx.push({ t: 'Om os', ty: 'Side', u: '/om-os', x: strip(['bestyrelse daglig leder de frivillige kontakt CVR', omos.data.lead, omos.data.purpose, omos.data.volunteersText]), ic: 'users' });

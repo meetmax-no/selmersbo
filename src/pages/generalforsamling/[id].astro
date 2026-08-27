@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+
+export async function getStaticPaths() {
+  const items = await getCollection('generalforsamling', ({ data }) => !data.draft);
+  return items.map((item) => ({ params: { id: item.id }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+const dateFmt = new Intl.DateTimeFormat('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<BaseLayout title={`${item.data.title} – Selmersbo`} description={item.data.summary}>
+  <PageHero eyebrow="Generalforsamling" title={item.data.title} icon="users" />
+  <section class="section" style="padding-top:1.5rem">
+    <div class="container">
+      <a class="back" href="/generalforsamling"><Icon name="arrow" size={18} /> Tilbage til Generalforsamling</a>
+      {item.data.date && <p class="updated">{dateFmt.format(item.data.date)}</p>}
+      <article class="prose newsletter"><Content /></article>
+    </div>
+  </section>
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .back { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 650; margin-bottom: 1rem; }
+  .back :global(svg) { transform: rotate(180deg); }
+  .updated { color: var(--muted); font-size: 0.98rem; margin: 0 0 1.4rem; }
+</style>
