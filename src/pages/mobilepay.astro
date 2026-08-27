@@ -45,15 +45,32 @@ const steps = [
         <span class="pay-label">Betal til Selmersbo</span>
         <strong class="pay-number">{number}</strong>
         <p>Husk at skrive, hvad betalingen gælder.</p>
-        <a class="pay-btn" href={payLink} rel="noopener" target="_blank">
+        <a class="pay-btn" id="mp-pay-btn" href={payLink} rel="noopener" target="_blank">
           <img src="/uploads/mobilepay-icon.svg" alt="" width="24" height="24" /> Betal med MobilePay
         </a>
+        <p class="pay-ipad-note" id="mp-ipad-note" hidden>
+          <Icon name="device" size={20} /><span>Åbn MobilePay på din telefon og betal til <strong>{number}</strong>. MobilePay findes ikke til iPad.</span>
+        </p>
         <a class="btn btn--ghost" href={`tel:+45${site.phone.replace(/\s/g, '')}`}><Icon name="phone" size={20} /> Spørg os: {site.phone}</a>
       </aside>
     </div>
   </section>
 
   <CtaBand />
+
+  <!-- MobilePay-appen findes kun til telefon (iPhone/Android), ikke iPad.
+       Skjul derfor betalingsknappen på iPad – nummeret vises stadig. -->
+  <script is:inline>
+    (function () {
+      var ua = navigator.userAgent || '';
+      var isIPad = /iPad/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (!isIPad) return;
+      var btn = document.getElementById('mp-pay-btn');
+      if (btn) btn.hidden = true;
+      var note = document.getElementById('mp-ipad-note');
+      if (note) note.hidden = false;
+    })();
+  </script>
 </BaseLayout>
 
 <style>
@@ -76,5 +93,13 @@ const steps = [
   }
   .pay-btn:hover { background: #4a68f0; color: #fff; }
   .pay-btn img { display: block; }
+  .pay-btn[hidden] { display: none; }
+  .pay-ipad-note {
+    display: flex; align-items: flex-start; gap: 0.6rem; text-align: left;
+    background: var(--green-050); color: var(--ink); border-radius: 14px;
+    padding: 0.85rem 1rem; font-size: 1rem; margin: 0 0 0.6rem;
+  }
+  .pay-ipad-note :global(svg) { color: var(--green-700); flex: none; margin-top: 2px; }
+  .pay-ipad-note[hidden] { display: none; }
   @media (max-width: 860px) { .pay-card { position: static; } }
 </style>
