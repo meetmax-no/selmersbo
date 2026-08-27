@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import stats from '../data/stats.json';
+
+// Pæne danske sidenavne til de mest almindelige stier.
+const PAGE_LABELS: Record<string, string> = {
+  '/': 'Forside',
+  '/aktiviteter': 'Aktiviteter',
+  '/nyheder': 'Nyheder',
+  '/nyhedsbreve': 'Nyhedsbreve',
+  '/udflugter': 'Udflugter',
+  '/galleri': 'Galleri',
+  '/udlejning': 'Udlejning',
+  '/mobilepay': 'MobilePay',
+  '/om-os': 'Om os',
+  '/generalforsamling': 'Generalforsamling',
+  '/quiz': 'Quiz',
+  '/soeg': 'Søg',
+};
+const label = (p: string) => PAGE_LABELS[p] ?? stats.topPages.find((x) => x.path === p)?.label ?? p;
+
+const hasData = stats.collecting && (stats.visitors > 0 || stats.pageviews > 0);
+const maxViews = Math.max(1, ...stats.topPages.map((p) => p.views));
+
+const nf = new Intl.NumberFormat('da-DK');
+const dateStr = (() => {
+  const [y, m, d] = stats.updated.split('-').map(Number);
+  const mnd = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
+  return `${d}. ${mnd[m - 1]} ${y}`;
+})();
+---
+<BaseLayout title="Besøgstal – Selmersbo" description="Besøgstal for selmersbo.dk – anonymt og cookie-frit." noindex={true}>
+  <PageHero
+    eyebrow="For bestyrelsen"
+    title="Besøgstal"
+    lead={`Hvor mange bruger selmersbo.dk – de sidste ${stats.rangeDays} dage. Tallene er anonyme og helt uden cookies.`}
+    icon="users" />
+
+  <section class="section" style="padding-top:2rem">
+    <div class="container">
+      {!hasData ? (
+        <div class="empty-box">
+          <span class="empty-ic"><Icon name="clock" size={30} /></span>
+          <h2>Vi er lige begyndt at tælle</h2>
+          <p>Statistikken er sat i gang. Kig forbi igen om en uges tid – så begynder tallene at komme her.</p>
+        </div>
+      ) : (
+        <>
+          <div class="big-grid">
+            <div class="big-card">
+              <span class="big-ic"><Icon name="users" size={26} /></span>
+              <strong class="big-num">{nf.format(stats.visitors)}</strong>
+              <span class="big-label">Besøgende</span>
+            </div>
+            <div class="big-card">
+              <span class="big-ic"><Icon name="image" size={26} /></span>
+              <strong class="big-num">{nf.format(stats.pageviews)}</strong>
+              <span class="big-label">Sidevisninger</span>
+            </div>
+          </div>
+
+          {stats.topPages.length > 0 && (
+            <div class="panel">
+              <h2>Mest besøgte sider</h2>
+              <ul class="bars">
+                {stats.topPages.map((p) => (
+                  <li>
+                    <span class="bar-label">{label(p.path)}</span>
+                    <span class="bar-track"><span class="bar-fill" style={`width:${Math.round((p.views / maxViews) * 100)}%`}></span></span>
+                    <span class="bar-val">{nf.format(p.views)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {stats.devices.length > 0 && (
+            <div class="panel">
+              <h2>Telefon eller computer</h2>
+              <ul class="bars">
+                {stats.devices.map((d) => (
+                  <li>
+                    <span class="bar-label">{d.type}</span>
+                    <span class="bar-track"><span class="bar-fill" style={`width:${d.share}%`}></span></span>
+                    <span class="bar-val">{d.share}%</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
+      )}
+
+      <p class="foot-note">
+        <Icon name="check" size={18} />
+        <span>Sidst opdateret {dateStr}. Tallene er anonyme og cookie-frie – der bruges ingen personoplysninger.</span>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .empty-box { text-align: center; max-width: 40rem; margin: 1rem auto 0; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 2.6rem 2rem; }
+  .empty-ic { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--green-050); color: var(--green-700); margin-bottom: 0.6rem; }
+  .empty-box h2 { margin: 0.2rem 0 0.4rem; }
+  .empty-box p { color: var(--muted); font-size: 1.08rem; margin: 0; }
+
+  .big-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+  .big-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.8rem; text-align: center; display: grid; justify-items: center; gap: 0.3rem; }
+  .big-ic { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--green-050); color: var(--green-700); margin-bottom: 0.3rem; }
+  .big-num { font-family: var(--font-display); font-size: 3rem; line-height: 1; color: var(--ink); }
+  .big-label { color: var(--muted); font-weight: 600; font-size: 1.05rem; }
+
+  .panel { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.6rem 1.8rem; margin-top: 1.4rem; }
+  .panel h2 { margin: 0 0 1rem; font-size: 1.35rem; }
+  .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
+  .bars li { display: grid; grid-template-columns: 12rem 1fr 4rem; align-items: center; gap: 0.9rem; }
+  .bar-label { font-weight: 600; }
+  .bar-track { background: var(--sand); border-radius: 999px; height: 16px; overflow: hidden; }
+  .bar-fill { display: block; height: 100%; background: var(--green); border-radius: 999px; }
+  .bar-val { text-align: right; color: var(--muted); font-weight: 600; }
+
+  .foot-note { display: flex; align-items: flex-start; gap: 0.5rem; color: var(--muted); font-size: 0.98rem; margin-top: 1.6rem; }
+  .foot-note :global(svg) { color: var(--green); flex: none; margin-top: 2px; }
+
+  @media (max-width: 620px) {
+    .big-grid { grid-template-columns: 1fr; }
+    .bars li { grid-template-columns: 7rem 1fr 3.4rem; gap: 0.5rem; }
+  }
+</style>

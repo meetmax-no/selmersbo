@@ -82,6 +82,13 @@ dig. Slå den fra igen for at vise den.
 | Indstillinger | Kontakt, åbningstider, genveje og **farvetema** |
 | Sider | Om os, Udlejning og Forside |
 
+## Besøgstal
+
+Vil I se, hvor mange der bruger siden, så åbn **selmersbo.dk/statistik**. Her
+står besøgstal for de sidste 30 dage – anonymt og uden cookies. Siden er kun til
+jer (den vises ikke i menuen og kan ikke findes via Google). Der skal ikke logges
+ind nogen steder.
+
 ## Skift farvetema (årstid)
 
 **Indstillinger → Kontakt & åbningstider →** feltet **"Farvetema (årstid)"** →
