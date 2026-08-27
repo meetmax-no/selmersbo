@@ -5,47 +5,47 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 
 ## ✅ Færdigt og live (CMS-styret)
 
-- Forside
-- **Nyheder** – fast besked, planlagte foredrag og månedens program (åbnes i modal)
-- **Indstillinger** – kontakt + åbningstider redigeres ét sted, vises overalt
+- **Forside**
+- **Nyheder** – fast besked, planlagte foredrag og månedens program (i modal)
 - **Aktiviteter** – 25 aktiviteter med billeder, status og "læs mere"-modal
-- Udflugter
+- **Udflugter** – med modal og tilmelding på kontoret
 - **Udlejning** – rigtige vilkår og priser
 - **Nyhedsbreve** – 13 måneder som læsbar tekst i modal (ingen PDF)
-- Galleri
+- **Galleri**
+- **Om os** – formål, daglig ledelse, bestyrelse (med portrætter), de frivillige
+- **Vedtægter** + **Privatlivspolitik** – egne sider, linket fra bunden
+- **MobilePay** – rigtigt nummer (95956) + officielt logo + CMS
+- **Indstillinger** – kontakt + åbningstider ét sted, vises overalt
+- **Årstidstemaer** – efterår / vinter / forår / sommer (vælges i CMS)
+- **Søg** – søger i hele siden (også personer), ingen cookies
+- **Genveje** i bunden – redigerbare i CMS
 - CMS på `/admin`, automatisk deploy til Vercel
 
 ## 🔧 Gjenstår
 
-### A. Flyt rigtigt indhold + gør redigerbart 🛠
-1. ~~**Indstillinger (singleton)** – åbningstider + kontakt~~ ✅ *færdig*
-2. **Om os** – flyt rigtigt indhold fra selmersbo.dk + CMS
-3. **Mobile Pay** – rigtigt MobilePay-nummer + rigtig tekst + CMS (+ ret slug til `/mobile-pay`)
-4. **Generalforsamling** – rigtig dato, dagsorden og dokumenter + CMS
-5. ~~**Nyheder** – fast besked + foredrag + månedens program~~ ✅ *færdig*
-6. **Forsidens velkomsttekst / hero** gøres redigerbar
+### A. Indhold der skal flyttes / gøres redigerbart 🛠
+1. **Generalforsamling** – rigtig dato, dagsorden og dokumenter + CMS
+2. **Forsidens velkomsttekst / hero** gøres redigerbar i CMS
 
-### B. Indhold I udfylder 👤 (via CMS)
-7. Resterende **aktivitetsbilleder** (dem vi endnu ikke har koblet på)
-8. Rigtige **galleribilleder**
-9. **Tilgængelighedserklæring** – officiel tekst (er eksempel nu)
+### B. Indhold I selv udfylder 👤 (via CMS)
+3. Resterende **aktivitetsbilleder** (dem vi endnu ikke har koblet på)
+4. Rigtige **galleribilleder**
+5. **Tilgængelighedserklæring** – officiel tekst (er eksempel nu)
 
 ### C. Funktionelle detaljer 🛠
-10. Nyheder "Læs mere" → rigtige links
-11. **Slug-parity** `/mobile-pay` + redirects fra de gamle Bricksite-URL'er
-12. **Kort** på forsiden: rigtigt indlejret kort eller behold link
+6. **Redirect** `/mobile-pay` → `/mobilepay` (+ redirects fra gamle Bricksite-URL'er)
+7. **Kort** på forsiden: rigtigt indlejret kort eller behold link
 
-### D. Design & lancering
-13. Rigtigt **logo/wordmark** (er stiliseret "S" nu)
-14. **SEO**: OG-delebillede, `sitemap.xml`, `robots.txt`
-15. **Domæne-cutover** `selmersbo.dk` → Vercel
-16. Kort **redaktør-guide** ("sådan logger du ind og redigerer")
-17. *(valgfrit)* privatlivsvenlig **analytics**
+### D. Design & lancering 🛠
+8. Rigtigt **logo/wordmark** (er stiliseret "S" nu)
+9. **SEO**: OG-delebillede, `sitemap.xml`, `robots.txt`
+10. **Domæne-cutover** `selmersbo.dk` → Vercel
+11. Kort **redaktør-guide** ("sådan logger du ind og redigerer")
+12. *(valgfrit)* **Vercel Web Analytics** (cookieless besøgstal)
 
 ## Anbefalet rækkefølge
 
-1. Indstillinger (åbningstider + kontakt)
-2. Enkeltsiderne: Om os / Mobile Pay / Generalforsamling
-3. Nyheder-tjek + funktionelle detaljer
-4. Domæne + redaktør-guide → lancering
-5. Polish (logo, SEO) løbende
+1. Generalforsamling + hero-tekst redigerbar (sidste indhold)
+2. Redirects + kort (funktionelle detaljer)
+3. Logo + SEO (polish)
+4. Domæne-cutover + redaktør-guide → lancering
