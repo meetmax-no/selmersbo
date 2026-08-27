@@ -121,6 +121,46 @@ const indstillinger = defineCollection({
   }),
 });
 
+// Om os – a single editable page: intro, daglig leder, bestyrelse, frivillige.
+const omos = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/omos' }),
+  schema: z.object({
+    title: z.string().default('Aktivhuset Selmersbo'),
+    lead: z.string(),
+    purpose: z.string(),
+    leader: z.object({
+      name: z.string(),
+      role: z.string().default('Daglig leder'),
+      email: z.string().optional(),
+      phone: z.string().optional(),
+      mobile: z.string().optional(),
+    }),
+    board: z.array(z.object({
+      name: z.string(),
+      role: z.string(),
+      phone: z.string().optional(),
+      mobile: z.string().optional(),
+    })).default([]),
+    volunteersHeading: z.string().default('De frivillige'),
+    volunteersText: z.string(),
+    followHeading: z.string().default('Følg os'),
+    followText: z.string(),
+    facebookUrl: z.string().optional(),
+    cvr: z.string().optional(),
+  }),
+});
+
+// Dokumenter (legal/reference pages: vedtægter, privatlivspolitik) – long
+// Markdown bodies, linked from the footer. One entry per file.
+const dokumenter = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/dokumenter' }),
+  schema: z.object({
+    title: z.string(),
+    updated: z.string().optional(), // e.g. "Oktober 2011"
+    summary: z.string().optional(),
+  }),
+});
+
 // Galleri (gallery) – list of photos with a caption.
 const galleri = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/galleri' }),
@@ -132,4 +172,4 @@ const galleri = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger };
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter };

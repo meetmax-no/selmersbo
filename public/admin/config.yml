@@ -157,6 +157,24 @@ collections:
       - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
+  - name: dokumenter
+    label: "Dokumenter"
+    label_singular: "Dokument"
+    description: "Vedtægter, privatlivspolitik og lignende – lange tekster, linket fra bunden."
+    folder: "src/content/dokumenter"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { name: title, label: "Titel", widget: string, hint: "F.eks. Vedtægter for Aktivhuset Selmersbo." }
+      - { name: updated, label: "Senest opdateret", widget: string, required: false, hint: 'F.eks. "Oktober 2011".' }
+      - { name: summary, label: "Kort resumé", widget: text, required: false, hint: "Vises som beskrivelse (SEO)." }
+      - { name: body, label: "Indhold", widget: markdown, hint: "Selve dokumentet." }
+
   # Indstillinger – kontakt og åbningstider (ét sted, vises overalt)
   - name: indstillinger
     label: "Indstillinger"
@@ -207,6 +225,40 @@ collections:
   - name: sider
     label: "Sider"
     files:
+      - name: omos
+        label: "Om os"
+        file: "src/content/omos/index.md"
+        description: "Formål, daglig ledelse, bestyrelse og de frivillige."
+        fields:
+          - { name: title, label: "Sidetitel", widget: string, default: "Aktivhuset Selmersbo" }
+          - { name: lead, label: "Indledning", widget: text, hint: "Kort tekst under overskriften." }
+          - { name: purpose, label: "Om huset (formål)", widget: text }
+          - name: leader
+            label: "Daglig ledelse"
+            widget: object
+            fields:
+              - { name: name, label: "Navn", widget: string }
+              - { name: role, label: "Titel", widget: string, default: "Daglig leder" }
+              - { name: email, label: "E-mail", widget: string, required: false }
+              - { name: phone, label: "Telefon", widget: string, required: false }
+              - { name: mobile, label: "Mobil", widget: string, required: false }
+          - name: board
+            label: "Bestyrelsen"
+            label_singular: "Medlem"
+            widget: list
+            summary: "{{fields.name}} – {{fields.role}}"
+            fields:
+              - { name: name, label: "Navn", widget: string }
+              - { name: role, label: "Rolle", widget: string, hint: "F.eks. Formand, Bestyrelsesmedlem, Suppleant." }
+              - { name: phone, label: "Telefon", widget: string, required: false }
+              - { name: mobile, label: "Mobil", widget: string, required: false }
+          - { name: volunteersHeading, label: "Overskrift – frivillige", widget: string, default: "De frivillige" }
+          - { name: volunteersText, label: "Tekst – frivillige", widget: text, hint: "Adskil afsnit med en tom linje." }
+          - { name: followHeading, label: "Overskrift – følg os", widget: string, default: "Følg os" }
+          - { name: followText, label: "Tekst – følg os", widget: text }
+          - { name: facebookUrl, label: "Facebook-gruppe (link)", widget: string, required: false }
+          - { name: cvr, label: "CVR-nummer", widget: string, required: false }
+
       - name: udlejning
         label: "Udlejning"
         file: "src/content/udlejning/index.md"

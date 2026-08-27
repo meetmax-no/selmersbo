@@ -1,66 +1,135 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 import { getSettings } from '../lib/settings';
-const site = await getSettings();
 
-const values = [
-  { icon: 'users', title: 'Fællesskab', text: 'Her er altid plads til én mere – og til en god snak.' },
-  { icon: 'accessibility', title: 'Tilgængelighed', text: 'Hele huset er i ét plan med niveaufri adgang for alle.' },
-  { icon: 'heart', title: 'Omsorg', text: 'Vi passer på hinanden – og har en sygeplejeklinik i huset.' },
+const site = await getSettings();
+const entry = await getEntry('omos', 'index');
+const d = entry!.data;
+
+const tel = (p: string) => `tel:+45${p.replace(/\s/g, '')}`;
+const volParas = d.volunteersText.split(/\n\n+/);
+
+const docs = [
+  { href: '/dokumenter/vedtaegter', label: 'Vedtægter', icon: 'book' },
+  { href: '/dokumenter/privatlivspolitik', label: 'Privatlivspolitik', icon: 'check' },
+  { href: '/tilgaengelighed', label: 'Tilgængelighedserklæring', icon: 'accessibility' },
 ];
 ---
-<BaseLayout title="Om os – Selmersbo" description="Om Aktivhuset Selmersbo – et aktivitets- og samværshus for seniorer i Hørsholm.">
-  <PageHero
-    eyebrow="Om os"
-    title="Aktivhuset Selmersbo"
-    lead="Et aktivitets- og samværshus for seniorer i Hørsholm – med et varmt fællesskab og god plads til alle."
-    icon="users" />
+<BaseLayout title="Om os – Selmersbo" description="Om Aktivhuset Selmersbo – ledelse, bestyrelse og de frivillige bag huset i Hørsholm.">
+  <PageHero eyebrow="Om os" title={d.title} lead={d.lead} icon="users" />
 
+  <!-- Formål + billede -->
   <section class="section" style="padding-top:2rem">
     <div class="container split">
       <div class="prose">
-        <h2>Et hus fyldt med liv</h2>
-        <p>
-          På Selmersbo mødes vi om det, vi holder af – sang og musik, bevægelse,
-          spil, foredrag, håndarbejde og hyggeligt samvær. Huset er skabt til at
-          være let at bruge for alle: alt er i ét plan, dørene er brede, og der er
-          handicapvenligt toilet.
-        </p>
-        <p>
-          Vi er en del af aktivitetscentrene i Hørsholm Kommune og drives i tæt
-          samarbejde med engagerede frivillige. Uanset om du kommer for en kop
-          kaffe eller for at være med til en fast aktivitet, er du velkommen.
-        </p>
-
-        <h2>Det står vi for</h2>
-        <div class="grid grid--3" style="margin-top:1rem">
-          {values.map((v) => (
-            <div class="value card">
-              <div class="value-icon" aria-hidden="true"><Icon name={v.icon} size={24} /></div>
-              <h3>{v.title}</h3>
-              <p>{v.text}</p>
-            </div>
-          ))}
-        </div>
+        <h2>Om huset</h2>
+        <p>{d.purpose}</p>
       </div>
-
       <aside class="side">
         <figure class="side-figure">
           <img src="/images/community-flags.jpg" alt="Medlemmerne samlet udenfor med flag og bogstavskilte, der staver Selmersbo" loading="lazy" width="1292" height="969" />
         </figure>
-        <div class="contact card">
-          <h3>Kontakt</h3>
-          <ul>
-            <li><Icon name="users" size={18} /> Daglig leder: {site.manager}</li>
-            <li><Icon name="pin" size={18} /> {site.address.street}, {site.address.zip} {site.address.city}</li>
-            <li><Icon name="phone" size={18} /> <a href={`tel:+45${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
-            <li><Icon name="mail" size={18} /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Daglig ledelse -->
+  <section class="section section--sand" style="padding-block:2.4rem">
+    <div class="container">
+      <h2 class="block-title">Daglig ledelse</h2>
+      <div class="leader card">
+        <div class="leader-avatar" aria-hidden="true"><Icon name="users" size={30} /></div>
+        <div class="leader-body">
+          <h3>{d.leader.name}</h3>
+          <p class="role">{d.leader.role}</p>
+          <ul class="contact-lines">
+            {d.leader.phone && <li><Icon name="phone" size={18} /> <a href={tel(d.leader.phone)}>{d.leader.phone}</a> <span class="muted">(kontor)</span></li>}
+            {d.leader.mobile && <li><Icon name="phone" size={18} /> <a href={tel(d.leader.mobile)}>{d.leader.mobile}</a> <span class="muted">(mobil)</span></li>}
+            {d.leader.email && <li><Icon name="mail" size={18} /> <a href={`mailto:${d.leader.email}`}>{d.leader.email}</a></li>}
           </ul>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bestyrelsen -->
+  <section class="section" style="padding-block:2.4rem">
+    <div class="container">
+      <h2 class="block-title">Bestyrelsen</h2>
+      <div class="board-grid">
+        {d.board.map((m) => (
+          <div class="member card">
+            <h3>{m.name}</h3>
+            <p class="role">{m.role}</p>
+            {(m.phone || m.mobile) && (
+              <ul class="contact-lines">
+                {m.phone && <li><Icon name="phone" size={16} /> <a href={tel(m.phone)}>{m.phone}</a> <span class="muted">(tlf.)</span></li>}
+                {m.mobile && <li><Icon name="phone" size={16} /> <a href={tel(m.mobile)}>{m.mobile}</a> <span class="muted">(mobil)</span></li>}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- De frivillige -->
+  <section class="section section--sand" style="padding-block:2.4rem">
+    <div class="container split">
+      <div class="prose">
+        <h2>{d.volunteersHeading}</h2>
+        {volParas.map((p) => <p>{p}</p>)}
+      </div>
+      <aside class="side">
+        <div class="join card">
+          <div class="join-icon" aria-hidden="true"><Icon name="heart" size={26} /></div>
+          <h3>Bliv frivillig</h3>
+          <p>Har du lyst til at give en hånd? Kig forbi kontoret, så tager vi en snak.</p>
+          <a class="btn btn--primary" href={tel(site.phone)}>Ring {site.phone} <Icon name="phone" size={18} /></a>
+        </div>
       </aside>
+    </div>
+  </section>
+
+  <!-- Følg os + kontakt -->
+  <section class="section" style="padding-block:2.4rem">
+    <div class="container follow-wrap">
+      <div class="prose">
+        <h2>{d.followHeading}</h2>
+        <p>{d.followText}</p>
+        {d.facebookUrl && (
+          <a class="btn btn--ghost" href={d.facebookUrl} rel="noopener" target="_blank">Find os på Facebook <Icon name="arrow" size={18} /></a>
+        )}
+      </div>
+      <div class="contact card">
+        <h3>Kontakt</h3>
+        <ul class="contact-lines">
+          <li><Icon name="pin" size={18} /> {site.address.street}, {site.address.zip} {site.address.city}</li>
+          <li><Icon name="phone" size={18} /> <a href={tel(site.phone)}>{site.phone}</a></li>
+          <li><Icon name="mail" size={18} /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+          {d.cvr && <li><Icon name="book" size={18} /> CVR: {d.cvr}</li>}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dokumenter -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <h2 class="block-title">Dokumenter</h2>
+      <div class="docs">
+        {docs.map((doc) => (
+          <a class="doc" href={doc.href}>
+            <span class="doc-icon" aria-hidden="true"><Icon name={doc.icon} size={20} /></span>
+            <span>{doc.label}</span>
+            <Icon name="arrow" size={18} />
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -68,18 +137,52 @@ const values = [
 </BaseLayout>
 
 <style>
-  .value { text-align: left; }
-  .value-icon { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); margin-bottom: 0.6rem; }
-  .value h3 { margin: 0 0 0.2rem; font-size: 1.2rem; }
-  .value p { margin: 0; color: var(--muted); font-size: 1rem; }
+  .block-title { font-size: clamp(1.6rem, 3.2vw, 2.1rem); margin: 0 0 1.1rem; }
 
-  .side { display: grid; gap: 1.2rem; position: sticky; top: 96px; }
+  .side { display: grid; gap: 1.2rem; }
   .side-figure { margin: 0; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-md); }
   .side-figure img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+
+  /* Daglig leder */
+  .leader { display: flex; gap: 1.2rem; align-items: flex-start; max-width: 640px; }
+  .leader-avatar { flex: none; width: 64px; height: 64px; border-radius: 16px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .leader-body h3 { margin: 0; font-size: 1.4rem; }
+
+  /* Bestyrelsen */
+  .board-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1rem; }
+  .member h3 { margin: 0 0 0.15rem; font-size: 1.2rem; }
+  .role { margin: 0 0 0.6rem; color: var(--terra); font-weight: 650; font-size: 0.98rem; }
+
+  .contact-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+  .contact-lines li { display: flex; align-items: center; gap: 0.5rem; color: var(--ink); font-size: 1rem; }
+  .contact-lines li :global(svg) { color: var(--green); flex: none; }
+  .contact-lines a { color: var(--green-700); font-weight: 600; }
+  .contact-lines .muted { color: var(--muted); font-weight: 400; font-size: 0.92rem; }
+
+  /* Bliv frivillig */
+  .join { text-align: left; }
+  .join-icon { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--terra-tint); color: var(--terra); margin-bottom: 0.6rem; }
+  .join h3 { margin: 0 0 0.3rem; font-size: 1.3rem; }
+  .join p { margin: 0 0 1rem; color: var(--muted); }
+  .join .btn { width: 100%; justify-content: center; }
+
+  /* Følg os + kontakt */
+  .follow-wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); align-items: start; }
   .contact h3 { margin: 0 0 0.7rem; }
-  .contact ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
-  .contact li { display: flex; align-items: center; gap: 0.55rem; color: var(--muted); }
-  .contact li :global(svg) { color: var(--green); flex: none; }
-  .contact a { color: var(--green-700); }
-  @media (max-width: 860px) { .side { position: static; } }
+
+  /* Dokumenter */
+  .docs { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.8rem; }
+  .doc {
+    display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 0.9rem 1.1rem; font-weight: 600;
+  }
+  .doc:hover { border-color: var(--green); box-shadow: var(--shadow-sm); }
+  .doc span:nth-child(2) { flex: 1; }
+  .doc-icon { flex: none; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .doc :global(svg:last-child) { color: var(--green-700); }
+
+  @media (max-width: 860px) {
+    .follow-wrap { grid-template-columns: 1fr; }
+  }
 </style>
