@@ -7,7 +7,7 @@ price: 250,- kr pr person.
 summary: Vi oplever Jægerspris Slot med en rundvisning og spiser derefter en god frokost på Gerlev Kro. Tilmelding og betaling på kontoret.
 image: /uploads/Jagerspris_Slot.jpeg
 signupUrl: ''
-soldOut: false
+soldOut: true
 draft: false
 ---
 
