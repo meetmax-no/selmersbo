@@ -47,11 +47,15 @@ const dateStr = (() => {
   return `${d}. ${mnd[m - 1]} ${y}`;
 })();
 
-// To top-10-lister: alle sider, og kun aktivitets-undersider.
+// Top-10-lister: sider (sidebesøg) + åbnede aktiviteter/udflugter/nyhedsbreve (events).
 const topPages = (stats.topPages ?? []).slice(0, 10);
 const topActivities = (stats.topActivities ?? []).slice(0, 10);
+const topExcursions = (stats.topExcursions ?? []).slice(0, 10);
+const topLetters = (stats.topLetters ?? []).slice(0, 10);
 const maxPages = Math.max(1, ...topPages.map((p) => p.views));
 const maxActs = Math.max(1, ...topActivities.map((p) => p.views));
+const maxExc = Math.max(1, ...topExcursions.map((p) => p.views));
+const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
 ---
 <BaseLayout title="Besøgstal – Selmersbo" description="Besøgstal for selmersbo.dk – anonymt og cookie-frit." noindex={true}>
   <PageHero
@@ -109,6 +113,40 @@ const maxActs = Math.max(1, ...topActivities.map((p) => p.views));
                     <span class="rank">{i + 1}</span>
                     <span class="bar-label">{label(p.path)}</span>
                     <span class="bar-track"><span class="bar-fill" style={`width:${Math.round((p.views / maxActs) * 100)}%`}></span></span>
+                    <span class="bar-val">{nf.format(p.views)}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {topExcursions.length > 0 && (
+            <div class="panel">
+              <h2>Mest åbnede udflugter <span class="tag">Top 10</span></h2>
+              <p class="panel-sub">Hvilke udflugter folk åbner og læser mest om (på siden <em>Udflugter</em>).</p>
+              <ol class="bars">
+                {topExcursions.map((p, i) => (
+                  <li>
+                    <span class="rank">{i + 1}</span>
+                    <span class="bar-label">{label(p.path)}</span>
+                    <span class="bar-track"><span class="bar-fill" style={`width:${Math.round((p.views / maxExc) * 100)}%`}></span></span>
+                    <span class="bar-val">{nf.format(p.views)}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {topLetters.length > 0 && (
+            <div class="panel">
+              <h2>Mest åbnede nyhedsbreve <span class="tag">Top 10</span></h2>
+              <p class="panel-sub">Hvilke måneders program og nyheder folk åbner mest (på <em>Nyheder</em> og <em>Nyhedsbreve</em>).</p>
+              <ol class="bars">
+                {topLetters.map((p, i) => (
+                  <li>
+                    <span class="rank">{i + 1}</span>
+                    <span class="bar-label">{label(p.path)}</span>
+                    <span class="bar-track"><span class="bar-fill" style={`width:${Math.round((p.views / maxLet) * 100)}%`}></span></span>
                     <span class="bar-val">{nf.format(p.views)}</span>
                   </li>
                 ))}

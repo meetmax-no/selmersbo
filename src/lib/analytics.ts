@@ -22,6 +22,8 @@ export interface Stats {
   pageviews: number;
   topPages: StatEntry[];
   topActivities: StatEntry[];
+  topExcursions: StatEntry[];
+  topLetters: StatEntry[];
   devices: DeviceEntry[];
 }
 
@@ -68,17 +70,22 @@ export async function getStats(): Promise<Stats | null> {
   const dateRange = { since: ymd(new Date(nowMs - RANGE_DAYS * dayMs)), until: ymd(new Date(nowMs + dayMs)) };
   const msRange = { since: String(nowMs - RANGE_DAYS * dayMs), until: String(nowMs) };
 
-  const [count, byPath, byDevice, byActivity] = await Promise.all([
+  // Hjælper til "åbnet"-events (modaler for aktiviteter, udflugter, nyhedsbreve).
+  const openEvents = (name: string) =>
+    q('events/aggregate', { ...msRange, by: 'eventData/navn', limit: '10', filter: `eventName eq '${name}'` }, token);
+
+  const [count, byPath, byDevice, byActivity, byExcursion, byLetter] = await Promise.all([
     q('visits/count', dateRange, token),
     q('visits/aggregate', { ...msRange, by: 'requestPath', limit: '50' }, token),
     q('visits/aggregate', { ...msRange, by: 'deviceType', limit: '6' }, token),
-    // Custom event "Aktivitet åbnet" med { navn }, så vi kan se hvilke
-    // aktiviteter folk åbner (de vises i en modal, ikke som egen side).
-    q('events/aggregate', { ...msRange, by: 'eventData/navn', limit: '10', filter: "eventName eq 'Aktivitet åbnet'" }, token),
+    // Custom events med { navn } – tingene vises i en modal, ikke som egen side.
+    openEvents('Aktivitet åbnet'),
+    openEvents('Udflugt åbnet'),
+    openEvents('Nyhedsbrev åbnet'),
   ]);
 
   // Kom der intet svar overhovedet, så vis "tom" tilstand.
-  if (!count && !byPath && !byDevice && !byActivity) return null;
+  if (!count && !byPath && !byDevice && !byActivity && !byExcursion && !byLetter) return null;
 
   const pages: StatEntry[] = (byPath ?? [])
     .map((r: any) => ({ path: stripSlash(r.requestPath ?? ''), views: r.pageviews ?? 0 }))
@@ -87,16 +94,20 @@ export async function getStats(): Promise<Stats | null> {
 
   const topPages = pages.slice(0, 10);
 
-  // "Mest åbnede aktiviteter" – fra custom events. Feltnavne parses defensivt,
-  // da events-API'ets nøgler ikke er verificeret endnu.
-  const topActivities: StatEntry[] = (byActivity ?? [])
-    .map((r: any) => ({
-      path: String(r['eventData/navn'] ?? r.navn ?? r.value ?? r.key ?? ''),
-      views: Number(r.count ?? r.total ?? r.events ?? r.pageviews ?? r.visitors ?? 0),
-    }))
-    .filter((r: StatEntry) => r.path && r.path !== 'undefined' && r.views > 0)
-    .sort((a: StatEntry, b: StatEntry) => b.views - a.views)
-    .slice(0, 10);
+  // Parser "åbnet"-events defensivt (events-API'ets nøgler kan variere).
+  const parseOpens = (rows: any): StatEntry[] =>
+    (rows ?? [])
+      .map((r: any) => ({
+        path: String(r['eventData/navn'] ?? r.navn ?? r.value ?? r.key ?? ''),
+        views: Number(r.count ?? r.total ?? r.events ?? r.pageviews ?? r.visitors ?? 0),
+      }))
+      .filter((r: StatEntry) => r.path && r.path !== 'undefined' && r.views > 0)
+      .sort((a: StatEntry, b: StatEntry) => b.views - a.views)
+      .slice(0, 10);
+
+  const topActivities = parseOpens(byActivity);
+  const topExcursions = parseOpens(byExcursion);
+  const topLetters = parseOpens(byLetter);
 
   const devRows = (byDevice ?? []).map((r: any) => ({
     type: DEVICE_LABELS[String(r.deviceType ?? '').toLowerCase()] ?? (r.deviceType || 'Andet'),
@@ -120,6 +131,8 @@ export async function getStats(): Promise<Stats | null> {
     pageviews,
     topPages,
     topActivities,
+    topExcursions,
+    topLetters,
     devices,
   };
 }

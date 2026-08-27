@@ -37,7 +37,7 @@ const formatDate = (d: Date) => {
             const d = item.data;
             return (
               <>
-                <a class="udf-card" href={`/udflugter/${item.id}`} data-udf={item.id}>
+                <a class="udf-card" href={`/udflugter/${item.id}`} data-udf={item.id} data-udf-title={d.title}>
                   <div class="udf-media">
                     {d.image
                       ? <img src={d.image} alt={d.title} loading="lazy" />
@@ -101,6 +101,7 @@ const formatDate = (d: Date) => {
 </BaseLayout>
 
 <script>
+  import { track } from '@vercel/analytics';
   document.querySelectorAll('a[data-udf]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const el = a as HTMLAnchorElement;
@@ -109,6 +110,7 @@ const formatDate = (d: Date) => {
         e.preventDefault();
         d.showModal();
         document.documentElement.style.overflow = 'hidden';
+        try { track('Udflugt åbnet', { navn: el.dataset.udfTitle || el.dataset.udf || '' }); } catch {}
       }
     });
   });

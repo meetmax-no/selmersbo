@@ -79,7 +79,7 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
 
       {latest && LatestContent && (
         <>
-          <a class="program" id="program" href={`/nyhedsbreve/${latest.id}`} data-program>
+          <a class="program" id="program" href={`/nyhedsbreve/${latest.id}`} data-program data-program-title={latest.data.title}>
             <div class="program-icon" aria-hidden="true"><Icon name="calendar" size={28} /></div>
             <div class="program-body">
               <p class="program-kicker">Månedens program</p>
@@ -116,6 +116,7 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
 </BaseLayout>
 
 <script>
+  import { track } from '@vercel/analytics';
   // Progressive enhancement: open månedens program in a modal, so the visitor
   // stays on Nyheder. Without JS the card is a normal link to the newsletter page.
   const opener = document.querySelector('a[data-program]') as HTMLAnchorElement | null;
@@ -125,6 +126,8 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
       e.preventDefault();
       dialog.showModal();
       document.documentElement.style.overflow = 'hidden';
+      // Samme event som nyhedsbrev-modalen, så månedens program tælles med.
+      try { track('Nyhedsbrev åbnet', { navn: opener.dataset.programTitle || '' }); } catch {}
     });
     dialog.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => dialog.close()));
     dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });

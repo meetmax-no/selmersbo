@@ -26,7 +26,7 @@ const rendered = await Promise.all(
       <div class="nb-grid">
         {rendered.map(({ item, Content, label }) => (
           <>
-            <a class="nb-card" href={`/nyhedsbreve/${item.id}`} data-nb={item.id}>
+            <a class="nb-card" href={`/nyhedsbreve/${item.id}`} data-nb={item.id} data-nb-title={item.data.title}>
               <div class="nb-icon" aria-hidden="true"><Icon name="mail" size={22} /></div>
               <div class="nb-card-body">
                 <h3>{label}</h3>
@@ -59,6 +59,7 @@ const rendered = await Promise.all(
 </BaseLayout>
 
 <script>
+  import { track } from '@vercel/analytics';
   // Progressive enhancement: open the newsletter in a modal.
   // Without JS the card is a normal link to the readable /nyhedsbreve/{id} page.
   document.querySelectorAll('a[data-nb]').forEach((a) => {
@@ -69,6 +70,7 @@ const rendered = await Promise.all(
         e.preventDefault();
         d.showModal();
         document.documentElement.style.overflow = 'hidden';
+        try { track('Nyhedsbrev åbnet', { navn: el.dataset.nbTitle || el.dataset.nb || '' }); } catch {}
       }
     });
   });
