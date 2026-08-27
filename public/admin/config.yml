@@ -157,6 +157,42 @@ collections:
       - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
+  # Indstillinger – kontakt og åbningstider (ét sted, vises overalt)
+  - name: indstillinger
+    label: "Indstillinger"
+    description: "Kontakt og åbningstider. Rettes ét sted – opdateres i top, bund, forside osv."
+    files:
+      - name: kontakt
+        label: "Kontakt & åbningstider"
+        file: "src/content/indstillinger/index.md"
+        description: "Adresse, telefon, e-mail og åbningstider."
+        fields:
+          - { name: name, label: "Kort navn", widget: string, default: "Selmersbo" }
+          - { name: full, label: "Fulde navn", widget: string, default: "Aktivhuset Selmersbo" }
+          - { name: tagline, label: "Undertekst", widget: string, default: "Aktivhuset i Hørsholm", hint: "Vises under navnet i top og bund." }
+          - { name: manager, label: "Daglig leder", widget: string, required: false }
+          - name: address
+            label: "Adresse"
+            widget: object
+            fields:
+              - { name: street, label: "Gade og nr.", widget: string }
+              - { name: zip, label: "Postnr.", widget: string }
+              - { name: city, label: "By", widget: string }
+              - { name: mapsUrl, label: "Google Maps-link", widget: string, required: false, hint: "Link til kort. Kan stå tomt." }
+          - { name: phone, label: "Telefon", widget: string, hint: "F.eks. 4849 4300." }
+          - { name: clinicPhone, label: "Sygeplejeklinik (telefon)", widget: string, required: false }
+          - { name: email, label: "E-mail", widget: string }
+          - { name: facebook, label: "Facebook-link", widget: string, required: false, hint: "Fuld adresse til Facebook-siden. Kan stå tomt." }
+          - name: hours
+            label: "Åbningstider"
+            widget: list
+            label_singular: "Dag"
+            summary: "{{fields.day}} – {{fields.time}}"
+            fields:
+              - { name: day, label: "Dag", widget: string, hint: "F.eks. Mandag." }
+              - { name: time, label: "Tid", widget: string, hint: 'F.eks. 09.30 – 16.00 eller "Lukket".' }
+              - { name: closed, label: "Lukket denne dag", widget: boolean, default: false, hint: "Sæt til hvis huset er lukket." }
+
   # Enkeltsider (redigeres, men oprettes/slettes ikke)
   - name: sider
     label: "Sider"

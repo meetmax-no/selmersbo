@@ -1,5 +1,7 @@
 ---
-import { nav, site } from '../data/site';
+import { nav } from '../data/site';
+import { getSettings } from '../lib/settings';
+const site = await getSettings();
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === '/' ? path === '/' : href.startsWith('/') && path.startsWith(href);

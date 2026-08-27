@@ -91,6 +91,34 @@ const nyhedsbreve = defineCollection({
   }),
 });
 
+// Indstillinger (settings) – a single editable entry (index.md) with the
+// contact info + opening hours that are shown all over the site. One place
+// to edit → updates header, footer, front page, CTA, etc.
+const indstillinger = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/indstillinger' }),
+  schema: z.object({
+    name: z.string().default('Selmersbo'),
+    full: z.string().default('Aktivhuset Selmersbo'),
+    tagline: z.string().default('Aktivhuset i Hørsholm'),
+    manager: z.string().default(''),
+    address: z.object({
+      street: z.string().default(''),
+      zip: z.string().default(''),
+      city: z.string().default(''),
+      mapsUrl: z.string().default(''),
+    }),
+    phone: z.string().default(''),
+    clinicPhone: z.string().default(''),
+    email: z.string().default(''),
+    facebook: z.string().default(''),
+    hours: z.array(z.object({
+      day: z.string(),
+      time: z.string(),
+      closed: z.boolean().default(false),
+    })).default([]),
+  }),
+});
+
 // Galleri (gallery) – list of photos with a caption.
 const galleri = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/galleri' }),
@@ -102,4 +130,4 @@ const galleri = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri };
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger };

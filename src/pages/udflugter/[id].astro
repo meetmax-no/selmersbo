@@ -4,7 +4,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Icon from '../../components/Icon.astro';
-import { site } from '../../data/site';
+import { getSettings } from '../../lib/settings';
+const site = await getSettings();
 
 export async function getStaticPaths() {
   const items = await getCollection('udflugter', ({ data }) => !data.draft);

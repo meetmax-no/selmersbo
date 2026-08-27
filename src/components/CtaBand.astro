@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
-import { site } from '../data/site';
+import { getSettings } from '../lib/settings';
+const site = await getSettings();
 interface Props {
   eyebrow?: string;
   title?: string;

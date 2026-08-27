@@ -1,5 +1,6 @@
 ---
-import { site } from '../data/site';
+import { getSettings } from '../lib/settings';
+const site = await getSettings();
 import Icon from './Icon.astro';
 ---
 <footer class="site-footer" id="kontakt">

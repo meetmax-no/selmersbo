@@ -4,7 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import ActivityCard from '../components/ActivityCard.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { site } from '../data/site';
+import { getSettings } from '../lib/settings';
+const site = await getSettings();
 
 const today = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'][new Date().getDay()];
 const todayHours = site.hours.find((h) => h.day === today);
