@@ -220,6 +220,15 @@ collections:
               - { name: day, label: "Dag", widget: string, hint: "F.eks. Mandag." }
               - { name: time, label: "Tid", widget: string, hint: 'F.eks. 09.30 – 16.00 eller "Lukket".' }
               - { name: closed, label: "Lukket denne dag", widget: boolean, default: false, hint: "Sæt til hvis huset er lukket." }
+          - name: footerLinks
+            label: "Genveje (i bunden)"
+            label_singular: "Genvej"
+            widget: list
+            summary: "{{fields.label}}"
+            hint: "Linkene i 'Genveje' nederst på siden. Ræk­ke­følgen bestemmer visningen."
+            fields:
+              - { name: label, label: "Tekst", widget: string, hint: "F.eks. Om os." }
+              - { name: url, label: "Link", widget: string, hint: "Intern side (f.eks. /om-os) eller fuld adresse (https://…)." }
 
   # Enkeltsider (redigeres, men oprettes/slettes ikke)
   - name: sider

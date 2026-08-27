@@ -43,13 +43,10 @@ import Icon from './Icon.astro';
     <div class="footer-col">
       <h3>Genveje</h3>
       <ul class="footer-list plain">
-        <li><a href="/soeg">Søg</a></li>
-        <li><a href="/om-os">Om os</a></li>
-        <li><a href="/mobilepay">MobilePay</a></li>
-        <li><a href="/dokumenter/vedtaegter">Vedtægter</a></li>
-        <li><a href="/dokumenter/privatlivspolitik">Privatlivspolitik</a></li>
-        <li><a href="/tilgaengelighed">Tilgængelighedserklæring</a></li>
-        {site.facebook && <li><a href={site.facebook} rel="noopener" target="_blank">Facebook</a></li>}
+        {site.footerLinks.map((l) => {
+          const ext = /^https?:\/\//.test(l.url);
+          return <li><a href={l.url} {...(ext ? { rel: 'noopener', target: '_blank' } : {})}>{l.label}</a></li>;
+        })}
       </ul>
     </div>
   </div>

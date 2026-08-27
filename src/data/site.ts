@@ -24,6 +24,15 @@ export const site = {
     { day: 'Torsdag', time: '09.30 – 16.00' },
     { day: 'Fredag', time: '09.30 – 14.00' },
   ],
+  footerLinks: [
+    { label: 'Søg', url: '/soeg' },
+    { label: 'Om os', url: '/om-os' },
+    { label: 'MobilePay', url: '/mobilepay' },
+    { label: 'Vedtægter', url: '/dokumenter/vedtaegter' },
+    { label: 'Privatlivspolitik', url: '/dokumenter/privatlivspolitik' },
+    { label: 'Tilgængelighedserklæring', url: '/tilgaengelighed' },
+    { label: 'Facebook', url: 'https://www.facebook.com/groups/146686506050448' },
+  ],
 } as const;
 
 // Main navigation – mirrors the current site's structure, all real routes.

@@ -91,6 +91,17 @@ const nyhedsbreve = defineCollection({
   }),
 });
 
+// Footer shortcut links ("Genveje") – default set, editable in the CMS.
+export const DEFAULT_FOOTER_LINKS = [
+  { label: 'Søg', url: '/soeg' },
+  { label: 'Om os', url: '/om-os' },
+  { label: 'MobilePay', url: '/mobilepay' },
+  { label: 'Vedtægter', url: '/dokumenter/vedtaegter' },
+  { label: 'Privatlivspolitik', url: '/dokumenter/privatlivspolitik' },
+  { label: 'Tilgængelighedserklæring', url: '/tilgaengelighed' },
+  { label: 'Facebook', url: 'https://www.facebook.com/groups/146686506050448' },
+];
+
 // Indstillinger (settings) – a single editable entry (index.md) with the
 // contact info + opening hours that are shown all over the site. One place
 // to edit → updates header, footer, front page, CTA, etc.
@@ -118,6 +129,11 @@ const indstillinger = defineCollection({
       time: z.string(),
       closed: z.boolean().default(false),
     })).default([]),
+    // Footer-genveje – redigerbare i CMS. Falder tilbage til standardsættet.
+    footerLinks: z.array(z.object({
+      label: z.string(),
+      url: z.string(),
+    })).default(DEFAULT_FOOTER_LINKS),
   }),
 });
 
