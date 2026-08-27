@@ -40,6 +40,26 @@ eller vælg et, der er brugt før. Giv gerne en kort billedtekst.
 Sæt **"Kladde"** til, så forsvinder tingen fra siden men bliver liggende hos
 dig. Slå den fra igen for at vise den.
 
+## 6. Aktuelle links på forsiden
+
+Øverst på forsiden – lige over "Nyt fra Selmersbo" – står der tre link­kort
+(f.eks. *seniorsiden*, en *avisartikel* og *Oplev Hørsholm*). Dem retter du selv:
+
+1. Gå til **Sider → Forside**.
+2. Find **"Aktuelle links (vises øverst på forsiden)"**.
+3. Ret et kort, eller klik **Tilføj** for et nyt. For hvert kort:
+   - **Tekst på knappen** – det, man læser (f.eks. "Se seniorsiden for oktober").
+   - **Lille undertekst** – en kort forklaring (må gerne stå tom).
+   - **Link (adresse)** – hele adressen. Skal du linke til en PDF i Google Drev,
+     så åbn filen i Drev, kopier adressen fra browserens adresselinje og sæt den
+     ind her.
+   - **Ikon** – vælg et passende (Dokument, Avis, Kalender, Ekstern side …).
+4. Vil du fjerne et kort, klik på skraldespanden ud for det.
+5. Klik **Publicer**.
+
+> Tip: Linkene åbner i en ny fane, så brugeren nemt kommer tilbage til siden.
+> Fjerner du alle tre kort, forsvinder hele afsnittet af sig selv.
+
 ## Hvad er hvad?
 
 | Del | Indhold |
