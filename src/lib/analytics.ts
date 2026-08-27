@@ -52,9 +52,11 @@ export async function getStats(): Promise<Stats | null> {
   const token = process.env.VERCEL_TOKEN;
   if (!token) return null;
 
-  const until = new Date();
-  const since = new Date(until.getTime() - RANGE_DAYS * 86_400_000);
-  const range = { since: ymd(since), until: ymd(until) };
+  // VIGTIGT: send tidspunkter som millisekunder (ikke kun dato). En dato-streng
+  // som "2026-08-27" fortolkes af aggregate-API'et som kl. 01:00 samme dag i
+  // projektets tidszone og afskærer dermed dagens besøg (→ tomme lister).
+  const nowMs = Date.now();
+  const range = { since: String(nowMs - RANGE_DAYS * 86_400_000), until: String(nowMs) };
 
   try {
     const [count, byPath, byDevice] = await Promise.all([
@@ -83,7 +85,7 @@ export async function getStats(): Promise<Stats | null> {
       .map((r: any) => ({ type: r.type, share: Math.round((r.views / devTotal) * 100) }));
 
     return {
-      updated: ymd(until),
+      updated: ymd(new Date(nowMs)),
       rangeDays: RANGE_DAYS,
       collecting: true,
       visitors: count?.visitors ?? 0,
