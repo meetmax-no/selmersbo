@@ -25,16 +25,20 @@ const udflugter = defineCollection({
 });
 
 // Nyheder (news) – shown on the front page and on /nyheder.
+// Everything is shown in full inline (no "read more" click). A pinned item is
+// a standing notice ("fast besked") shown at the top; the rest are dated news.
 const nyheder = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/nyheder' }),
   schema: z.object({
     title: z.string(),
     tag: z.string().default('Nyt'),
     date: z.coerce.date(),
-    summary: z.string(),
+    summary: z.string().optional(), // short text for dated news / front page
+    pinned: z.boolean().default(false), // "fast besked" → shown at the top
     cta: z.string().default('Læs mere'),
-    url: z.string().optional(),
+    url: z.string().optional(), // only a real external link
     draft: z.boolean().default(false),
+    // Markdown body = full text (used for pinned notices and longer news).
   }),
 });
 

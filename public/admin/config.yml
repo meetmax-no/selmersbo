@@ -64,11 +64,13 @@ collections:
     sortable_fields: [date, title]
     fields:
       - { name: title, label: "Overskrift", widget: string }
-      - { name: tag, label: "Mærkat", widget: string, default: "Nyt", hint: "F.eks. Seniorsiden, I pressen, Hørsholm." }
+      - { name: tag, label: "Mærkat", widget: string, default: "Nyt", hint: "F.eks. Besked, Seniorsiden, I pressen." }
       - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
-      - { name: summary, label: "Tekst", widget: text }
-      - { name: cta, label: "Knaptekst", widget: string, default: "Læs mere" }
-      - { name: url, label: "Link", widget: string, required: false, hint: "Hvor knappen fører hen (valgfrit)." }
+      - { name: pinned, label: "Fast besked (vises øverst, altid åben)", widget: boolean, default: false }
+      - { name: summary, label: "Kort tekst", widget: text, required: false, hint: "Vises på forsiden og som indledning." }
+      - { name: body, label: "Uddybende tekst", widget: markdown, required: false, hint: "Vises i fuld længde på siden (til faste beskeder og længere nyheder)." }
+      - { name: url, label: "Eksternt link", widget: string, required: false, hint: "Kun hvis nyheden peger ud af siden (f.eks. en artikel)." }
+      - { name: cta, label: "Linktekst", widget: string, default: "Læs mere", hint: "Teksten på det eksterne link." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
   - name: aktiviteter

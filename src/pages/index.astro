@@ -10,7 +10,7 @@ const today = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'L
 const todayHours = site.hours.find((h) => h.day === today);
 
 // Content from the CMS collections
-const news = (await getCollection('nyheder', ({ data }) => !data.draft))
+const news = (await getCollection('nyheder', ({ data }) => !data.draft && !data.pinned))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3)
   .map((e) => e.data);
@@ -117,7 +117,7 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
       </div>
       <div class="grid grid--3">
         {news.map((n) => (
-          <a class="news-card" href={n.url ?? '#'}>
+          <a class="news-card" href={n.url && n.url !== '#' ? n.url : '/nyheder'}>
             <span class="chip chip--gold">{n.tag}</span>
             <h3>{n.title}</h3>
             <p>{n.summary}</p>

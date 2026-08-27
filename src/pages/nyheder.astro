@@ -1,37 +1,63 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 
-const news = (await getCollection('nyheder', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .map((e) => e.data);
+const dateFmt = new Intl.DateTimeFormat('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+const items = await getCollection('nyheder', ({ data }) => !data.draft);
+const rendered = await Promise.all(items.map(async (item) => ({ item, Content: (await render(item)).Content })));
+const byDate = (a: any, b: any) => b.item.data.date.getTime() - a.item.data.date.getTime();
+const pinned = rendered.filter((r) => r.item.data.pinned).sort(byDate);
+const news = rendered.filter((r) => !r.item.data.pinned).sort(byDate);
+const hasLink = (u?: string) => !!u && u !== '#';
 ---
-<BaseLayout title="Nyheder – Selmersbo" description="Seneste nyt fra Aktivhuset Selmersbo i Hørsholm.">
+<BaseLayout title="Nyheder – Selmersbo" description="Seneste nyt og faste beskeder fra Aktivhuset Selmersbo.">
   <PageHero
     eyebrow="Aktuelt"
-    title="Nyheder fra Selmersbo"
-    lead="Følg med i, hvad der sker i og omkring huset – program, presse og gode historier fra fællesskabet."
+    title="Nyheder"
+    lead="Følg med i, hvad der sker på Selmersbo. Alt står her på siden – du behøver ikke klikke dig videre."
     icon="calendar" />
 
   <section class="section" style="padding-top:2rem">
-    <div class="container">
-      <div class="grid grid--3">
-        {news.map((n) => (
-          <a class="news-card" href={n.url ?? '#'}>
-            <span class="chip chip--gold">{n.tag}</span>
-            <h3>{n.title}</h3>
-            <p>{n.summary}</p>
-            <span class="news-cta">{n.cta} <Icon name="arrow" size={18} /></span>
-          </a>
-        ))}
-      </div>
-      <p class="demo-note">
-        <Icon name="check" size={20} />
-        <span>Nyhederne redigeres i CMS'et under <strong>/admin</strong> – Selmersbo skriver selv de aktuelle nyheder her.</span>
-      </p>
+    <div class="container news-wrap">
+
+      {pinned.length > 0 && (
+        <div class="notices">
+          {pinned.map(({ item, Content }) => (
+            <aside class="notice">
+              <p class="notice-tag"><Icon name="check" size={18} /> {item.data.tag}</p>
+              <h2>{item.data.title}</h2>
+              <div class="prose newsletter"><Content /></div>
+            </aside>
+          ))}
+        </div>
+      )}
+
+      {news.length > 0 && (
+        <div class="news-list">
+          {pinned.length > 0 && <h2 class="news-heading">Seneste nyt</h2>}
+          {news.map(({ item, Content }) => (
+            <article class="news-item">
+              <div class="news-meta">
+                <span class="chip chip--gold">{item.data.tag}</span>
+                <time datetime={item.data.date.toISOString()}>{dateFmt.format(item.data.date)}</time>
+              </div>
+              <h3>{item.data.title}</h3>
+              {item.data.summary && <p class="news-lead">{item.data.summary}</p>}
+              <div class="prose newsletter"><Content /></div>
+              {hasLink(item.data.url) && (
+                <a class="news-link" href={item.data.url} rel="noopener">{item.data.cta} <Icon name="arrow" size={18} /></a>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
+
+      {pinned.length === 0 && news.length === 0 && (
+        <p class="empty">Der er ingen nyheder lige nu – kig forbi igen snart.</p>
+      )}
     </div>
   </section>
 
@@ -39,21 +65,29 @@ const news = (await getCollection('nyheder', ({ data }) => !data.draft))
 </BaseLayout>
 
 <style>
-  .news-card {
-    display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem;
+  .news-wrap { display: grid; gap: clamp(1.5rem, 4vw, 2.5rem); }
+
+  /* Faste beskeder */
+  .notices { display: grid; gap: 1rem; }
+  .notice {
+    background: var(--gold-tint); border: 1px solid #ecd9a9; border-left: 5px solid var(--gold);
+    border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.8rem);
+  }
+  .notice-tag { display: inline-flex; align-items: center; gap: 0.45rem; margin: 0 0 0.4rem; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; color: #8a5e14; }
+  .notice-tag :global(svg) { color: var(--gold); }
+  .notice h2 { margin: 0 0 0.5rem; font-size: clamp(1.5rem, 3vw, 1.9rem); }
+
+  /* Daterte nyheder – vist i fuld tekst */
+  .news-heading { font-size: clamp(1.6rem, 3.2vw, 2.1rem); margin: 0 0 0.5rem; }
+  .news-list { display: grid; gap: 1.2rem; }
+  .news-item {
     background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow-sm); padding: 1.6rem; text-decoration: none; color: var(--ink);
-    height: 100%; transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    box-shadow: var(--shadow-sm); padding: clamp(1.3rem, 3vw, 1.8rem);
   }
-  .news-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--gold); }
-  .news-card h3 { margin: 0.2rem 0 0; }
-  .news-card p { color: var(--muted); margin: 0; font-size: 1.02rem; }
-  .news-cta { margin-top: auto; display: inline-flex; align-items: center; gap: 0.4rem; color: var(--green-700); font-weight: 650; }
-  .demo-note {
-    display: flex; align-items: center; gap: 0.6rem; margin-top: 2rem;
-    background: var(--gold-tint); color: #7a5410; border: 1px solid #ecd9a9;
-    border-radius: 12px; padding: 0.8rem 1.1rem; font-size: 1rem; max-width: none;
-  }
-  .demo-note :global(svg) { color: var(--gold); flex: none; }
-  .demo-note strong { color: #5e3f08; }
+  .news-meta { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .news-meta time { color: var(--muted); font-size: 0.98rem; }
+  .news-item h3 { margin: 0 0 0.4rem; font-size: 1.5rem; }
+  .news-lead { font-size: 1.1rem; color: var(--ink); margin: 0 0 0.6rem; }
+  .news-link { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.6rem; font-weight: 650; color: var(--green-700); }
+  .empty { color: var(--muted); font-size: 1.1rem; }
 </style>
