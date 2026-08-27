@@ -73,13 +73,13 @@
 
 /* ❄️ Vinter – kølig, klar, med dyb grangrøn og frostblå */
 :root[data-theme='vinter'] {
-  --bg: #f3f6fa;
-  --paper: #ffffff;
-  --sand: #e7eef5;
-  --sand-deep: #d9e4ee;
-  --ink: #1b2430;
-  --muted: #4c5663;
-  --line: #d2dde8;
+  --bg: #e6eef7;
+  --paper: #fbfdff;
+  --sand: #d3e2f0;
+  --sand-deep: #c1d6e9;
+  --ink: #17212e;
+  --muted: #465264;
+  --line: #c6d6e6;
   --green: #1f5d5f;
   --green-700: #17494b;
   --green-050: #dcebec;
@@ -95,13 +95,13 @@
 
 /* 🌸 Forår – frisk og lys, med løvgrøn, blomsterrosa og påskegul */
 :root[data-theme='foraar'] {
-  --bg: #f6faf4;
-  --paper: #ffffff;
-  --sand: #e9f2e5;
-  --sand-deep: #dbebd5;
-  --ink: #22281f;
-  --muted: #515c4b;
-  --line: #dbe8d4;
+  --bg: #eaf5e6;
+  --paper: #fbfefa;
+  --sand: #dbeed2;
+  --sand-deep: #c9e3bd;
+  --ink: #1f271c;
+  --muted: #4c5946;
+  --line: #cee3c5;
   --green: #367a41;
   --green-700: #2c6535;
   --green-050: #e4f1e2;
@@ -117,13 +117,13 @@
 
 /* ☀️ Sommer – lys og solrig, med havgrøn, koralorange og solsikkegul */
 :root[data-theme='sommer'] {
-  --bg: #fef9ee;
-  --paper: #ffffff;
-  --sand: #f7edd8;
-  --sand-deep: #f0e3c8;
-  --ink: #2a2418;
-  --muted: #5c5442;
-  --line: #ecdfc6;
+  --bg: #fef1d9;
+  --paper: #fffdf6;
+  --sand: #fce7bd;
+  --sand-deep: #f6d9a2;
+  --ink: #2a2214;
+  --muted: #5c5138;
+  --line: #f0d9a8;
   --green: #227d6b;
   --green-700: #1b6557;
   --green-050: #dcefe9;
