@@ -31,7 +31,6 @@ export const site = {
     { label: 'MobilePay', url: '/mobilepay' },
     { label: 'Vedtægter', url: '/dokumenter/vedtaegter' },
     { label: 'Privatlivspolitik', url: '/dokumenter/privatlivspolitik' },
-    { label: 'Tilgængelighedserklæring', url: '/tilgaengelighed' },
     { label: 'Facebook', url: 'https://www.facebook.com/groups/146686506050448' },
   ],
 } as const;

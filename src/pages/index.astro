@@ -1,11 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import ActivityCard from '../components/ActivityCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { getSettings } from '../lib/settings';
 const site = await getSettings();
+const fs = (await getEntry('forside', 'index'))!.data;
+const welcomeParas = fs.welcomeText.split(/\n\n+/);
 
 const today = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'][new Date().getDay()];
 const todayHours = site.hours.find((h) => h.day === today);
@@ -46,12 +48,9 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow"><Icon name="users" size={18} /> Aktivhuset Selmersbo</p>
-        <h1>Et varmt fællesskab for seniorer i Hørsholm</h1>
-        <p class="lead">
-          Sang, bevægelse, foredrag, udflugter og hyggeligt samvær – midt i
-          Hørsholm, i lyse lokaler med god plads til alle.
-        </p>
+        <p class="eyebrow"><Icon name="users" size={18} /> {fs.heroEyebrow}</p>
+        <h1>{fs.heroTitle}</h1>
+        <p class="lead">{fs.heroLead}</p>
         <div class="hero-cta">
           <a class="btn btn--primary" href="/aktiviteter">Se aktiviteter <Icon name="arrow" size={20} /></a>
           <a class="btn btn--ghost" href="#bliv-medlem">Bliv medlem</a>
@@ -60,12 +59,12 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
 
       <div class="hero-media">
         <img
-          src="/images/community-flags.jpg"
-          alt="Medlemmer af Selmersbo står samlet udenfor med danske flag og bogstavskilte, der staver Selmersbo"
+          src={fs.heroImage}
+          alt={fs.heroImageAlt}
           width="1292" height="969" fetchpriority="high" />
         <div class="hero-badge">
           <Icon name="accessibility" size={22} />
-          <span>Alt i ét plan – god tilgængelighed</span>
+          <span>{fs.heroBadge}</span>
         </div>
       </div>
     </div>
@@ -102,29 +101,21 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
   <section class="section" id="velkommen">
     <div class="container welcome">
       <div class="welcome-copy">
-        <p class="eyebrow">Velkommen</p>
-        <h2>Kære venner af Selmersbo</h2>
-        <p>
-          Selmersbo er et aktivitets- og samværshus for seniorer i Hørsholm.
-          Her mødes vi om det, vi holder af – uanset om det er sang og musik,
-          en gåtur, et godt foredrag eller en kop kaffe og en snak.
-        </p>
-        <p>
-          Følg med her på siden, hvor vi løbende fortæller om, hvad der sker på
-          Selmersbo. Alle er velkomne – og der er altid plads til én mere.
-        </p>
+        <p class="eyebrow">{fs.welcomeEyebrow}</p>
+        <h2>{fs.welcomeTitle}</h2>
+        {welcomeParas.map((p) => <p>{p}</p>)}
         <ul class="welcome-points">
-          <li><Icon name="check" size={20} /> Nye venskaber og fast samvær hver uge</li>
-          <li><Icon name="check" size={20} /> Aktiviteter for alle – ingen erfaring nødvendig</li>
-          <li><Icon name="check" size={20} /> Handicapvenligt hus med niveaufri adgang</li>
+          {fs.welcomePoints.map((pt) => (
+            <li><Icon name="check" size={20} /> {pt.text}</li>
+          ))}
         </ul>
       </div>
       <figure class="welcome-figure">
         <img
-          src="/images/koncert.jpg"
-          alt="Kor optræder i Selmersbos lyse aktivitetsrum, mens medlemmerne lytter i kurvestole"
+          src={fs.welcomeImage}
+          alt={fs.welcomeImageAlt}
           width="922" height="922" loading="lazy" />
-        <figcaption>Koncert i aktivitetsrummet</figcaption>
+        {fs.welcomeCaption && <figcaption>{fs.welcomeCaption}</figcaption>}
       </figure>
     </div>
   </section>

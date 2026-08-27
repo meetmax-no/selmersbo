@@ -235,6 +235,31 @@ collections:
   - name: sider
     label: "Sider"
     files:
+      - name: forside
+        label: "Forside"
+        file: "src/content/forside/index.md"
+        description: "Overskrift, velkomsttekst og billeder på forsiden."
+        fields:
+          - { name: heroEyebrow, label: "Forsidens lille overskrift", widget: string }
+          - { name: heroTitle, label: "Forsidens store overskrift", widget: string }
+          - { name: heroLead, label: "Forsidens indledning", widget: text }
+          - { name: heroImage, label: "Forsidens billede", widget: image }
+          - { name: heroImageAlt, label: "Billedtekst (til skærmlæser)", widget: string, required: false }
+          - { name: heroBadge, label: "Mærkat på billedet", widget: string, required: false }
+          - { name: welcomeEyebrow, label: "Velkomst – lille overskrift", widget: string }
+          - { name: welcomeTitle, label: "Velkomst – overskrift", widget: string }
+          - { name: welcomeText, label: "Velkomst – tekst", widget: text, hint: "Adskil afsnit med en tom linje." }
+          - name: welcomePoints
+            label: "Velkomst – punkter"
+            label_singular: "Punkt"
+            widget: list
+            summary: "{{fields.text}}"
+            fields:
+              - { name: text, label: "Tekst", widget: string }
+          - { name: welcomeImage, label: "Velkomst – billede", widget: image }
+          - { name: welcomeImageAlt, label: "Billedtekst (til skærmlæser)", widget: string, required: false }
+          - { name: welcomeCaption, label: "Billedtekst under foto", widget: string, required: false }
+
       - name: omos
         label: "Om os"
         file: "src/content/omos/index.md"

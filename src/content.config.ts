@@ -98,7 +98,6 @@ export const DEFAULT_FOOTER_LINKS = [
   { label: 'MobilePay', url: '/mobilepay' },
   { label: 'Vedtægter', url: '/dokumenter/vedtaegter' },
   { label: 'Privatlivspolitik', url: '/dokumenter/privatlivspolitik' },
-  { label: 'Tilgængelighedserklæring', url: '/tilgaengelighed' },
   { label: 'Facebook', url: 'https://www.facebook.com/groups/146686506050448' },
 ];
 
@@ -136,6 +135,26 @@ const indstillinger = defineCollection({
       label: z.string(),
       url: z.string(),
     })).default(DEFAULT_FOOTER_LINKS),
+  }),
+});
+
+// Forside – editable hero + welcome text (one entry: index.md).
+const forside = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/forside' }),
+  schema: z.object({
+    heroEyebrow: z.string().default('Aktivhuset Selmersbo'),
+    heroTitle: z.string(),
+    heroLead: z.string(),
+    heroImage: z.string().default('/images/community-flags.jpg'),
+    heroImageAlt: z.string().default(''),
+    heroBadge: z.string().default('Alt i ét plan – god tilgængelighed'),
+    welcomeEyebrow: z.string().default('Velkommen'),
+    welcomeTitle: z.string(),
+    welcomeText: z.string(),
+    welcomePoints: z.array(z.object({ text: z.string() })).default([]),
+    welcomeImage: z.string().default('/images/koncert.jpg'),
+    welcomeImageAlt: z.string().default(''),
+    welcomeCaption: z.string().default(''),
   }),
 });
 
@@ -192,4 +211,4 @@ const galleri = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter };
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside };
