@@ -6,7 +6,8 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 ## ✅ Færdigt og live (CMS-styret)
 
 - Forside
-- Nyheder
+- **Nyheder** – fast besked, planlagte foredrag og månedens program (åbnes i modal)
+- **Indstillinger** – kontakt + åbningstider redigeres ét sted, vises overalt
 - **Aktiviteter** – 25 aktiviteter med billeder, status og "læs mere"-modal
 - Udflugter
 - **Udlejning** – rigtige vilkår og priser
@@ -17,11 +18,11 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 ## 🔧 Gjenstår
 
 ### A. Flyt rigtigt indhold + gør redigerbart 🛠
-1. **Indstillinger (singleton)** – åbningstider + kontakt (er hårdkodet nu; vises overalt → ét sted at rette). *Højest værdi.*
+1. ~~**Indstillinger (singleton)** – åbningstider + kontakt~~ ✅ *færdig*
 2. **Om os** – flyt rigtigt indhold fra selmersbo.dk + CMS
 3. **Mobile Pay** – rigtigt MobilePay-nummer + rigtig tekst + CMS (+ ret slug til `/mobile-pay`)
 4. **Generalforsamling** – rigtig dato, dagsorden og dokumenter + CMS
-5. **Nyheder** – tjek mod den rigtige `/nyheder`-side og flyt (er bygget ud fra forsideblokkene nu)
+5. ~~**Nyheder** – fast besked + foredrag + månedens program~~ ✅ *færdig*
 6. **Forsidens velkomsttekst / hero** gøres redigerbar
 
 ### B. Indhold I udfylder 👤 (via CMS)
