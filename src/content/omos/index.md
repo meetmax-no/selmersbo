@@ -14,18 +14,19 @@ purpose: >-
 leader:
   name: Anne Hooge-Hansen
   role: Daglig leder
+  image: /uploads/om-anne.jpg
   email: ahh@horsholm.dk
   phone: "4849 4300"
   mobile: "2682 8621"
 board:
-  - { name: Mogens Buch-Larsen, role: Formand, mobile: "4088 7720" }
-  - { name: Jesper Lauritsen, role: Næstformand, phone: "4576 1209", mobile: "4032 5709" }
-  - { name: Hanne Wendt, role: Bestyrelsesmedlem, mobile: "2293 3618" }
-  - { name: Søren Quist Fog, role: Bestyrelsesmedlem, mobile: "4161 4056" }
-  - { name: Mia-Maja Mogensen, role: Bestyrelsesmedlem, phone: "4586 9694", mobile: "2818 9404" }
-  - { name: Peter Christensen, role: Bestyrelsesmedlem, mobile: "2074 9403" }
-  - { name: Rosemarie Schiel, role: Bestyrelsesmedlem, mobile: "3122 8192" }
-  - { name: Lone Sønderbo, role: Suppleant }
+  - { name: Mogens Buch-Larsen, role: Formand, image: /uploads/om-mogens.jpg, mobile: "4088 7720" }
+  - { name: Jesper Lauritsen, role: Næstformand, image: /uploads/om-jesper.jpg, phone: "4576 1209", mobile: "4032 5709" }
+  - { name: Hanne Wendt, role: Bestyrelsesmedlem, image: /uploads/om-hanne.jpg, mobile: "2293 3618" }
+  - { name: Søren Quist Fog, role: Bestyrelsesmedlem, image: /uploads/om-soren.jpg, mobile: "4161 4056" }
+  - { name: Mia-Maja Mogensen, role: Bestyrelsesmedlem, image: /uploads/om-mia.jpg, phone: "4586 9694", mobile: "2818 9404" }
+  - { name: Peter Christensen, role: Bestyrelsesmedlem, image: /uploads/om-peter.jpg, mobile: "2074 9403" }
+  - { name: Rosemarie Schiel, role: Bestyrelsesmedlem, image: /uploads/om-rosemarie.jpg, mobile: "3122 8192" }
+  - { name: Lone Sønderbo, role: Suppleant, image: /uploads/om-lone.jpg }
 volunteersHeading: De frivillige
 volunteersText: >-
   Selmersbo har omkring 25 frivillige, som er en uvurderlig hjælp i det daglige

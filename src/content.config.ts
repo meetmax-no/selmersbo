@@ -131,6 +131,7 @@ const omos = defineCollection({
     leader: z.object({
       name: z.string(),
       role: z.string().default('Daglig leder'),
+      image: z.string().optional(),
       email: z.string().optional(),
       phone: z.string().optional(),
       mobile: z.string().optional(),
@@ -138,6 +139,7 @@ const omos = defineCollection({
     board: z.array(z.object({
       name: z.string(),
       role: z.string(),
+      image: z.string().optional(),
       phone: z.string().optional(),
       mobile: z.string().optional(),
     })).default([]),

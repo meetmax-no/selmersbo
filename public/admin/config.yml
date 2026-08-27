@@ -239,6 +239,7 @@ collections:
             fields:
               - { name: name, label: "Navn", widget: string }
               - { name: role, label: "Titel", widget: string, default: "Daglig leder" }
+              - { name: image, label: "Foto", widget: image, required: false, hint: "Lille portrætfoto." }
               - { name: email, label: "E-mail", widget: string, required: false }
               - { name: phone, label: "Telefon", widget: string, required: false }
               - { name: mobile, label: "Mobil", widget: string, required: false }
@@ -250,6 +251,7 @@ collections:
             fields:
               - { name: name, label: "Navn", widget: string }
               - { name: role, label: "Rolle", widget: string, hint: "F.eks. Formand, Bestyrelsesmedlem, Suppleant." }
+              - { name: image, label: "Foto", widget: image, required: false, hint: "Lille portrætfoto." }
               - { name: phone, label: "Telefon", widget: string, required: false }
               - { name: mobile, label: "Mobil", widget: string, required: false }
           - { name: volunteersHeading, label: "Overskrift – frivillige", widget: string, default: "De frivillige" }

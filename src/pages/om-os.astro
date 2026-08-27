@@ -42,7 +42,11 @@ const docs = [
     <div class="container">
       <h2 class="block-title">Daglig ledelse</h2>
       <div class="leader card">
-        <div class="leader-avatar" aria-hidden="true"><Icon name="users" size={30} /></div>
+        <div class="leader-avatar">
+          {d.leader.image
+            ? <img src={d.leader.image} alt={d.leader.name} loading="lazy" width="128" height="128" />
+            : <Icon name="users" size={30} />}
+        </div>
         <div class="leader-body">
           <h3>{d.leader.name}</h3>
           <p class="role">{d.leader.role}</p>
@@ -63,8 +67,15 @@ const docs = [
       <div class="board-grid">
         {d.board.map((m) => (
           <div class="member card">
-            <h3>{m.name}</h3>
-            <p class="role">{m.role}</p>
+            <div class="member-head">
+              {m.image
+                ? <img class="member-photo" src={m.image} alt={m.name} loading="lazy" width="112" height="112" />
+                : <span class="member-photo member-photo--fallback" aria-hidden="true"><Icon name="users" size={22} /></span>}
+              <div class="member-id">
+                <h3>{m.name}</h3>
+                <p class="role">{m.role}</p>
+              </div>
+            </div>
             {(m.phone || m.mobile) && (
               <ul class="contact-lines">
                 {m.phone && <li><Icon name="phone" size={16} /> <a href={tel(m.phone)}>{m.phone}</a> <span class="muted">(tlf.)</span></li>}
@@ -145,13 +156,18 @@ const docs = [
 
   /* Daglig leder */
   .leader { display: flex; gap: 1.2rem; align-items: flex-start; max-width: 640px; }
-  .leader-avatar { flex: none; width: 64px; height: 64px; border-radius: 16px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .leader-avatar { flex: none; width: 72px; height: 72px; border-radius: 16px; overflow: hidden; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .leader-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .leader-body h3 { margin: 0; font-size: 1.4rem; }
 
   /* Bestyrelsen */
-  .board-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1rem; }
-  .member h3 { margin: 0 0 0.15rem; font-size: 1.2rem; }
-  .role { margin: 0 0 0.6rem; color: var(--terra); font-weight: 650; font-size: 0.98rem; }
+  .board-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+  .member-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.7rem; }
+  .member-photo { flex: none; width: 58px; height: 58px; border-radius: 50%; object-fit: cover; background: var(--green-050); box-shadow: var(--shadow-sm); }
+  .member-photo--fallback { display: grid; place-items: center; color: var(--green-700); }
+  .member-id { min-width: 0; }
+  .member h3 { margin: 0 0 0.1rem; font-size: 1.15rem; }
+  .role { margin: 0; color: var(--terra); font-weight: 650; font-size: 0.95rem; }
 
   .contact-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
   .contact-lines li { display: flex; align-items: center; gap: 0.5rem; color: var(--ink); font-size: 1rem; }
@@ -178,8 +194,9 @@ const docs = [
     padding: 0.9rem 1.1rem; font-weight: 600;
   }
   .doc:hover { border-color: var(--green); box-shadow: var(--shadow-sm); }
-  .doc span:nth-child(2) { flex: 1; }
+  .doc span:nth-child(2) { flex: 1; min-width: 0; overflow-wrap: anywhere; }
   .doc-icon { flex: none; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
+  .doc > :global(svg) { flex: none; }
   .doc :global(svg:last-child) { color: var(--green-700); }
 
   @media (max-width: 860px) {
