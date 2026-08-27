@@ -149,12 +149,17 @@ const forside = defineCollection({
     heroImageAlt: z.string().default(''),
     heroBadge: z.string().default('Alt i ét plan – god tilgængelighed'),
     // Aktuelle genveje / links (fx seniorside, avisartikel, ekstern side).
+    // Enten en uploadet fil (PDF – ligger på vores eget domæne, så
+    // tilbage-knappen virker) ELLER en ekstern adresse (url). `file` vinder.
     highlightsHeading: z.string().default('Aktuelt at læse'),
     highlights: z.array(z.object({
       label: z.string(),
       note: z.string().optional(),
-      url: z.string(),
+      file: z.string().optional(),
+      url: z.string().optional(),
       icon: z.string().default('document'),
+    }).refine((h) => !!(h.file || h.url), {
+      message: 'Angiv enten en fil eller en adresse (url).',
     })).default([]),
     welcomeEyebrow: z.string().default('Velkommen'),
     welcomeTitle: z.string(),

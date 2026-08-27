@@ -11,11 +11,11 @@ highlightsHeading: Aktuelt at læse
 highlights:
   - label: Se seniorsiden for august og september 2026
     note: Aktivitetsoversigt for centrene (åbner som PDF)
-    url: https://drive.google.com/file/d/1IyVrY4d7_3pKgr6orVanS9G_oAfNr6dW/view?usp=drive_link
+    file: /uploads/seniorsiden-aug-sep-2026.pdf
     icon: calendar
   - label: Artikel i Ugebladet – august 2026
     note: Trommens samarbejde med aktivitetscentrene (åbner som PDF)
-    url: https://drive.google.com/file/d/16qhEfF9vYB2hgRmZq4_AsZFceFz7AKhD/view?usp=drive_link
+    file: /uploads/ugebladet-aug-2026.pdf
     icon: newspaper
   - label: Oplev Hørsholm – ny hjemmeside
     note: Kommunens nye side med oplevelser og arrangementer

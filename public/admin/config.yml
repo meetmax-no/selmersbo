@@ -299,7 +299,8 @@ collections:
             fields:
               - { name: label, label: "Tekst på knappen", widget: string }
               - { name: note, label: "Lille undertekst", widget: string, required: false }
-              - { name: url, label: "Link (adresse)", widget: string, hint: "Indsæt hele adressen, fx https://…" }
+              - { name: file, label: "PDF-dokument (anbefales)", widget: file, required: false, hint: "Upload en PDF her, så åbnes den på vores egen side – og tilbage-knappen virker. Bruges i stedet for et link." }
+              - { name: url, label: "…eller link til en ekstern side", widget: string, required: false, hint: "Kun hvis du IKKE uploadede en PDF ovenfor. Indsæt hele adressen, fx https://oplev.horsholm.dk" }
               - name: icon
                 label: "Ikon"
                 widget: select

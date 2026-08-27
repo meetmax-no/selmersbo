@@ -130,7 +130,7 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
         </div>
         <div class="grid grid--3">
           {fs.highlights.map((h) => (
-            <a class="link-card" href={h.url} target="_blank" rel="noopener">
+            <a class="link-card" href={h.file ?? h.url} target="_blank" rel="noopener">
               <span class="link-ic" aria-hidden="true"><Icon name={h.icon} size={24} /></span>
               <span class="link-text">
                 <strong>{h.label}</strong>
