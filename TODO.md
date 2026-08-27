@@ -29,7 +29,6 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 
 ### C. Funktionelle detaljer 🛠
 3. **Redirect** `/mobile-pay` → `/mobilepay` (+ redirects fra gamle Bricksite-URL'er)
-4. **Kort** på forsiden: rigtigt indlejret kort eller behold link
 
 ### D. Design & lancering 🛠
 5. **Domæne-cutover** `selmersbo.dk` → Vercel (og skift evt. `site` i astro.config hvis nødvendigt)
@@ -47,6 +46,7 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 - Tilgængelighedserklæring fjernet (efter aftale)
 - **SEO**: sitemap, robots.txt, OG-delebillede, canonical/Open Graph
 - **Redaktør-guide** på dansk (REDAKTOER-GUIDE.md + delt side)
+- **Google-kort** indlejret på forsiden
 
 ## Anbefalet rækkefølge
 

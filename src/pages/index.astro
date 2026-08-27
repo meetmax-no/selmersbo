@@ -187,13 +187,17 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
       </div>
 
       <aside class="map-card">
-        <div class="map-visual" aria-hidden="true">
-          <Icon name="pin" size={40} />
-        </div>
+        <iframe
+          class="map-visual"
+          title={`Kort – ${site.full}, ${site.address.street}, ${site.address.zip} ${site.address.city}`}
+          src={`https://www.google.com/maps?q=${encodeURIComponent(`${site.address.street}, ${site.address.zip} ${site.address.city}`)}&output=embed`}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
         <div class="map-body">
           <strong>{site.address.street}</strong>
           <span>{site.address.zip} {site.address.city}, Danmark</span>
-          <a class="btn btn--primary" href={site.address.mapsUrl} rel="noopener">Åbn i Google Maps <Icon name="arrow" size={18} /></a>
+          <a class="btn btn--primary" href={site.address.mapsUrl} rel="noopener" target="_blank">Åbn i Google Maps <Icon name="arrow" size={18} /></a>
         </div>
       </aside>
     </div>
@@ -278,14 +282,7 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
   .info-lines a { color: var(--green-700); }
 
   .map-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; position: sticky; top: 96px; }
-  .map-visual {
-    height: 170px; display: grid; place-items: center; color: var(--terra);
-    background:
-      radial-gradient(circle at 30% 30%, var(--green-050) 0, transparent 45%),
-      radial-gradient(circle at 70% 60%, var(--gold-tint) 0, transparent 40%),
-      repeating-linear-gradient(0deg, var(--sand) 0 22px, var(--sand-deep) 22px 24px),
-      repeating-linear-gradient(90deg, var(--sand) 0 22px, var(--sand-deep) 22px 24px);
-  }
+  .map-visual { display: block; width: 100%; height: 280px; border: 0; }
   .map-body { padding: 1.3rem 1.4rem 1.5rem; display: grid; gap: 0.25rem; }
   .map-body strong { font-size: 1.15rem; }
   .map-body span { color: var(--muted); margin-bottom: 0.9rem; }
