@@ -17,10 +17,12 @@ const pinned = rendered.filter((r) => r.item.data.pinned).sort(byOrder);
 const news = rendered.filter((r) => !r.item.data.pinned).sort(byOrder);
 
 // Månedens program = the newest newsletter (kalenderen for måneden).
+// Opens in a modal so man bliver på Nyheder-siden (og let kan lukke igen).
 const letters = (await getCollection('nyhedsbreve', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const latest = letters[0];
 const latestMonth = latest ? monthFmt.format(latest.data.date) : '';
+const LatestContent = latest ? (await render(latest)).Content : null;
 
 const anchor = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const jump = [
@@ -75,16 +77,33 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
         </article>
       ))}
 
-      {latest && (
-        <a class="program" id="program" href={`/nyhedsbreve/${latest.id}`}>
-          <div class="program-icon" aria-hidden="true"><Icon name="calendar" size={28} /></div>
-          <div class="program-body">
-            <p class="program-kicker">Månedens program</p>
-            <h2>Se hele programmet for {latestMonth}</h2>
-            <p class="program-text">Alle aktiviteter, foredrag og arrangementer måned for måned. Du kan læse det direkte på siden – ingen PDF.</p>
-          </div>
-          <span class="program-go"><Icon name="arrow" size={22} /></span>
-        </a>
+      {latest && LatestContent && (
+        <>
+          <a class="program" id="program" href={`/nyhedsbreve/${latest.id}`} data-program>
+            <div class="program-icon" aria-hidden="true"><Icon name="calendar" size={28} /></div>
+            <div class="program-body">
+              <p class="program-kicker">Månedens program</p>
+              <h2>Se hele programmet for {latestMonth}</h2>
+              <p class="program-text">Alle aktiviteter, foredrag og arrangementer måned for måned. Du kan læse det direkte på siden – ingen PDF.</p>
+            </div>
+            <span class="program-go"><Icon name="arrow" size={22} /></span>
+          </a>
+
+          <dialog id="program-dialog" class="prog-dialog" aria-label={latest.data.title}>
+            <div class="prog-dialog-inner">
+              <header class="prog-dialog-head">
+                <h2>{latest.data.title}</h2>
+                <button class="prog-close" type="button" data-close aria-label="Luk">✕</button>
+              </header>
+              <div class="prog-body">
+                <article class="prose newsletter"><LatestContent /></article>
+              </div>
+              <footer class="prog-dialog-foot">
+                <button class="btn btn--ghost" type="button" data-close>Luk og gå tilbage til Nyheder</button>
+              </footer>
+            </div>
+          </dialog>
+        </>
       )}
 
       {pinned.length === 0 && news.length === 0 && !latest && (
@@ -95,6 +114,23 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
 
   <CtaBand />
 </BaseLayout>
+
+<script>
+  // Progressive enhancement: open månedens program in a modal, so the visitor
+  // stays on Nyheder. Without JS the card is a normal link to the newsletter page.
+  const opener = document.querySelector('a[data-program]') as HTMLAnchorElement | null;
+  const dialog = document.getElementById('program-dialog') as HTMLDialogElement | null;
+  if (opener && dialog && typeof dialog.showModal === 'function') {
+    opener.addEventListener('click', (e) => {
+      e.preventDefault();
+      dialog.showModal();
+      document.documentElement.style.overflow = 'hidden';
+    });
+    dialog.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => dialog.close()));
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
+  }
+</script>
 
 <style>
   .news-wrap { display: grid; gap: clamp(1.4rem, 3.5vw, 2.2rem); }
@@ -156,4 +192,27 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
     .program { flex-wrap: wrap; }
     .program-go { display: none; }
   }
+
+  /* Månedens program – modal (samme mønster som Nyhedsbreve) */
+  .prog-dialog {
+    width: min(760px, calc(100% - 2rem)); max-width: 760px; padding: 0; border: none;
+    border-radius: var(--radius-lg); background: var(--paper); color: var(--ink);
+    box-shadow: var(--shadow-lg);
+  }
+  .prog-dialog::backdrop { background: rgba(20, 19, 15, 0.55); }
+  .prog-dialog-inner { display: flex; flex-direction: column; max-height: 86vh; }
+  .prog-dialog-head {
+    flex: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--line); background: var(--paper);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .prog-dialog-head h2 { margin: 0; font-size: 1.45rem; }
+  .prog-close {
+    flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    font-size: 1.1rem; line-height: 1; display: grid; place-items: center;
+  }
+  .prog-close:hover { background: var(--sand); }
+  .prog-body { flex: 1 1 auto; overflow-y: auto; padding: 1.4rem 1.5rem; }
+  .prog-dialog-foot { flex: none; padding: 1rem 1.5rem; border-top: 1px solid var(--line); text-align: right; }
 </style>
