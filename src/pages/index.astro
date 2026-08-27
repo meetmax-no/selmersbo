@@ -187,13 +187,9 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
       </div>
 
       <aside class="map-card">
-        <iframe
-          class="map-visual"
-          title={`Kort – ${site.full}, ${site.address.street}, ${site.address.zip} ${site.address.city}`}
-          src={`https://www.google.com/maps?q=${encodeURIComponent(`${site.address.street}, ${site.address.zip} ${site.address.city}`)}&output=embed`}
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          allowfullscreen></iframe>
+        <a class="map-visual" href={site.address.mapsUrl} rel="noopener" target="_blank" aria-label="Åbn kort i Google Maps">
+          <img src="/uploads/kort-selmersbo.jpg" alt={`Kort over ${site.address.street}, ${site.address.zip} ${site.address.city}`} loading="lazy" width="680" height="400" />
+        </a>
         <div class="map-body">
           <strong>{site.address.street}</strong>
           <span>{site.address.zip} {site.address.city}, Danmark</span>
@@ -282,7 +278,14 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
   .info-lines a { color: var(--green-700); }
 
   .map-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; position: sticky; top: 96px; }
-  .map-visual { display: block; width: 100%; height: 280px; border: 0; }
+  .map-visual { display: block; position: relative; }
+  .map-visual img { display: block; width: 100%; height: 280px; object-fit: cover; }
+  .map-visual::after {
+    content: "Åbn i Google Maps ↗"; position: absolute; right: 10px; bottom: 10px;
+    background: var(--paper); color: var(--green-700); font-size: 0.85rem; font-weight: 650;
+    padding: 0.35rem 0.7rem; border-radius: 999px; box-shadow: var(--shadow-sm); opacity: 0; transition: opacity .15s;
+  }
+  .map-visual:hover::after, .map-visual:focus-visible::after { opacity: 1; }
   .map-body { padding: 1.3rem 1.4rem 1.5rem; display: grid; gap: 0.25rem; }
   .map-body strong { font-size: 1.15rem; }
   .map-body span { color: var(--muted); margin-bottom: 0.9rem; }
