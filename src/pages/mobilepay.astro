@@ -7,9 +7,12 @@ import { getSettings } from '../lib/settings';
 const site = await getSettings();
 
 const number = site.mobilepay || '95956';
+// Officielt MobilePay-betalingslink til et MyShop-nummer. Åbner MobilePay
+// (app på telefon) med Selmersbos nummer – beløb og tekst skrives af brugeren.
+const payLink = `https://mobilepay.dk/erhverv/betalingslink/betalingslink-svar?phone=${number.replace(/\s/g, '')}`;
 const steps = [
-  'Åbn MobilePay på din telefon.',
-  `Vælg “Betal” og indtast Selmersbos nummer: ${number}.`,
+  'Tryk på knappen “Betal med MobilePay” – eller åbn MobilePay på din telefon.',
+  `Indtast Selmersbos nummer: ${number} (hvis du ikke brugte knappen).`,
   'Skriv beløbet og gerne en kort tekst, fx “Kontingent”.',
   'Godkend betalingen – så er du i mål.',
 ];
@@ -41,6 +44,9 @@ const steps = [
         <span class="pay-label">Betal til Selmersbo</span>
         <strong class="pay-number">{number}</strong>
         <p>Husk at skrive, hvad betalingen gælder.</p>
+        <a class="pay-btn" href={payLink} rel="noopener" target="_blank">
+          <img src="/uploads/mobilepay-icon.svg" alt="" width="24" height="24" /> Betal med MobilePay
+        </a>
         <a class="btn btn--ghost" href={`tel:+45${site.phone.replace(/\s/g, '')}`}><Icon name="phone" size={20} /> Spørg os: {site.phone}</a>
       </aside>
     </div>
@@ -61,5 +67,13 @@ const steps = [
   .pay-number { font-family: var(--font-display); font-size: 2.4rem; letter-spacing: 0.12em; color: var(--ink); }
   .pay-card p { color: var(--muted); font-size: 0.98rem; margin: 0.2rem 0 0.8rem; }
   .pay-card .btn { width: 100%; }
+  .pay-btn {
+    width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: #5a78ff; color: #fff; font-weight: 700; font-size: 1.05rem; font-family: inherit;
+    border: none; border-radius: 999px; padding: 0.85rem 1.2rem; text-decoration: none;
+    box-shadow: var(--shadow-sm); margin-bottom: 0.6rem;
+  }
+  .pay-btn:hover { background: #4a68f0; color: #fff; }
+  .pay-btn img { display: block; }
   @media (max-width: 860px) { .pay-card { position: static; } }
 </style>
