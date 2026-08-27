@@ -11,6 +11,7 @@ const entry = await getEntry('omos', 'index');
 const d = entry!.data;
 
 const tel = (p: string) => `tel:+45${p.replace(/\s/g, '')}`;
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const volParas = d.volunteersText.split(/\n\n+/);
 
 const docs = [
@@ -41,7 +42,7 @@ const docs = [
   <section class="section section--sand" style="padding-block:2.4rem">
     <div class="container">
       <h2 class="block-title">Daglig ledelse</h2>
-      <div class="leader card">
+      <div class="leader card" id={slug(d.leader.name)}>
         <div class="leader-avatar">
           {d.leader.image
             ? <img src={d.leader.image} alt={d.leader.name} loading="lazy" width="128" height="128" />
@@ -66,7 +67,7 @@ const docs = [
       <h2 class="block-title">Bestyrelsen</h2>
       <div class="board-grid">
         {d.board.map((m) => (
-          <div class="member card">
+          <div class="member card" id={slug(m.name)}>
             <div class="member-head">
               {m.image
                 ? <img class="member-photo" src={m.image} alt={m.name} loading="lazy" width="112" height="112" />
@@ -155,13 +156,16 @@ const docs = [
   .side-figure img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
 
   /* Daglig leder */
-  .leader { display: flex; gap: 1.2rem; align-items: flex-start; max-width: 640px; }
+  .leader { display: flex; gap: 1.2rem; align-items: flex-start; max-width: 640px; scroll-margin-top: 90px; }
+  .leader:target { box-shadow: 0 0 0 3px var(--green-050); }
   .leader-avatar { flex: none; width: 72px; height: 72px; border-radius: 16px; overflow: hidden; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
   .leader-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .leader-body h3 { margin: 0; font-size: 1.4rem; }
 
   /* Bestyrelsen */
   .board-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+  .member { scroll-margin-top: 90px; }
+  .member:target { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-050); }
   .member-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.7rem; }
   .member-photo { flex: none; width: 60px; height: 60px; border-radius: 12px; object-fit: cover; background: var(--green-050); box-shadow: var(--shadow-sm); }
   .member-photo--fallback { display: grid; place-items: center; color: var(--green-700); }

@@ -33,8 +33,13 @@ for (const d of await getCollection('dokumenter'))
   idx.push({ t: d.data.title, ty: 'Dokument', u: `/dokumenter/${d.id}`, x: strip([d.data.summary, d.body]), ic: 'book' });
 
 const omos = (await getCollection('omos'))[0];
-if (omos)
-  idx.push({ t: 'Om os', ty: 'Side', u: '/om-os', x: strip([omos.data.lead, omos.data.purpose, omos.data.volunteersText, 'bestyrelse daglig leder ' + omos.data.board.map((m) => `${m.name} ${m.role}`).join(' ')]), ic: 'users' });
+if (omos) {
+  idx.push({ t: 'Om os', ty: 'Side', u: '/om-os', x: strip(['bestyrelse daglig leder de frivillige kontakt CVR', omos.data.lead, omos.data.purpose, omos.data.volunteersText]), ic: 'users' });
+  // Hver person (ledelse + bestyrelse) som eget søgetræf → hopper til kortet.
+  const people = [omos.data.leader, ...omos.data.board];
+  for (const m of people)
+    idx.push({ t: m.name, ty: m.role || 'Bestyrelse', u: `/om-os#${anchor(m.name)}`, x: strip([m.role, 'bestyrelse ledelse selmersbo']), ic: 'users' });
+}
 
 const udl = (await getCollection('udlejning'))[0];
 if (udl)
