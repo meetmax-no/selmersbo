@@ -32,10 +32,8 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 4. **Kort** på forsiden: rigtigt indlejret kort eller behold link
 
 ### D. Design & lancering 🛠
-5. **SEO**: OG-delebillede, `sitemap.xml`, `robots.txt`
-6. **Domæne-cutover** `selmersbo.dk` → Vercel
-7. Kort **redaktør-guide** ("sådan logger du ind og redigerer")
-8. *(valgfrit)* **Vercel Web Analytics** (cookieless besøgstal)
+5. **Domæne-cutover** `selmersbo.dk` → Vercel (og skift evt. `site` i astro.config hvis nødvendigt)
+6. *(valgfrit)* **Vercel Web Analytics** (cookieless besøgstal)
 
 ## Nyligt færdigt
 
@@ -47,6 +45,8 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 - **Generalforsamling** (dagsorden + indkaldelse, beretning, referater)
 - Rigtigt **logo** i top og bund
 - Tilgængelighedserklæring fjernet (efter aftale)
+- **SEO**: sitemap, robots.txt, OG-delebillede, canonical/Open Graph
+- **Redaktør-guide** på dansk (REDAKTOER-GUIDE.md + delt side)
 
 ## Anbefalet rækkefølge
 
