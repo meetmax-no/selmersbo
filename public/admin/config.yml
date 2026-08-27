@@ -211,6 +211,7 @@ collections:
           - { name: clinicPhone, label: "Sygeplejeklinik (telefon)", widget: string, required: false }
           - { name: email, label: "E-mail", widget: string }
           - { name: facebook, label: "Facebook-link", widget: string, required: false, hint: "Fuld adresse til Facebook-siden. Kan stå tomt." }
+          - { name: mobilepay, label: "MobilePay-nummer", widget: string, required: false, hint: "F.eks. 95956. Vises på MobilePay-siden." }
           - name: hours
             label: "Åbningstider"
             widget: list

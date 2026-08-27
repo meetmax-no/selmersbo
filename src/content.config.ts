@@ -124,6 +124,8 @@ const indstillinger = defineCollection({
     clinicPhone: z.string().default(''),
     email: z.string().default(''),
     facebook: z.string().default(''),
+    mobilepay: z.string().default('95956'), // MobilePay-nummer
+
     hours: z.array(z.object({
       day: z.string(),
       time: z.string(),

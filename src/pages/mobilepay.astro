@@ -6,9 +6,10 @@ import Icon from '../components/Icon.astro';
 import { getSettings } from '../lib/settings';
 const site = await getSettings();
 
+const number = site.mobilepay || '95956';
 const steps = [
   'Åbn MobilePay på din telefon.',
-  'Vælg “Betal” og indtast Selmersbos MobilePay-nummer.',
+  `Vælg “Betal” og indtast Selmersbos nummer: ${number}.`,
   'Skriv beløbet og gerne en kort tekst, fx “Kontingent”.',
   'Godkend betalingen – så er du i mål.',
 ];
@@ -23,19 +24,22 @@ const steps = [
   <section class="section" style="padding-top:2rem">
     <div class="container split">
       <div class="prose">
+        <h2>Kære brugere af Selmersbo</h2>
+        <p>MobilePay kan bruges til at betale med på Selmersbo. Nummeret, du skal bruge, står her på siden.</p>
         <h2>Sådan gør du</h2>
         <ol class="steps">
           {steps.map((s, i) => (
             <li><span class="step-num">{i + 1}</span> {s}</li>
           ))}
         </ol>
-        <p class="demo-note" style="margin-top:1.5rem"><Icon name="check" size={20} /><span>MobilePay-nummeret indsættes her af Selmersbo. Er du i tvivl, så spør' i huset – vi hjælper gerne.</span></p>
+        <p class="mp-link"><a href="https://www.mobilepay.dk" rel="noopener" target="_blank">Læs mere på MobilePays hjemmeside <Icon name="arrow" size={18} /></a></p>
+        <p class="demo-note" style="margin-top:1.5rem"><Icon name="check" size={20} /><span>Er du i tvivl, så spørg i huset – vi hjælper dig gerne.</span></p>
       </div>
 
       <aside class="pay-card">
-        <div class="pay-badge" aria-hidden="true"><Icon name="device" size={30} /></div>
-        <span class="pay-label">Selmersbos MobilePay</span>
-        <strong class="pay-number">000000</strong>
+        <img class="pay-logo" src="/uploads/mobilepay-logo.svg" alt="MobilePay" width="150" height="48" loading="lazy" />
+        <span class="pay-label">Betal til Selmersbo</span>
+        <strong class="pay-number">{number}</strong>
         <p>Husk at skrive, hvad betalingen gælder.</p>
         <a class="btn btn--ghost" href={`tel:+45${site.phone.replace(/\s/g, '')}`}><Icon name="phone" size={20} /> Spørg os: {site.phone}</a>
       </aside>
@@ -51,8 +55,9 @@ const steps = [
   .step-num { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--green); color: #fff; font-weight: 700; font-size: 1rem; }
 
   .pay-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.8rem; text-align: center; display: grid; gap: 0.4rem; justify-items: center; position: sticky; top: 96px; }
-  .pay-badge { width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); margin-bottom: 0.4rem; }
+  .pay-logo { width: 150px; height: auto; margin-bottom: 0.5rem; }
   .pay-label { color: var(--muted); font-weight: 600; }
+  .mp-link a { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--green-700); font-weight: 650; }
   .pay-number { font-family: var(--font-display); font-size: 2.4rem; letter-spacing: 0.12em; color: var(--ink); }
   .pay-card p { color: var(--muted); font-size: 0.98rem; margin: 0.2rem 0 0.8rem; }
   .pay-card .btn { width: 100%; }

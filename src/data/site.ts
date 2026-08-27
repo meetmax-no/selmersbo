@@ -17,6 +17,7 @@ export const site = {
   clinicPhone: '4849 4199',
   email: 'selmersbo@horsholm.dk',
   facebook: 'https://www.facebook.com/groups/146686506050448',
+  mobilepay: '95956',
   hours: [
     { day: 'Mandag', time: '09.30 – 16.00' },
     { day: 'Tirsdag', time: '09.30 – 16.00' },
