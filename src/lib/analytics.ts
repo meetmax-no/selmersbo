@@ -13,7 +13,7 @@ const PROJECT_ID = process.env.VERCEL_PROJECT_ID || 'prj_AzEzdiT76wwTfXQRWgZ449G
 const RANGE_DAYS = 30;
 
 export interface StatEntry { path: string; views: number; }
-export interface DeviceEntry { type: string; share: number; }
+export interface DeviceEntry { type: string; count: number; share: number; }
 export interface Stats {
   updated: string;
   rangeDays: number;
@@ -109,14 +109,15 @@ export async function getStats(): Promise<Stats | null> {
   const topExcursions = parseOpens(byExcursion);
   const topLetters = parseOpens(byLetter);
 
+  // Antal = besøgende pr. enhed (summerer til ~antal besøgende i alt).
   const devRows = (byDevice ?? []).map((r: any) => ({
     type: DEVICE_LABELS[String(r.deviceType ?? '').toLowerCase()] ?? (r.deviceType || 'Andet'),
-    views: r.pageviews ?? 0,
+    count: Number(r.visitors ?? r.pageviews ?? 0),
   }));
-  const devTotal = devRows.reduce((s: number, r: any) => s + r.views, 0) || 1;
+  const devTotal = devRows.reduce((s: number, r: any) => s + r.count, 0) || 1;
   const devices: DeviceEntry[] = devRows
-    .sort((a: any, b: any) => b.views - a.views)
-    .map((r: any) => ({ type: r.type, share: Math.round((r.views / devTotal) * 100) }));
+    .sort((a: any, b: any) => b.count - a.count)
+    .map((r: any) => ({ type: r.type, count: r.count, share: Math.round((r.count / devTotal) * 100) }));
 
   // Totaler fra count; falder count ud, udledes sidevisninger fra listen, så
   // siden stadig viser noget (og ikke tom-tilstanden).
