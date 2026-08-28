@@ -1,6 +1,6 @@
 ---
 title: Yoga
-icon: dumbbell
+icon: yoga
 day: Hver torsdag kl. 10.00
 text: Yoga torsdag formiddag.
 status: Ingen ledige pladser

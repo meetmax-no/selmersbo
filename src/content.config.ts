@@ -4,7 +4,7 @@ import { glob } from 'astro/loaders';
 // Icons an editor can pick for an activity (must exist in Icon.astro).
 export const ACTIVITY_ICONS = [
   'music', 'heart', 'cards', 'device', 'mic', 'thread', 'plate', 'bus', 'users', 'calendar',
-  'book', 'brush', 'film', 'coffee', 'dumbbell', 'chat',
+  'book', 'brush', 'film', 'coffee', 'dumbbell', 'chat', 'health', 'yoga', 'activity',
 ] as const;
 
 // Udflugter (excursions) – edited through the CMS at /admin.

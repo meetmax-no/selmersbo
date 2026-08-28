@@ -1,6 +1,6 @@
 ---
 title: Sygeplejeklinikken
-icon: heart
+icon: health
 day: Efter aftale
 text: Konsultation efter aftale.
 order: 23

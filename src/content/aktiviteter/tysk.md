@@ -1,6 +1,7 @@
 ---
 title: Samtale på tysk
 icon: chat
+image: /uploads/akt-tysk.jpg
 day: Tirsdage kl. 11.00
 text: Få gang i det tyske sprog igen.
 order: 24

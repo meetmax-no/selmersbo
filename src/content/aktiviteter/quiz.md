@@ -1,6 +1,7 @@
 ---
 title: Quiz
 icon: chat
+image: /uploads/akt-quiz.jpg
 day: Mandage kl. 13.00
 text: Hyggelig quiz med kaffe og kage.
 order: 20

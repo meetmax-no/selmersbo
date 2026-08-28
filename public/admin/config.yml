@@ -108,6 +108,9 @@ collections:
           - { label: "Mad & kaffe", value: coffee }
           - { label: "Samtale / snak", value: chat }
           - { label: "Udflugt", value: bus }
+          - { label: "Yoga / afspænding", value: yoga }
+          - { label: "Gymnastik / træning", value: activity }
+          - { label: "Sygepleje / sundhed", value: health }
           - { label: "Fællesskab", value: users }
           - { label: "Kalender", value: calendar }
       - { name: image, label: "Billede", widget: image, required: false, hint: "Valgfrit foto. Uden billede vises ikonet." }
