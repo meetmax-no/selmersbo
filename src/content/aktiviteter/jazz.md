@@ -1,6 +1,7 @@
 ---
 title: Jazz
 icon: music
+image: /uploads/akt-jazz.jpg
 day: Tirsdage kl. 18.00
 text: Nogle timers jazz – tag lidt mad med.
 order: 17

@@ -1,6 +1,7 @@
 ---
 title: Bridge
 icon: cards
+image: /uploads/akt-bridge.jpg
 day: Man–tors formiddag
 text: Bridge for øvede og begyndere (Ældre Sagen).
 order: 4
