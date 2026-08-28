@@ -32,9 +32,9 @@ Marker: 🛠 = udvikleropgave · 👤 = indhold I selv udfylder (via CMS'et på 
 ## 🔧 Gjenstår
 
 ### Indhold I selv udfylder 👤 (via CMS – ikke nødvendigt for lancering)
-1. Billeder til de sidste **12 aktiviteter** (bibliotek, bridge, film-café, gymnastik,
-   gymnastik-dans, hjerteforeningen, jazz, quiz, strikke/sy/sludre, sygeplejeklinik,
-   tysk, yoga). De virker fint uden – de viser et ikon.
+1. **Aktivitetsbilleder: færdige.** 22 af 25 har foto (hentet fra selmersbo.dk);
+   de sidste 3 (sygeplejeklinik, yoga, gymnastik) har egne ikoner, da der ikke
+   findes fotos. Nye fotos kan altid lægges ind i CMS.
 2. Flere **galleribilleder** efter behov.
 
 ### Lancering 🛠
