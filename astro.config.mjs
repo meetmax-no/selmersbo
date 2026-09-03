@@ -16,6 +16,6 @@ export default defineConfig({
   },
   integrations: [sitemap({
     // Hold /admin, API-endpoints og den interne statistik-side ude af sitemap.
-    filter: (page) => !page.includes('/admin') && !page.includes('/api/') && !page.includes('/statistik') && !page.includes('/oppdatering'),
+    filter: (page) => !page.includes('/admin') && !page.includes('/api/') && !page.includes('/statistik') && !page.includes('/oppdatering') && !page.includes('/menu'),
   })],
 });
