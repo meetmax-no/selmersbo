@@ -5,6 +5,7 @@ image: /uploads/akt-dart.jpg
 day: Hver mandag
 text: Dart hver mandag.
 status: Lukket for tilgang
+forside: true
 order: 5
 draft: false
 ---

@@ -38,9 +38,12 @@ if (latestLetter) {
     href: `/nyhedsbreve/${latestLetter.id}`,
   });
 }
-const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 6);
+// Forsiden viser de aktiviteter der er krydset af med "Vis på forsiden" (maks 6).
+// Er ingen krydset af, falder vi tilbage til de 6 første efter rækkefølge.
+const allActivities = (await getCollection('aktiviteter', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+const chosen = allActivities.filter((a) => a.data.forside);
+const preview = (chosen.length ? chosen : allActivities).slice(0, 6);
 ---
 <BaseLayout title="Selmersbo – Aktivhuset i Hørsholm">
   <!-- ============ HERO ============ -->

@@ -118,7 +118,8 @@ collections:
       - { name: text, label: "Kort tekst", widget: text, hint: "Vises på kortet." }
       - { name: status, label: "Status", widget: string, required: false, hint: 'F.eks. "Ingen ledige pladser". Lad stå tom hvis åben.' }
       - { name: body, label: "Fuld beskrivelse", widget: markdown, hint: "Vises når man klikker på aktiviteten." }
-      - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
+      - { name: forside, label: "Vis på forsiden", widget: boolean, default: false, hint: "Sæt kryds for at vise aktiviteten på forsiden. Der vises højst 6 (efter rækkefølge)." }
+      - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først (både på forsiden og på Aktiviteter)." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
   - name: nyhedsbreve

@@ -7,6 +7,7 @@ text: |-
   Bankospil og hygge – kun for medlemmer. 
   Se datoer.
 status: ''
+forside: true
 order: 1
 draft: false
 ---

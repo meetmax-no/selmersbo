@@ -55,6 +55,7 @@ const aktiviteter = defineCollection({
     day: z.string(), // short schedule shown on the card
     text: z.string(), // short teaser (card + front page)
     status: z.string().optional(), // e.g. "Ingen ledige pladser"
+    forside: z.boolean().default(false), // vis på forsiden (maks 6)
     order: z.number().default(0),
     draft: z.boolean().default(false),
     // Markdown body = the full description shown in the modal / detail page.
