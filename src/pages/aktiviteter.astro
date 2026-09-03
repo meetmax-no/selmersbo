@@ -1,17 +1,15 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
+import ActivityTile from '../components/ActivityTile.astro';
 import { getSettings } from '../lib/settings';
 const site = await getSettings();
 
 const activities = (await getCollection('aktiviteter', ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order);
-const rendered = await Promise.all(
-  activities.map(async (item) => ({ item, Content: (await render(item)).Content })),
-);
 const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
 ---
 <BaseLayout
@@ -31,44 +29,7 @@ const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
   <section class="section" style="padding-top:2rem">
     <div class="container">
       <div class="akt-grid">
-        {rendered.map(({ item, Content }) => (
-          <>
-            <a class="akt-card" href={`/aktiviteter/${item.id}`} data-akt={item.id} data-akt-title={item.data.title}>
-              <div class="akt-media">
-                {item.data.image
-                  ? <img src={item.data.image} alt={item.data.title} loading="lazy" />
-                  : <span class="akt-media-icon"><Icon name={item.data.icon} size={80} /></span>}
-                {item.data.status && <span class="akt-status">{item.data.status}</span>}
-              </div>
-              <div class="akt-body">
-                <h3 class="akt-title">{item.data.title}</h3>
-                <div class="akt-day"><span class="chip chip--sand">{item.data.day}</span></div>
-                <p>{item.data.text}</p>
-                <span class="akt-open">Læs mere <Icon name="arrow" size={16} /></span>
-              </div>
-            </a>
-
-            <dialog id={`akt-${item.id}`} class="akt-dialog" aria-label={item.data.title}>
-              <div class="akt-dialog-inner">
-                <header class="akt-dialog-head">
-                  <h2>{item.data.title}</h2>
-                  <button class="akt-close" type="button" data-close aria-label="Luk">✕</button>
-                </header>
-                <div class="akt-dialog-scroll">
-                  {item.data.image && <img class="akt-dialog-img" src={item.data.image} alt={item.data.title} />}
-                  <div class="akt-meta">
-                    <span class="chip"><Icon name="clock" size={16} /> {item.data.day}</span>
-                    {item.data.status && <span class="chip chip--sold">{item.data.status}</span>}
-                  </div>
-                  <article class="prose newsletter"><Content /></article>
-                </div>
-                <footer class="akt-dialog-foot">
-                  <button class="btn btn--ghost" type="button" data-close>Luk</button>
-                </footer>
-              </div>
-            </dialog>
-          </>
-        ))}
+        {activities.map((item) => <ActivityTile item={item} />)}
       </div>
     </div>
   </section>
@@ -79,74 +40,10 @@ const tel = `tel:+45${site.phone.replace(/\s/g, '')}`;
     text="Alle seniorer er velkomne. Ring eller skriv, så fortæller vi gerne mere om aktiviteterne og om at blive medlem." />
 </BaseLayout>
 
-<script>
-  import { track } from '@vercel/analytics';
-  document.querySelectorAll('a[data-akt]').forEach((a) => {
-    a.addEventListener('click', (e) => {
-      const el = a as HTMLAnchorElement;
-      const d = document.getElementById('akt-' + el.dataset.akt) as HTMLDialogElement | null;
-      if (d && typeof d.showModal === 'function') {
-        e.preventDefault();
-        d.showModal();
-        document.documentElement.style.overflow = 'hidden';
-        // Anonymt event, så vi kan se hvilke aktiviteter folk åbner.
-        try { track('Aktivitet åbnet', { navn: el.dataset.aktTitle || el.dataset.akt || '' }); } catch {}
-      }
-    });
-  });
-  document.querySelectorAll('dialog.akt-dialog').forEach((node) => {
-    const d = node as HTMLDialogElement;
-    d.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => d.close()));
-    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
-    d.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
-  });
-</script>
-
 <style>
   .hero-cta { display: flex; gap: 0.85rem; flex-wrap: wrap; margin-top: 1.6rem; }
 
   .akt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2.5vw, 1.5rem); grid-auto-rows: 1fr; }
   @media (max-width: 900px) { .akt-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .akt-grid { grid-template-columns: 1fr; } }
-
-  .akt-card {
-    display: flex; flex-direction: column; background: var(--paper);
-    border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
-    box-shadow: var(--shadow-sm); text-decoration: none; color: var(--ink); height: 100%;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
-  }
-  .akt-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--green); }
-  .akt-media { flex: none; position: relative; height: 190px; background: var(--green-050); overflow: hidden; }
-  .akt-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .akt-media-icon { position: absolute; inset: 0; display: grid; place-items: center; color: var(--green-700); }
-  .akt-status {
-    position: absolute; left: 0.7rem; top: 0.7rem; font-size: 0.85rem; font-weight: 650;
-    background: var(--terra); color: #fff; padding: 0.25rem 0.6rem; border-radius: 999px;
-  }
-  .akt-body { padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.35rem; flex: 1; }
-  /* Reserve 2 lines for the title so the day chip sits at the same spot on every card */
-  .akt-title { margin: 0; font-size: 1.2rem; line-height: 1.2; min-height: 2.4em; }
-  .akt-day { display: flex; justify-content: flex-end; }
-  .akt-body p { margin: 0; color: var(--muted); font-size: 1rem; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .akt-open { margin-top: auto; display: inline-flex; align-items: center; gap: 0.35rem; color: var(--green-700); font-weight: 650; padding-top: 0.4rem; }
-
-  /* Modal (shared look with the newsletters) */
-  .akt-dialog {
-    width: min(680px, calc(100% - 2rem)); max-width: 680px; padding: 0; border: none;
-    border-radius: var(--radius-lg); background: var(--paper); color: var(--ink); box-shadow: var(--shadow-lg);
-  }
-  .akt-dialog::backdrop { background: rgba(20, 19, 15, 0.55); }
-  .akt-dialog-inner { display: flex; flex-direction: column; max-height: 88vh; }
-  .akt-dialog-head {
-    flex: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--line);
-  }
-  .akt-dialog-head h2 { margin: 0; font-size: 1.4rem; }
-  .akt-close { flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 1.1rem; display: grid; place-items: center; }
-  .akt-close:hover { background: var(--sand); }
-  .akt-dialog-scroll { flex: 1 1 auto; overflow-y: auto; padding: 1.3rem 1.4rem; }
-  .akt-dialog-img { width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; }
-  .akt-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
-  .chip--sold { background: var(--terra-tint); color: var(--terra); }
-  .akt-dialog-foot { flex: none; padding: 0.9rem 1.4rem; border-top: 1px solid var(--line); text-align: right; }
 </style>

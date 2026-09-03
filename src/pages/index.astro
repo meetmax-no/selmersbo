@@ -2,7 +2,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import ActivityCard from '../components/ActivityCard.astro';
+import ActivityTile from '../components/ActivityTile.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { getSettings } from '../lib/settings';
 const site = await getSettings();
@@ -40,8 +40,7 @@ if (latestLetter) {
 }
 const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 6)
-  .map((e) => e.data);
+  .slice(0, 6);
 ---
 <BaseLayout title="Selmersbo – Aktivhuset i Hørsholm">
   <!-- ============ HERO ============ -->
@@ -176,8 +175,8 @@ const preview = (await getCollection('aktiviteter', ({ data }) => !data.draft))
         </div>
         <a class="btn btn--ghost" href="/aktiviteter">Se alle aktiviteter <Icon name="arrow" size={20} /></a>
       </div>
-      <div class="grid grid--3">
-        {preview.map((a) => <ActivityCard activity={a} />)}
+      <div class="grid grid--3 akt-preview-grid">
+        {preview.map((item) => <ActivityTile item={item} />)}
       </div>
     </div>
   </section>
