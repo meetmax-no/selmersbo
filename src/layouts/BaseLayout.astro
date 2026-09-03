@@ -32,6 +32,12 @@ const ogImage = Astro.site ? new URL('/og-image.jpg', Astro.site).href : '/og-im
 const flashEntry = await getEntry('newsflash', 'index');
 const flash = flashEntry?.data;
 const flashOn = !!flash && flash.status !== 'off';
+// Nøgle der ændrer sig, når beskeden ændres → popup/banner regnes som ulæst
+// og vises igen, også i samme besøg.
+const flashText = flash ? `${flash.heading}|${flash.body}` : '';
+let flashHash = 0;
+for (let i = 0; i < flashText.length; i++) flashHash = (Math.imul(flashHash, 31) + flashText.charCodeAt(i)) | 0;
+const flashKey = String(flashHash >>> 0);
 ---
 <!doctype html>
 <html lang="da" data-theme={theme}>
@@ -64,7 +70,7 @@ const flashOn = !!flash && flash.status !== 'off';
     <Header />
 
     {flashOn && flash.status === 'banner' && (
-      <aside class="flash-banner" id="flash-banner" role="region" aria-label={flash.heading}>
+      <aside class="flash-banner" id="flash-banner" role="region" aria-label={flash.heading} data-flash-key={flashKey}>
         <div class="container flash-banner-inner">
           <span class="flash-tag">{flash.heading}</span>
           <span class="flash-msg">{flash.body}</span>
@@ -80,7 +86,7 @@ const flashOn = !!flash && flash.status !== 'off';
     <Footer />
 
     {flashOn && flash.status === 'popup' && (
-      <dialog class="flash-dialog" id="flash-dialog" aria-label={flash.heading}>
+      <dialog class="flash-dialog" id="flash-dialog" aria-label={flash.heading} data-flash-key={flashKey}>
         <div class="flash-dialog-inner">
           <span class="flash-tag">{flash.heading}</span>
           <p class="flash-msg">{flash.body}</p>
@@ -97,20 +103,22 @@ const flashOn = !!flash && flash.status !== 'off';
         (function () {
           var d = document.getElementById('flash-dialog');
           if (d && typeof d.showModal === 'function') {
+            var key = 'flash-seen-' + (d.getAttribute('data-flash-key') || '');
             var seen = false;
-            try { seen = !!sessionStorage.getItem('flash-seen'); } catch (e) {}
+            try { seen = !!sessionStorage.getItem(key); } catch (e) {}
             if (!seen) {
               d.showModal();
-              try { sessionStorage.setItem('flash-seen', '1'); } catch (e) {}
+              try { sessionStorage.setItem(key, '1'); } catch (e) {}
             }
             d.querySelectorAll('[data-flash-close]').forEach(function (b) { b.addEventListener('click', function () { d.close(); }); });
             d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
           }
           var ban = document.getElementById('flash-banner');
           if (ban) {
-            try { if (sessionStorage.getItem('flash-banner-seen')) ban.hidden = true; } catch (e) {}
+            var bkey = 'flash-banner-seen-' + (ban.getAttribute('data-flash-key') || '');
+            try { if (sessionStorage.getItem(bkey)) ban.hidden = true; } catch (e) {}
             var bc = ban.querySelector('[data-flash-close]');
-            if (bc) bc.addEventListener('click', function () { ban.hidden = true; try { sessionStorage.setItem('flash-banner-seen', '1'); } catch (e) {} });
+            if (bc) bc.addEventListener('click', function () { ban.hidden = true; try { sessionStorage.setItem(bkey, '1'); } catch (e) {} });
           }
         })();
       </script>
