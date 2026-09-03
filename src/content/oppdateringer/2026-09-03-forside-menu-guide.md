@@ -9,4 +9,5 @@ draft: false
 - **Forside:** Aktivitetskortene ser nu ud som på Aktiviteter-siden og åbner beskrivelsen i et vindue, når man klikker.
 - **Menu** (`/menu`): Ny intern samleside med genveje for bestyrelsen – rediger indhold, besøgstal, opdateringer og redaktør-guide.
 - **Redaktør-guide** (`/guide`): Den korte vejledning ligger nu direkte på siden.
+- **Opdateringer** (`/oppdatering`): Denne side er ny – her kan I følge med i, hvad der løbende ændres og forbedres.
 - Ny version: **v1.1**.
