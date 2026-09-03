@@ -163,6 +163,26 @@ collections:
       - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
+  - name: oppdateringer
+    label: "Opdateringer (ændringslog)"
+    label_singular: "Opdatering"
+    description: "Korte, daterede noter om ændringer på siden. Vises på /oppdatering."
+    folder: "src/content/oppdateringer"
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: "{{year}}-{{month}}-{{day}}-{{title}}"
+    summary: "{{date}} · {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false, default: "" }
+      - { name: version, label: "Version", widget: string, required: false, hint: 'Valgfri, f.eks. "1.1".' }
+      - { name: title, label: "Overskrift", widget: string, hint: "Kort titel på opdateringen." }
+      - { name: body, label: "Hvad er ændret", widget: markdown, hint: "Skriv gerne som en punktliste." }
+      - { name: draft, label: "Kladde (skjul)", widget: boolean, default: false }
+
   - name: quiz
     label: "Quiz"
     label_singular: "Quiz"

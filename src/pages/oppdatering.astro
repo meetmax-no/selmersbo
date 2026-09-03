@@ -1,0 +1,65 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const entries = (await getCollection('oppdateringer', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const rendered = await Promise.all(
+  entries.map(async (e) => ({ e, Content: (await render(e)).Content })),
+);
+
+const mnd = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
+const fmt = (d: Date) => `${d.getDate()}. ${mnd[d.getMonth()]} ${d.getFullYear()}`;
+---
+<BaseLayout title="Opdateringer – Selmersbo" description="Ændringer og forbedringer på selmersbo.dk – med dato." noindex={true}>
+  <PageHero
+    eyebrow="Ændringslog"
+    title="Opdateringer"
+    lead="Kort oversigt over, hvad der er lavet og forbedret på siden – nyeste øverst."
+    icon="calendar" />
+
+  <section class="section" style="padding-top:2rem">
+    <div class="container">
+      {rendered.length === 0 ? (
+        <p class="empty">Ingen opdateringer endnu.</p>
+      ) : (
+        <ol class="log">
+          {rendered.map(({ e, Content }) => (
+            <li class="log-item">
+              <div class="log-meta">
+                <time datetime={e.data.date.toISOString().slice(0, 10)}>{fmt(e.data.date)}</time>
+                {e.data.version && <span class="ver">v{e.data.version}</span>}
+              </div>
+              <div class="log-body">
+                <h2>{e.data.title}</h2>
+                <div class="prose"><Content /></div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .empty { color: var(--muted); font-size: 1.1rem; }
+  .log { list-style: none; margin: 0; padding: 0; max-width: 760px; display: grid; gap: 1.2rem; }
+  .log-item {
+    display: grid; grid-template-columns: 12rem 1fr; gap: 1.4rem;
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow-sm); padding: 1.5rem 1.6rem;
+  }
+  .log-meta { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+  .log-meta time { font-weight: 700; color: var(--ink); }
+  .ver { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.03em; color: var(--green-700); background: var(--green-050); padding: 0.15rem 0.5rem; border-radius: 999px; }
+  .log-body h2 { margin: 0 0 0.5rem; font-size: 1.3rem; }
+  .log-body :global(.prose) { color: var(--muted); }
+  .log-body :global(.prose ul) { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.35rem; }
+  .log-body :global(.prose p) { margin: 0 0 0.6rem; }
+  @media (max-width: 620px) {
+    .log-item { grid-template-columns: 1fr; gap: 0.6rem; }
+    .log-meta { flex-direction: row; align-items: center; gap: 0.7rem; }
+  }
+</style>

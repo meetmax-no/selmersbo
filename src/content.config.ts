@@ -251,4 +251,16 @@ const galleri = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz, generalforsamling };
+// Oppdateringer (changelog) – korte, daterede noter om ændringer på siden.
+// Markdown-body = detaljerne. Vises på /oppdatering.
+const oppdateringer = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/oppdateringer' }),
+  schema: z.object({
+    date: z.coerce.date(),
+    version: z.string().optional(),
+    title: z.string(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz, generalforsamling, oppdateringer };

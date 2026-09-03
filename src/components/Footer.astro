@@ -53,7 +53,7 @@ import Icon from './Icon.astro';
 
   <div class="container footer-bottom">
     <p>© {new Date().getFullYear()} {site.full} · {site.address.street}, {site.address.zip} {site.address.city}</p>
-    <p class="mockup-note">Ko | Do · Consult v1.0</p>
+    <p class="mockup-note"><a href="/oppdatering">Ko | Do · Consult v1.1</a></p>
   </div>
 </footer>
 
@@ -91,6 +91,8 @@ import Icon from './Icon.astro';
     border-top: 1px solid #35332b; padding-block: 1.4rem; color: #9a9284; font-size: 0.9rem;
   }
   .mockup-note { color: var(--gold); font-weight: 600; }
+  .mockup-note a { color: inherit; text-decoration: none; }
+  .mockup-note a:hover { text-decoration: underline; }
 
   @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
