@@ -263,4 +263,17 @@ const oppdateringer = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz, generalforsamling, oppdateringer };
+// Nyhedsflash – én vigtig besked der kan vises som popup, som banner øverst
+// på siden, eller være slukket. Styres fra CMS.
+const newsflash = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/newsflash' }),
+  schema: z.object({
+    status: z.enum(['off', 'banner', 'popup']).default('off'),
+    heading: z.string().default('Vigtigt'),
+    body: z.string(),
+    ctaLabel: z.string().optional(),
+    ctaUrl: z.string().optional(),
+  }),
+});
+
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz, generalforsamling, oppdateringer, newsflash };

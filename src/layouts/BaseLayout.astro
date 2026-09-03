@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '@vercel/analytics/astro';
+import { getEntry } from 'astro:content';
 import { getSettings } from '../lib/settings';
 
 interface Props {
@@ -26,6 +27,11 @@ const themeColor: Record<string, string> = {
 // Absolutte URL'er til SEO/deling (bruger `site` fra astro.config).
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
 const ogImage = Astro.site ? new URL('/og-image.jpg', Astro.site).href : '/og-image.jpg';
+
+// Nyhedsflash (vigtig besked) – styres fra CMS: popup, banner eller slukket.
+const flashEntry = await getEntry('newsflash', 'index');
+const flash = flashEntry?.data;
+const flashOn = !!flash && flash.status !== 'off';
 ---
 <!doctype html>
 <html lang="da" data-theme={theme}>
@@ -54,11 +60,80 @@ const ogImage = Astro.site ? new URL('/og-image.jpg', Astro.site).href : '/og-im
   </head>
   <body>
     <a href="#main" class="skip-link">Spring til indhold</a>
+
+    {flashOn && flash.status === 'banner' && (
+      <aside class="flash-banner" id="flash-banner" role="region" aria-label={flash.heading}>
+        <div class="container flash-banner-inner">
+          <span class="flash-tag">{flash.heading}</span>
+          <span class="flash-msg">{flash.body}</span>
+          {flash.ctaUrl && flash.ctaLabel && <a class="flash-cta" href={flash.ctaUrl}>{flash.ctaLabel}</a>}
+          <button class="flash-close" type="button" data-flash-close aria-label="Luk beskeden">✕</button>
+        </div>
+      </aside>
+    )}
+
     <Header />
     <main id="main">
       <slot />
     </main>
     <Footer />
+
+    {flashOn && flash.status === 'popup' && (
+      <dialog class="flash-dialog" id="flash-dialog" aria-label={flash.heading}>
+        <div class="flash-dialog-inner">
+          <span class="flash-tag">{flash.heading}</span>
+          <p class="flash-msg">{flash.body}</p>
+          <div class="flash-actions">
+            {flash.ctaUrl && flash.ctaLabel && <a class="btn btn--primary" href={flash.ctaUrl}>{flash.ctaLabel}</a>}
+            <button class="btn btn--ghost" type="button" data-flash-close>Luk</button>
+          </div>
+        </div>
+      </dialog>
+    )}
+
+    {flashOn && (
+      <script is:inline>
+        (function () {
+          var d = document.getElementById('flash-dialog');
+          if (d && typeof d.showModal === 'function') {
+            var seen = false;
+            try { seen = !!sessionStorage.getItem('flash-seen'); } catch (e) {}
+            if (!seen) {
+              d.showModal();
+              try { sessionStorage.setItem('flash-seen', '1'); } catch (e) {}
+            }
+            d.querySelectorAll('[data-flash-close]').forEach(function (b) { b.addEventListener('click', function () { d.close(); }); });
+            d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+          }
+          var ban = document.getElementById('flash-banner');
+          if (ban) {
+            try { if (sessionStorage.getItem('flash-banner-seen')) ban.hidden = true; } catch (e) {}
+            var bc = ban.querySelector('[data-flash-close]');
+            if (bc) bc.addEventListener('click', function () { ban.hidden = true; try { sessionStorage.setItem('flash-banner-seen', '1'); } catch (e) {} });
+          }
+        })();
+      </script>
+    )}
+
     <Analytics />
   </body>
 </html>
+
+<style>
+  /* Nyhedsflash – banner + popup */
+  .flash-banner { background: var(--terra); color: #fff; }
+  .flash-banner[hidden] { display: none; }
+  .flash-banner-inner { display: flex; align-items: center; gap: 0.85rem; padding: 0.7rem 0; flex-wrap: wrap; }
+  .flash-tag { flex: none; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85rem; background: rgba(255, 255, 255, 0.2); padding: 0.2rem 0.65rem; border-radius: 999px; }
+  .flash-banner .flash-msg { font-weight: 600; }
+  .flash-banner .flash-cta { color: #fff; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+  .flash-close { margin-left: auto; flex: none; background: transparent; border: none; color: #fff; font-size: 1.05rem; line-height: 1; cursor: pointer; padding: 0.35rem 0.5rem; border-radius: 8px; }
+  .flash-close:hover { background: rgba(255, 255, 255, 0.18); }
+
+  .flash-dialog { width: min(520px, calc(100% - 2rem)); border: none; border-top: 6px solid var(--terra); border-radius: var(--radius-lg); padding: 0; background: var(--paper); color: var(--ink); box-shadow: var(--shadow-lg); }
+  .flash-dialog::backdrop { background: rgba(20, 19, 15, 0.6); }
+  .flash-dialog-inner { padding: 2rem 1.9rem 1.7rem; text-align: center; }
+  .flash-dialog .flash-tag { display: inline-block; background: var(--terra); color: #fff; margin-bottom: 0.9rem; }
+  .flash-dialog .flash-msg { white-space: pre-line; font-size: 1.18rem; line-height: 1.5; margin: 0 0 1.5rem; }
+  .flash-actions { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
+</style>
