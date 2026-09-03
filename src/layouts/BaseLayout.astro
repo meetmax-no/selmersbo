@@ -61,6 +61,8 @@ const flashOn = !!flash && flash.status !== 'off';
   <body>
     <a href="#main" class="skip-link">Spring til indhold</a>
 
+    <Header />
+
     {flashOn && flash.status === 'banner' && (
       <aside class="flash-banner" id="flash-banner" role="region" aria-label={flash.heading}>
         <div class="container flash-banner-inner">
@@ -72,7 +74,6 @@ const flashOn = !!flash && flash.status !== 'off';
       </aside>
     )}
 
-    <Header />
     <main id="main">
       <slot />
     </main>
