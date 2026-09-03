@@ -4,8 +4,8 @@ Sådan retter du tekster og billeder på siden – helt selv. Du kan ikke ødel�
 noget, og du behøver ikke være god til computere. Der gemmes en kopi af alle
 ændringer, så alt kan rettes igen.
 
-> En pæn, printvenlig udgave af denne guide findes som delt side (spørg den,
-> der har sat siden op, efter linket).
+> Du finder altid denne guide igen via **Menu** nederst på siden. Er du i tvivl
+> om noget, så spørg endelig – vi hjælper gerne.
 
 ## 1. Log ind
 
