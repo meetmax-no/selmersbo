@@ -21,6 +21,7 @@ const fmt = (d: Date) => `${d.getDate()}. ${mnd[d.getMonth()]} ${d.getFullYear()
 
   <section class="section" style="padding-top:2rem">
     <div class="container">
+      <a class="back" href="/menu">← Menu</a>
       {rendered.length === 0 ? (
         <p class="empty">Ingen opdateringer endnu.</p>
       ) : (
@@ -44,6 +45,8 @@ const fmt = (d: Date) => `${d.getDate()}. ${mnd[d.getMonth()]} ${d.getFullYear()
 </BaseLayout>
 
 <style>
+  .back { display: inline-block; color: var(--green-700); font-weight: 650; margin-bottom: 1.2rem; text-decoration: none; }
+  .back:hover { text-decoration: underline; }
   .empty { color: var(--muted); font-size: 1.1rem; }
   .log { list-style: none; margin: 0; padding: 0; max-width: 760px; display: grid; gap: 1.2rem; }
   .log-item {

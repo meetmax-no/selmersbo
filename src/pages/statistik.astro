@@ -65,6 +65,7 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
 
   <section class="section" style="padding-top:2rem">
     <div class="container">
+      <a class="back" href="/menu">← Menu</a>
       {!hasData ? (
         <div class="empty-box">
           <span class="empty-ic"><Icon name="clock" size={30} /></span>
@@ -179,6 +180,8 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
 </BaseLayout>
 
 <style>
+  .back { display: inline-block; color: var(--green-700); font-weight: 650; margin-bottom: 1.2rem; text-decoration: none; }
+  .back:hover { text-decoration: underline; }
   .empty-box { text-align: center; max-width: 40rem; margin: 1rem auto 0; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 2.6rem 2rem; }
   .empty-ic { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--green-050); color: var(--green-700); margin-bottom: 0.6rem; }
   .empty-box h2 { margin: 0.2rem 0 0.4rem; }

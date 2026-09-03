@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Content } from '../../REDAKTOER-GUIDE.md';
+---
+<BaseLayout title="Redaktør-guide – Selmersbo" description="Sådan retter du tekster og billeder på selmersbo.dk – helt selv." noindex={true}>
+  <section class="section">
+    <div class="container guide-wrap">
+      <a class="back" href="/menu">← Menu</a>
+      <article class="prose guide"><Content /></article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .guide-wrap { max-width: 740px; }
+  .back { display: inline-block; color: var(--green-700); font-weight: 650; margin-bottom: 1rem; text-decoration: none; }
+  .back:hover { text-decoration: underline; }
+  .prose.guide :global(h1) { font-size: clamp(2rem, 5vw, 2.9rem); margin-bottom: 0.6rem; }
+  .prose.guide :global(h2) { margin-top: 2rem; }
+  .prose.guide :global(table) { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  .prose.guide :global(th), .prose.guide :global(td) { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); }
+  .prose.guide :global(blockquote) { border-left: 3px solid var(--green); padding-left: 1rem; color: var(--muted); margin: 1rem 0; }
+</style>
