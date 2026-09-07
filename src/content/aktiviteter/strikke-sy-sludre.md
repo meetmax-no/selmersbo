@@ -1,9 +1,11 @@
 ---
 title: Strikke-, sy og sludrekomsammen
 icon: thread
-image: /uploads/akt-strikke-sy-sludre.jpg
+image: /uploads/fredag 080722-2.jpg
 day: Hver torsdag kl. 13.00
-text: "Drop-in: strik, sy og sludr."
+text: 'Drop-in: strik, sy og sludr.'
+status: ''
+forside: false
 order: 22
 draft: false
 ---
