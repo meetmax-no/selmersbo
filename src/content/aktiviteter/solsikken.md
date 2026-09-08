@@ -1,7 +1,7 @@
 ---
 title: Førtidspensionister – Solsikken
 icon: users
-image: /uploads/akt-solsikken.jpg
+image: /uploads/velliv_lokal-trivsel.png
 day: Onsdag & fredag
 text: Mødested for førtidspensionister (18–64 år).
 status: ''
