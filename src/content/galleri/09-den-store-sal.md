@@ -1,6 +1,6 @@
 ---
 image: /uploads/gal-9.jpg
-caption: Den store sal
+caption: Gymnastiksalen
 order: 9
 draft: false
 ---
