@@ -18,7 +18,7 @@ board:
   - name: Jesper Lauritsen
     role: Næstformand
     image: /uploads/om-jesper.jpg
-    phone: 4576 1209
+    phone: ''
     mobile: 4032 5709
   - name: Hanne Wendt
     role: Bestyrelsesmedlem
@@ -33,7 +33,7 @@ board:
   - name: Mia-Maja Mogensen
     role: Bestyrelsesmedlem
     image: /uploads/om-mia.jpg
-    phone: 4586 9694
+    phone: ''
     mobile: 2818 9404
   - name: Peter Christensen
     role: Bestyrelsesmedlem
