@@ -39,6 +39,11 @@ const DEVICE_LABELS: Record<string, string> = {
 const stripSlash = (p: string) => (p.length > 1 ? p.replace(/\/+$/, '') : p);
 const ymd = (d: Date) => d.toISOString().slice(0, 10);
 
+// Interne sider (kun for bestyrelsen) – husets egne værktøjer, ikke offentligt
+// indhold. De tælles IKKE med i "Mest besøgte sider".
+const INTERNAL_PAGES = new Set(['/menu', '/statistik', '/oppdatering', '/guide']);
+const isInternal = (p: string) => INTERNAL_PAGES.has(p) || p.startsWith('/admin') || p.startsWith('/api');
+
 // Ét kald. Returnerer data-arrayet/objektet, eller null ved fejl (kaster ikke,
 // så ét fejlende kald ikke tømmer hele siden).
 async function q(path: string, params: Record<string, string>, token: string): Promise<any> {
@@ -89,7 +94,7 @@ export async function getStats(): Promise<Stats | null> {
 
   const pages: StatEntry[] = (byPath ?? [])
     .map((r: any) => ({ path: stripSlash(r.requestPath ?? ''), views: r.pageviews ?? 0 }))
-    .filter((r: StatEntry) => r.path)
+    .filter((r: StatEntry) => r.path && !isInternal(r.path))
     .sort((a: StatEntry, b: StatEntry) => b.views - a.views);
 
   const topPages = pages.slice(0, 10);
