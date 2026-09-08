@@ -4,6 +4,8 @@ icon: users
 image: /uploads/akt-solsikken.jpg
 day: Onsdag & fredag
 text: Mødested for førtidspensionister (18–64 år).
+status: ''
+forside: false
 order: 10
 draft: false
 ---
