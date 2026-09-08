@@ -68,6 +68,7 @@ const udlejning = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/udlejning' }),
   schema: z.object({
     title: z.string().default('Udlejning'),
+    eyebrow: z.string().default('Lej huset'), // lille "fnyt" over titlen
     lead: z.string(),
     conditions: z.array(z.object({ text: z.string() })).default([]),
     contactNote: z.string().default(''),
@@ -121,10 +122,11 @@ const indstillinger = defineCollection({
       mapsUrl: z.string().default(''),
     }),
     phone: z.string().default(''),
-    clinicPhone: z.string().default(''),
     email: z.string().default(''),
     facebook: z.string().default(''),
     mobilepay: z.string().default('95956'), // MobilePay-nummer
+    // Kort tekst i footerens første kolonne ("Selmersbo") – redigerbar i CMS.
+    footerBlurb: z.string().default('Et aktivitets- og samværshus for seniorer i Hørsholm – med plads til alle og god tilgængelighed i ét plan.'),
 
     hours: z.array(z.object({
       day: z.string(),

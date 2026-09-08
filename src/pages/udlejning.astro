@@ -18,7 +18,7 @@ const priceGroups = [
 ].filter((g) => g.rows.length > 0);
 ---
 <BaseLayout title="Udlejning – Selmersbo" description="Lej Selmersbos lokaler til foredrag, møder eller fester i Hørsholm. Se priser og vilkår.">
-  <PageHero eyebrow="Lej huset" title={d.title} lead={d.lead} icon="calendar" />
+  <PageHero eyebrow={d.eyebrow} title={d.title} lead={d.lead} icon="calendar" />
 
   <section class="section" style="padding-top:2rem">
     <div class="container split">

@@ -13,10 +13,7 @@ import Icon from './Icon.astro';
           <span class="brand-tag">{site.tagline}</span>
         </span>
       </div>
-      <p class="footer-blurb">
-        Et aktivitets- og samværshus for seniorer i Hørsholm – med plads til
-        alle og god tilgængelighed i ét plan.
-      </p>
+      <p class="footer-blurb">{site.footerBlurb}</p>
     </div>
 
     <div class="footer-col">
@@ -26,7 +23,6 @@ import Icon from './Icon.astro';
         <li><Icon name="phone" size={20} /> <a href={`tel:+45${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
         <li><Icon name="mail" size={20} /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
       </ul>
-      <p class="footer-note">Sygeplejeklinik efter aftale: {site.clinicPhone}</p>
     </div>
 
     <div class="footer-col">

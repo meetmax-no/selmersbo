@@ -1,5 +1,6 @@
 ---
 title: Udlejning
+eyebrow: Lej huset
 lead: >-
   På Selmersbo er der mulighed for at leje lokaler til foredrag, møder eller
   fester for Hørsholm-borgere.

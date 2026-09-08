@@ -207,7 +207,7 @@ const preview = (chosen.length ? chosen : allActivities).slice(0, 6);
             {site.address.street}, {site.address.zip} {site.address.city}<br />
             Daglig leder: {site.manager}<br />
             Telefon: <a href={`tel:+45${site.phone.replace(/\s/g, '')}`}>{site.phone}</a><br />
-            Sygeplejeklinik (efter aftale): {site.clinicPhone}
+            E-mail: <a href={`mailto:${site.email}`}>{site.email}</a>
           </p>
         </div>
       </div>

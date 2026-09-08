@@ -14,10 +14,10 @@ export const site = {
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Selmersvej+13,+2970+H%C3%B8rsholm',
   },
   phone: '4849 4300',
-  clinicPhone: '4849 4199',
   email: 'selmersbo@horsholm.dk',
   facebook: 'https://www.facebook.com/groups/146686506050448',
   mobilepay: '95956',
+  footerBlurb: 'Et aktivitets- og samværshus for seniorer i Hørsholm – med plads til alle og god tilgængelighed i ét plan.',
   hours: [
     { day: 'Mandag', time: '09.30 – 16.00' },
     { day: 'Tirsdag', time: '09.30 – 16.00' },
