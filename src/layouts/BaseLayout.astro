@@ -34,7 +34,7 @@ const flash = flashEntry?.data;
 const flashOn = !!flash && flash.status !== 'off';
 // Nøgle der ændrer sig, når beskeden ændres → popup/banner regnes som ulæst
 // og vises igen, også i samme besøg.
-const flashText = flash ? `${flash.heading}|${flash.body}` : '';
+const flashText = flash ? `${flash.heading}|${flash.message}` : '';
 let flashHash = 0;
 for (let i = 0; i < flashText.length; i++) flashHash = (Math.imul(flashHash, 31) + flashText.charCodeAt(i)) | 0;
 const flashKey = String(flashHash >>> 0);
@@ -73,7 +73,7 @@ const flashKey = String(flashHash >>> 0);
       <aside class="flash-banner" id="flash-banner" role="region" aria-label={flash.heading} data-flash-key={flashKey}>
         <div class="container flash-banner-inner">
           <span class="flash-tag">{flash.heading}</span>
-          <span class="flash-msg">{flash.body}</span>
+          <span class="flash-msg">{flash.message}</span>
           {flash.ctaUrl && flash.ctaLabel && <a class="flash-cta" href={flash.ctaUrl}>{flash.ctaLabel}</a>}
           <button class="flash-close" type="button" data-flash-close aria-label="Luk beskeden">✕</button>
         </div>
@@ -89,7 +89,7 @@ const flashKey = String(flashHash >>> 0);
       <dialog class="flash-dialog" id="flash-dialog" aria-label={flash.heading} data-flash-key={flashKey}>
         <div class="flash-dialog-inner">
           <span class="flash-tag">{flash.heading}</span>
-          <p class="flash-msg">{flash.body}</p>
+          <p class="flash-msg">{flash.message}</p>
           <div class="flash-actions">
             {flash.ctaUrl && flash.ctaLabel && <a class="btn btn--primary" href={flash.ctaUrl}>{flash.ctaLabel}</a>}
             <button class="btn btn--ghost" type="button" data-flash-close>Luk</button>

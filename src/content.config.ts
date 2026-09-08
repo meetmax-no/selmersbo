@@ -270,7 +270,10 @@ const newsflash = defineCollection({
   schema: z.object({
     status: z.enum(['off', 'banner', 'popup']).default('off'),
     heading: z.string().default('Vigtigt'),
-    body: z.string(),
+    // NB: feltet må IKKE hedde `body` – Sveltia/Decap tolker et frontmatter-felt
+    // ved navn `body` som selve markdown-teksten i `yaml-frontmatter`-format,
+    // så det forsvinder ud af frontmatter ved gem. Derfor: `message`.
+    message: z.string().default(''),
     ctaLabel: z.string().optional(),
     ctaUrl: z.string().optional(),
   }),

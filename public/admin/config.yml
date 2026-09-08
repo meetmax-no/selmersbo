@@ -315,7 +315,7 @@ collections:
               - { label: "Banner øverst på siden", value: "banner" }
               - { label: "Popup (vindue midt på skærmen)", value: "popup" }
           - { name: heading, label: "Mærkat / overskrift", widget: string, default: "Vigtigt", hint: "Fx VIGTIGT." }
-          - { name: body, label: "Besked", widget: text, hint: "Adskil linjer med et linjeskift." }
+          - { name: message, label: "Besked", widget: text, hint: "Adskil linjer med et linjeskift." }
           - { name: ctaLabel, label: "Knap-tekst (valgfri)", widget: string, required: false, hint: 'Fx "Læs mere". Lad stå tom for ingen knap.' }
           - { name: ctaUrl, label: "Knap-link (valgfri)", widget: string, required: false, hint: "Fx /nyheder eller en hel adresse." }
 
