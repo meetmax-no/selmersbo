@@ -6,9 +6,9 @@ leader:
   name: Anne Hooge-Hansen
   role: Daglig leder
   image: /uploads/om-anne.jpg
-  email: ahh@horsholm.dk
+  email: selmersbo@horsholm.dk
   phone: 4849 4300
-  mobile: 2682 8621
+  mobile: ''
 board:
   - name: Mogens Buch-Larsen
     role: Formand
