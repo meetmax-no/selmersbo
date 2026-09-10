@@ -1,7 +1,7 @@
 ---
 title: Strikke-, sy og sludrekomsammen
 icon: thread
-image: /uploads/fredag 080722-2.jpg
+image: /uploads/billede strikkeklub.png
 day: Hver torsdag kl. 13.00
 text: 'Drop-in: strik, sy og sludr.'
 status: ''
