@@ -1,7 +1,7 @@
 ---
 title: Sygeplejeklinikken
 icon: health
-image: /uploads/Sygepleje klinikken.JPG
+image: /uploads/sygeplejerske_med_emblem.jpg
 day: Efter aftale
 text: Konsultation efter aftale.
 status: ''
