@@ -1,6 +1,6 @@
 ---
 title: Aktivhuset Selmersbo
-lead: Et aktivitets- og samlingssted for Seniorer i Hørsholm – drevet som en forening  tæt samarbejde mellem kommunen, en bestyrelse og omkring 20 frivillige.
+lead: Et aktivitets- og samlingssted for Seniorer i Hørsholm – drevet som en forening  i tæt samarbejde mellem kommunen, en bestyrelse og omkring 20 frivillige.
 purpose: Foreningens navn er Aktivhuset Selmersbo, og dens hjemsted er Hørsholm Kommune på adressen Selmersvej 13, 2970 Hørsholm. Selmersbos formål er at være samlingssted for frivillige foreninger med et socialt og humanistisk formål. Derudover kan Selmersbos lokaler udlejes til Hørsholms borgere.
 leader:
   name: Anne Hooge-Hansen
