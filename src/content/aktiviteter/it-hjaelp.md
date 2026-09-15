@@ -1,9 +1,11 @@
 ---
 title: IT-hjælp
 icon: device
-image: /uploads/akt-it.png
+image: /uploads/Copilot_20260915_165159.jpg
 day: Hver torsdag kl. 10.00
 text: Hjælp til daglig brug af IT og internet.
+status: ''
+forside: false
 order: 15
 draft: false
 ---
