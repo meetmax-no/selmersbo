@@ -1,6 +1,6 @@
 ---
 heroEyebrow: Aktivhuset Selmersbo
-heroTitle: Et varmt fællesskab for seniorer i Hørsholm
+heroTitle: Et varmt fællesskab for Seniorer i Hørsholm
 heroLead: Sang, bevægelse, foredrag, udflugter og hyggeligt samvær – midt i Hørsholm, i lyse lokaler med god plads til alle.
 heroImage: /images/community-flags.jpg
 heroImageAlt: Medlemmer af Selmersbo står samlet udenfor med danske flag og bogstavskilte, der staver Selmersbo
