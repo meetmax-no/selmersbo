@@ -444,3 +444,24 @@ collections:
             fields:
               - { name: label, label: "Beskrivelse", widget: string }
               - { name: price, label: "Pris", widget: string }
+
+      - name: mobilepay
+        label: "MobilePay"
+        file: "src/content/mobilepay/index.md"
+        description: "Teksten på MobilePay-siden. Selve nummeret rettes under Indstillinger."
+        fields:
+          - { name: title, label: "Sidetitel", widget: string, default: "Betal med MobilePay" }
+          - { name: lead, label: "Indledning (under titlen)", widget: text }
+          - { name: introHeading, label: "Overskrift", widget: string, default: "Kære brugere af Selmersbo" }
+          - { name: introText, label: "Introtekst", widget: text }
+          - { name: stepsHeading, label: "Overskrift over trinnene", widget: string, default: "Sådan gør du" }
+          - name: steps
+            label: "Trin (sådan gør du)"
+            label_singular: "Trin"
+            widget: list
+            summary: "{{fields.text}}"
+            hint: "Rækkefølgen bestemmer nummereringen. Nummeret vises stort på siden, så det behøver ikke skrives i et trin."
+            fields:
+              - { name: text, label: "Tekst", widget: text }
+          - { name: helpNote, label: "Hjælpe-linje nederst", widget: text }
+          - { name: cardNote, label: "Note ved betalingskortet", widget: text, hint: "Fx: Husk at skrive, hvad betalingen gælder." }

@@ -1,4 +1,5 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
@@ -6,45 +7,42 @@ import Icon from '../components/Icon.astro';
 import { getSettings } from '../lib/settings';
 const site = await getSettings();
 
+// Al tekst redigeres i CMS (Sider → MobilePay). Nummeret hentes fra
+// Indstillinger, så det kun står ét sted.
+const d = (await getEntry('mobilepay', 'index'))!.data;
 const number = site.mobilepay || '95956';
 // Officielt MobilePay-betalingslink til Selmersbos MyShop-/merchantnummer.
 // Åbner MobilePay-appens betalingslink-flow (ikke en mobiloverførsel) –
 // beløb og tekst skriver brugeren selv.
 const payLink = `https://qr.mobilepay.dk/paymentlink?phone=${number.replace(/\s/g, '')}`;
-const steps = [
-  'Tryk på knappen “Betal med MobilePay” – eller åbn MobilePay på din telefon.',
-  `Indtast Selmersbos nummer: ${number} (hvis du ikke brugte knappen).`,
-  'Skriv beløbet og gerne en kort tekst, fx “Kontingent”.',
-  'Godkend betalingen – så er du i mål.',
-];
 ---
 <BaseLayout title="MobilePay – Selmersbo" description="Betal kontingent og aktiviteter til Selmersbo med MobilePay.">
   <PageHero
     eyebrow="Betaling"
-    title="Betal med MobilePay"
-    lead="Du kan nemt betale kontingent, ture og arrangementer med MobilePay."
+    title={d.title}
+    lead={d.lead}
     icon="device" />
 
   <section class="section" style="padding-top:2rem">
     <div class="container split">
       <div class="prose">
-        <h2>Kære brugere af Selmersbo</h2>
-        <p>MobilePay kan bruges til at betale med på Selmersbo. Nummeret, du skal bruge, står her på siden.</p>
-        <h2>Sådan gør du</h2>
+        <h2>{d.introHeading}</h2>
+        <p>{d.introText}</p>
+        <h2>{d.stepsHeading}</h2>
         <ol class="steps">
-          {steps.map((s, i) => (
-            <li><span class="step-num">{i + 1}</span> {s}</li>
+          {d.steps.map((s, i) => (
+            <li><span class="step-num">{i + 1}</span> {s.text}</li>
           ))}
         </ol>
         <p class="mp-link"><a href="https://www.mobilepay.dk" rel="noopener" target="_blank">Læs mere på MobilePays hjemmeside <Icon name="arrow" size={18} /></a></p>
-        <p class="demo-note" style="margin-top:1.5rem"><Icon name="check" size={20} /><span>Er du i tvivl, så spørg i huset – vi hjælper dig gerne.</span></p>
+        <p class="demo-note" style="margin-top:1.5rem"><Icon name="check" size={20} /><span>{d.helpNote}</span></p>
       </div>
 
       <aside class="pay-card">
         <img class="pay-logo" src="/uploads/mobilepay-icon.svg" alt="MobilePay" width="64" height="64" loading="lazy" />
         <span class="pay-label">Betal til Selmersbo</span>
         <strong class="pay-number">{number}</strong>
-        <p>Husk at skrive, hvad betalingen gælder.</p>
+        <p>{d.cardNote}</p>
         <a class="pay-btn" id="mp-pay-btn" href={payLink} rel="noopener" target="_blank">
           <img src="/uploads/mobilepay-icon.svg" alt="" width="24" height="24" /> Betal med MobilePay
         </a>

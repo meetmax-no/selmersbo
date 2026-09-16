@@ -281,4 +281,20 @@ const newsflash = defineCollection({
   }),
 });
 
-export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz, generalforsamling, oppdateringer, newsflash };
+// MobilePay – redigerbar betalingsside (én post: index.md). Selve MobilePay-
+// nummeret hentes fra Indstillinger, så det kun står ét sted.
+const mobilepay = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/mobilepay' }),
+  schema: z.object({
+    title: z.string().default('Betal med MobilePay'),
+    lead: z.string().default('Du kan nemt betale kontingent, ture og arrangementer med MobilePay.'),
+    introHeading: z.string().default('Kære brugere af Selmersbo'),
+    introText: z.string().default(''),
+    stepsHeading: z.string().default('Sådan gør du'),
+    steps: z.array(z.object({ text: z.string() })).default([]),
+    helpNote: z.string().default('Er du i tvivl, så spørg i huset – vi hjælper dig gerne.'),
+    cardNote: z.string().default('Husk at skrive, hvad betalingen gælder.'),
+  }),
+});
+
+export const collections = { udflugter, nyheder, aktiviteter, udlejning, nyhedsbreve, galleri, indstillinger, omos, dokumenter, forside, quiz, generalforsamling, oppdateringer, newsflash, mobilepay };
