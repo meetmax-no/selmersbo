@@ -6,7 +6,7 @@ day: Hver mandag
 text: Dart hver mandag.
 status: Lukket for tilgang
 forside: true
-order: 5
+order: 25
 draft: false
 ---
 

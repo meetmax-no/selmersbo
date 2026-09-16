@@ -6,7 +6,7 @@ day: Hver tirsdag kl. 10.00
 text: Blandet træning og lidt dans.
 status: Ingen ledige pladser
 forside: false
-order: 12
+order: 60
 draft: false
 ---
 

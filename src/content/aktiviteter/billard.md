@@ -5,7 +5,7 @@ image: /uploads/akt-billard.jpg
 day: Efter aftale
 text: Gratis og hyggeligt – vi søger flere spillere.
 forside: true
-order: 3
+order: 15
 draft: false
 ---
 

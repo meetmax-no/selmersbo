@@ -4,7 +4,7 @@ icon: activity
 day: Hver onsdag kl. 9.30
 text: Gymnastik onsdag formiddag.
 status: Ingen ledige pladser
-order: 11
+order: 55
 draft: false
 ---
 

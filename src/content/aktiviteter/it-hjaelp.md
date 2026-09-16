@@ -6,7 +6,7 @@ day: Hver torsdag kl. 10.00
 text: Hjælp til daglig brug af IT og internet.
 status: ''
 forside: false
-order: 15
+order: 80
 draft: false
 ---
 

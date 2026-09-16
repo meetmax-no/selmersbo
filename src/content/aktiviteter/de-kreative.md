@@ -5,7 +5,7 @@ image: /uploads/akt-dekreative.jpg
 day: Onsdage kl. 13.00
 text: Akryl, akvarel, decoupage og hyggeligt samvær.
 forside: true
-order: 6
+order: 30
 draft: false
 ---
 

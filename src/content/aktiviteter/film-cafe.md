@@ -4,7 +4,7 @@ icon: film
 image: /uploads/akt-film-cafe.jpg
 day: Mandage kl. 13.00
 text: Fælles film med kaffe og kage.
-order: 7
+order: 35
 draft: false
 ---
 

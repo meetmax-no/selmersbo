@@ -6,7 +6,7 @@ day: Hver torsdag kl. 10.00
 text: Yoga torsdag formiddag.
 status: Ingen ledige pladser
 forside: false
-order: 25
+order: 135
 draft: false
 ---
 

@@ -8,7 +8,7 @@ text: |-
   Se datoer.
 status: ''
 forside: true
-order: 1
+order: 5
 draft: false
 ---
 

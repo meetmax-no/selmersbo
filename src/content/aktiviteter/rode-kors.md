@@ -4,7 +4,7 @@ icon: heart
 image: /uploads/akt-rodekors.jpg
 day: Tirsdage kl. 13.00
 text: Nørklerne strikker til Røde Kors.
-order: 21
+order: 110
 draft: false
 ---
 

@@ -5,7 +5,7 @@ image: /uploads/akt-bridge.jpg
 day: Man–tors formiddag
 text: Bridge for øvede og begyndere (Ældre Sagen).
 forside: true
-order: 4
+order: 20
 draft: false
 ---
 

@@ -6,7 +6,7 @@ day: Efter aftale
 text: Konsultation efter aftale.
 status: ''
 forside: false
-order: 23
+order: 130
 draft: false
 ---
 

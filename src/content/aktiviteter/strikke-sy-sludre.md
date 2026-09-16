@@ -6,7 +6,7 @@ day: Hver torsdag kl. 13.00
 text: 'Drop-in: strik, sy og sludr.'
 status: ''
 forside: false
-order: 22
+order: 125
 draft: false
 ---
 

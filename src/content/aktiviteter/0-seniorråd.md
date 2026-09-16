@@ -6,7 +6,7 @@ day: Møde en gang om måneden
 text: Seniorrådet er et uafhængigt råd, som er demokratisk valgt i kommunen blandt seniorer på 60 år eller derover.
 status: ''
 forside: false
-order: 0
+order: 120
 draft: false
 ---
 

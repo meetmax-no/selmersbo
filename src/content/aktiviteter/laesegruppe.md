@@ -5,7 +5,7 @@ image: /uploads/akt-laesegruppe.jpg
 day: En gang om måneden
 text: Vi taler om månedens bog.
 status: Ingen ledige pladser
-order: 18
+order: 95
 draft: false
 ---
 

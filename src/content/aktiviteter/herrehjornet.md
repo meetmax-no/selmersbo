@@ -4,7 +4,7 @@ icon: users
 image: /uploads/akt-herrehjornet.jpg
 day: Fredag i ulige uger
 text: Kun for herrer – kaffe og hygge.
-order: 13
+order: 65
 draft: false
 ---
 

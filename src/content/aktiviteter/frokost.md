@@ -6,7 +6,7 @@ day: Hver fredag kl. 12.00
 text: Fælles frokost i caféen.
 status: ''
 forside: false
-order: 9
+order: 45
 draft: false
 ---
 

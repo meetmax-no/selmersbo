@@ -4,7 +4,7 @@ icon: mic
 image: /uploads/akt-foredrag.jpg
 day: Fredage kl. 10.30
 text: Spændende oplægsholdere hver måned.
-order: 8
+order: 40
 draft: false
 ---
 

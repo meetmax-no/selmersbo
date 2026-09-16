@@ -4,7 +4,7 @@ icon: device
 image: /uploads/akt-it-undervisning.jpg
 day: Tirsdag formiddag
 text: Undervisning efter aftale – 50 min. pr. gang.
-order: 16
+order: 85
 draft: false
 ---
 

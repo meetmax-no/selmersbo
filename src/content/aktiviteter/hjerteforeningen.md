@@ -4,7 +4,7 @@ icon: heart
 image: /uploads/akt-hjerteforeningen.jpg
 day: Hjertecaféer
 text: Hjertecaféer for patienter og pårørende.
-order: 14
+order: 70
 draft: false
 ---
 
