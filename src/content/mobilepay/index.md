@@ -7,7 +7,7 @@ stepsHeading: Sådan gør du
 steps:
   - text: Tryk på knappen “Betal med MobilePay” – eller åbn MobilePay på din telefon.
   - text: Indtast Selmersbos nummer, som står her på siden (hvis du ikke brugte knappen).
-  - text: Skriv beløbet og gerne en kort tekst, fx “Banko"
+  - text: Skriv beløbet og gerne en kort tekst, fx “Banko".
   - text: Godkend betalingen – så er du i mål.
 helpNote: Er du i tvivl, så spørg i huset – vi hjælper dig gerne.
 cardNote: Husk at skrive, hvad betalingen gælder.
