@@ -1,9 +1,10 @@
 ---
 title: Bibliotek
 icon: book
-image: /uploads/akt-bibliotek.jpg
+image: /uploads/20260915_142919 (1).jpg
 day: Altid åbent
 text: Gratis bøger fra vores reol – tag med hjem.
+status: ''
 forside: true
 order: 10
 draft: false
