@@ -48,7 +48,7 @@ board:
     imagePos: standard
     phone: 4161 4056
     showPhone: false
-    email: søren fog <sqfprivat@gmail.com>
+    email: sqfprivat@gmail.com
     showEmail: true
     active: true
     order: 20
@@ -58,7 +58,7 @@ board:
     imagePos: standard
     phone: 2818 9404
     showPhone: false
-    email: Mia-Maja Mogensen <miammogensen@hotmail.com>
+    email: miammogensen@hotmail.com
     showEmail: true
     active: true
     order: 25
