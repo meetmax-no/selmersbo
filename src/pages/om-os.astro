@@ -19,6 +19,9 @@ const board = d.board.filter((m) => m.active).sort((a, b) => a.order - b.order);
 // Et felt vises kun, hvis det er udfyldt OG "vis"-boksen er krydset af.
 const showTel = (p: { phone?: string; showPhone: boolean }) => !!p.phone && p.showPhone;
 const showMail = (p: { email?: string; showEmail: boolean }) => !!p.email && p.showEmail;
+// "Billedudsnit" fra CMS → hvilken del af portrættet der vises i den lille firkant.
+const POS: Record<string, string> = { standard: 'center 20%', top: 'center top', center: 'center', bottom: 'center bottom' };
+const pos = (v: string) => `object-position:${POS[v] ?? POS.standard}`;
 
 const docs = [
   { href: '/dokumenter/vedtaegter', label: 'Vedtægter', icon: 'book' },
@@ -50,7 +53,7 @@ const docs = [
       <div class="leader card" id={slug(d.leader.name)}>
         <div class="leader-avatar">
           {d.leader.image
-            ? <img src={d.leader.image} alt={d.leader.name} loading="lazy" width="128" height="128" />
+            ? <img src={d.leader.image} alt={d.leader.name} loading="lazy" width="128" height="128" style={pos(d.leader.imagePos)} />
             : <Icon name="users" size={30} />}
         </div>
         <div class="leader-body">
@@ -74,7 +77,7 @@ const docs = [
           <div class="member card" id={slug(m.name)}>
             <div class="member-head">
               {m.image
-                ? <img class="member-photo" src={m.image} alt={m.name} loading="lazy" width="112" height="112" />
+                ? <img class="member-photo" src={m.image} alt={m.name} loading="lazy" width="112" height="112" style={pos(m.imagePos)} />
                 : <span class="member-photo member-photo--fallback" aria-hidden="true"><Icon name="users" size={22} /></span>}
               <div class="member-id">
                 <h3>{m.name}</h3>
@@ -162,8 +165,8 @@ const docs = [
   /* Daglig leder */
   .leader { display: flex; gap: 1.2rem; align-items: flex-start; max-width: 640px; scroll-margin-top: 90px; }
   .leader:target { box-shadow: 0 0 0 3px var(--green-050); }
-  .leader-avatar { flex: none; width: 72px; height: 72px; border-radius: 16px; overflow: hidden; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); }
-  .leader-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .leader-avatar { flex: none; width: 72px; height: 72px; border-radius: 16px; overflow: hidden; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); border: 1px solid var(--line); }
+  .leader-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
   .leader-body h3 { margin: 0; font-size: 1.4rem; }
 
   /* Bestyrelsen */
@@ -171,7 +174,7 @@ const docs = [
   .member { scroll-margin-top: 90px; }
   .member:target { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-050); }
   .member-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.7rem; }
-  .member-photo { flex: none; width: 60px; height: 60px; border-radius: 12px; object-fit: cover; background: var(--green-050); box-shadow: var(--shadow-sm); }
+  .member-photo { flex: none; width: 60px; height: 60px; border-radius: 12px; object-fit: cover; object-position: center 20%; background: var(--green-050); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
   .member-photo--fallback { display: grid; place-items: center; color: var(--green-700); }
   .member-id { min-width: 0; }
   .member h3 { margin: 0 0 0.1rem; font-size: 1.15rem; }

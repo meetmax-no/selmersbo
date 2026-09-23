@@ -383,6 +383,17 @@ collections:
               - { name: name, label: "Navn", widget: string }
               - { name: role, label: "Titel", widget: string, default: "Daglig leder" }
               - { name: image, label: "Foto", widget: image, required: false, hint: "Lille portrætfoto." }
+              - name: imagePos
+                label: "Billedudsnit"
+                widget: select
+                default: standard
+                required: false
+                hint: "Brug kun, hvis hovedet er skåret af eller sidder skævt i den lille firkant."
+                options:
+                  - { label: "Standard", value: standard }
+                  - { label: "Vis mere af toppen (hvis hovedet er skåret af)", value: top }
+                  - { label: "Midt i billedet", value: center }
+                  - { label: "Vis mere af bunden", value: bottom }
               - { name: phone, label: "Telefon", widget: string, required: false }
               - { name: showPhone, label: "Vis telefon på siden", widget: boolean, default: true }
               - { name: email, label: "E-mail", widget: string, required: false }
@@ -397,6 +408,17 @@ collections:
               - { name: name, label: "Navn", widget: string }
               - { name: role, label: "Rolle", widget: string, hint: "F.eks. Formand, Bestyrelsesmedlem, Suppleant." }
               - { name: image, label: "Foto", widget: image, required: false, hint: "Lille portrætfoto." }
+              - name: imagePos
+                label: "Billedudsnit"
+                widget: select
+                default: standard
+                required: false
+                hint: "Brug kun, hvis hovedet er skåret af eller sidder skævt i den lille firkant."
+                options:
+                  - { label: "Standard", value: standard }
+                  - { label: "Vis mere af toppen (hvis hovedet er skåret af)", value: top }
+                  - { label: "Midt i billedet", value: center }
+                  - { label: "Vis mere af bunden", value: bottom }
               - { name: phone, label: "Telefon", widget: string, required: false }
               - { name: showPhone, label: "Vis telefon på siden", widget: boolean, default: true }
               - { name: email, label: "E-mail", widget: string, required: false }
