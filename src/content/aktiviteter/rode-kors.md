@@ -1,9 +1,11 @@
 ---
 title: Røde Kors
 icon: heart
-image: /uploads/akt-rodekors.jpg
+image: /uploads/20260915_143053 (1).jpg
 day: Tirsdage kl. 13.00
 text: Nørklerne strikker til Røde Kors.
+status: ''
+forside: false
 order: 110
 draft: false
 ---
