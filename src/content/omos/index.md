@@ -19,7 +19,7 @@ board:
     phone: 4088 7720
     showPhone: false
     email: mogensbuchlarsen@gmail.com
-    showEmail: false
+    showEmail: true
     active: true
     order: 5
   - name: Jesper Lauritsen
