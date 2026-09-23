@@ -220,7 +220,7 @@ collections:
     fields:
       - { name: image, label: "Billede", widget: image }
       - { name: caption, label: "Billedtekst", widget: string, required: false }
-      - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først." }
+      - { name: order, label: "Rækkefølge", widget: number, default: 0, value_type: int, hint: "Lavere tal vises først. Brug spring på 5 (5, 10, 15 …), så der er plads til nye billeder imellem." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
 
   - name: dokumenter

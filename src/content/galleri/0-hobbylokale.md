@@ -1,6 +1,6 @@
 ---
 image: /uploads/20260908_113950.jpg
 caption: Hobbylokale
-order: 0
+order: 5
 draft: false
 ---

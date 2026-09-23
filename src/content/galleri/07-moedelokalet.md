@@ -1,6 +1,6 @@
 ---
 image: /uploads/gal-7.jpg
 caption: Mødelokalet
-order: 7
+order: 45
 draft: false
 ---

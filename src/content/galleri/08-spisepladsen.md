@@ -1,6 +1,6 @@
 ---
 image: /uploads/gal-8.jpg
 caption: Spisepladsen
-order: 8
+order: 50
 draft: false
 ---
