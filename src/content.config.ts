@@ -191,6 +191,7 @@ const omos = defineCollection({
       phone: z.string().optional(),
       showPhone: z.boolean().default(true),
       email: z.string().optional(),
+      emailLabel: z.string().optional(), // tekst på mail-linket; tom → "Mail til [fornavn]"
       showEmail: z.boolean().default(true),
     }),
     // Inaktive medlemmer skjules på siden (og i søgning) men bliver i CMS.
@@ -204,6 +205,7 @@ const omos = defineCollection({
       phone: z.string().optional(),
       showPhone: z.boolean().default(true),
       email: z.string().optional(),
+      emailLabel: z.string().optional(), // tekst på mail-linket; tom → "Mail til [fornavn]"
       showEmail: z.boolean().default(true),
       active: z.boolean().default(true),
       order: z.number().nullish().transform((v) => v ?? 99),

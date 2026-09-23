@@ -19,6 +19,8 @@ const board = d.board.filter((m) => m.active).sort((a, b) => a.order - b.order);
 // Et felt vises kun, hvis det er udfyldt OG "vis"-boksen er krydset af.
 const showTel = (p: { phone?: string; showPhone: boolean }) => !!p.phone && p.showPhone;
 const showMail = (p: { email?: string; showEmail: boolean }) => !!p.email && p.showEmail;
+// Adressen vises ikke – linket hedder "Mail til [fornavn]", medmindre CMS-feltet siger andet.
+const mailText = (p: { name: string; emailLabel?: string }) => p.emailLabel?.trim() || `Mail til ${p.name.trim().split(/\s+/)[0]}`;
 // "Billedudsnit" fra CMS → hvilken del af portrættet der vises i den stående ramme (3:4).
 const POS: Record<string, string> = { standard: 'center 20%', top: 'center top', center: 'center', bottom: 'center bottom' };
 const pos = (v: string) => `object-position:${POS[v] ?? POS.standard}`;
@@ -61,7 +63,7 @@ const docs = [
           <p class="role">{d.leader.role}</p>
           <ul class="contact-lines">
             {showTel(d.leader) && <li><Icon name="phone" size={18} /> <a href={tel(d.leader.phone!)}>{d.leader.phone}</a></li>}
-            {showMail(d.leader) && <li><Icon name="mail" size={18} /> <a href={`mailto:${d.leader.email}`}>{d.leader.email}</a></li>}
+            {showMail(d.leader) && <li><Icon name="mail" size={18} /> <a href={`mailto:${d.leader.email}`}>{mailText(d.leader)}</a></li>}
           </ul>
         </div>
       </div>
@@ -87,7 +89,7 @@ const docs = [
             {(showTel(m) || showMail(m)) && (
               <ul class="contact-lines">
                 {showTel(m) && <li><Icon name="phone" size={16} /> <a href={tel(m.phone!)}>{m.phone}</a></li>}
-                {showMail(m) && <li><Icon name="mail" size={16} /> <a href={`mailto:${m.email}`}>{m.email}</a></li>}
+                {showMail(m) && <li><Icon name="mail" size={16} /> <a href={`mailto:${m.email}`}>{mailText(m)}</a></li>}
               </ul>
             )}
           </div>
@@ -180,10 +182,12 @@ const docs = [
   .member h3 { margin: 0 0 0.1rem; font-size: 1.15rem; }
   .role { margin: 0; color: var(--terra); font-weight: 650; font-size: 0.95rem; }
 
-  .contact-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+  .contact-lines { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.4rem; }
   .contact-lines li { display: flex; align-items: center; gap: 0.5rem; color: var(--ink); font-size: 1rem; }
   .contact-lines li :global(svg) { color: var(--green); flex: none; }
   .contact-lines a { color: var(--green-700); font-weight: 600; }
+  /* Mail-linket står altid på én linje; bliver en tekst alligevel for lang, afkortes den med … */
+  .contact-lines a[href^='mailto:'] { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .contact-lines .muted { color: var(--muted); font-weight: 400; font-size: 0.92rem; }
 
   /* Bliv frivillig */

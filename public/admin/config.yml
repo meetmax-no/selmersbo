@@ -400,6 +400,7 @@ collections:
               - { name: phone, label: "Telefon", widget: string, required: false }
               - { name: showPhone, label: "Vis telefon på siden", widget: boolean, default: true }
               - { name: email, label: "E-mail", widget: string, required: false }
+              - { name: emailLabel, label: "Tekst på mail-link", widget: string, required: false, pattern: ["^.{0,20}$", "Højst 20 tegn, så teksten kan stå på én linje."], hint: "Står der ikke noget, vises «Mail til [fornavn]». Selve adressen vises ikke på siden." }
               - { name: showEmail, label: "Vis e-mail på siden", widget: boolean, default: true }
           - name: board
             label: "Bestyrelsen"
@@ -425,6 +426,7 @@ collections:
               - { name: phone, label: "Telefon", widget: string, required: false }
               - { name: showPhone, label: "Vis telefon på siden", widget: boolean, default: true }
               - { name: email, label: "E-mail", widget: string, required: false }
+              - { name: emailLabel, label: "Tekst på mail-link", widget: string, required: false, pattern: ["^.{0,20}$", "Højst 20 tegn, så teksten kan stå på én linje."], hint: "Står der ikke noget, vises «Mail til [fornavn]». Selve adressen vises ikke på siden." }
               - { name: showEmail, label: "Vis e-mail på siden", widget: boolean, default: true }
               - { name: active, label: "Aktiv (vises på siden)", widget: boolean, default: true }
               - { name: order, label: "Rækkefølge", widget: number, value_type: int, required: false, hint: "Lavere tal vises først. Brug spring på 5 (5, 10, 15 …). Uden tal havner medlemmet nederst." }
