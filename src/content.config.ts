@@ -186,7 +186,7 @@ const omos = defineCollection({
       name: z.string(),
       role: z.string().default('Daglig leder'),
       image: z.string().optional(),
-      // Billedudsnit i den lille firkant (standard = lidt oppe, så hovedet kommer med).
+      // Billedudsnit i den stående ramme (standard = lidt oppe, så hovedet kommer med).
       imagePos: z.enum(['standard', 'top', 'center', 'bottom']).catch('standard'),
       phone: z.string().optional(),
       showPhone: z.boolean().default(true),
@@ -199,7 +199,7 @@ const omos = defineCollection({
       name: z.string(),
       role: z.string(),
       image: z.string().optional(),
-      // Billedudsnit i den lille firkant (standard = lidt oppe, så hovedet kommer med).
+      // Billedudsnit i den stående ramme (standard = lidt oppe, så hovedet kommer med).
       imagePos: z.enum(['standard', 'top', 'center', 'bottom']).catch('standard'),
       phone: z.string().optional(),
       showPhone: z.boolean().default(true),

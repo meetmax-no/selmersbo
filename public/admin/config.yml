@@ -388,7 +388,7 @@ collections:
                 widget: select
                 default: standard
                 required: false
-                hint: "Brug kun, hvis hovedet er skåret af eller sidder skævt i den lille firkant."
+                hint: "Brug kun, hvis hovedet er skåret af eller sidder skævt i rammen."
                 options:
                   - { label: "Standard", value: standard }
                   - { label: "Vis mere af toppen (hvis hovedet er skåret af)", value: top }
@@ -413,7 +413,7 @@ collections:
                 widget: select
                 default: standard
                 required: false
-                hint: "Brug kun, hvis hovedet er skåret af eller sidder skævt i den lille firkant."
+                hint: "Brug kun, hvis hovedet er skåret af eller sidder skævt i rammen."
                 options:
                   - { label: "Standard", value: standard }
                   - { label: "Vis mere af toppen (hvis hovedet er skåret af)", value: top }
