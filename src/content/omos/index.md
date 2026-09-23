@@ -6,7 +6,8 @@ leader:
   name: Anne Hooge-Hansen
   role: Daglig leder
   image: /uploads/om-anne.jpg
-  phone: '4849 4300'
+  imagePos: standard
+  phone: 4849 4300
   showPhone: true
   email: selmersbo@horsholm.dk
   showEmail: true
@@ -14,69 +15,77 @@ board:
   - name: Mogens Buch-Larsen
     role: Formand
     image: /uploads/om-mogens.jpg
-    phone: '4088 7720'
-    showPhone: true
-    email: ''
+    imagePos: standard
+    phone: 4088 7720
+    showPhone: false
+    email: mogensbuchlarsen@gmail.com
     showEmail: false
     active: true
     order: 5
   - name: Jesper Lauritsen
     role: Næstformand
     image: /uploads/om-jesper.jpg
-    phone: '4032 5709'
-    showPhone: true
-    email: ''
-    showEmail: false
+    imagePos: standard
+    phone: 4032 5709
+    showPhone: false
+    email: jl@jesperlauritsen.dk
+    showEmail: true
     active: true
     order: 10
   - name: Hanne Wendt
     role: Bestyrelsesmedlem
     image: /uploads/om-hanne.jpg
-    phone: '2293 3618'
-    showPhone: true
-    email: ''
-    showEmail: false
+    imagePos: standard
+    phone: 2293 3618
+    showPhone: false
+    email: wendt.hanne@gmail.com
+    showEmail: true
     active: true
     order: 15
   - name: Søren Quist Fog
     role: Bestyrelsesmedlem
     image: /uploads/om-soren.jpg
-    phone: '4161 4056'
-    showPhone: true
-    email: ''
-    showEmail: false
+    imagePos: standard
+    phone: 4161 4056
+    showPhone: false
+    email: søren fog <sqfprivat@gmail.com>
+    showEmail: true
     active: true
     order: 20
   - name: Mia-Maja Mogensen
     role: Bestyrelsesmedlem
     image: /uploads/om-mia.jpg
-    phone: '2818 9404'
-    showPhone: true
-    email: ''
-    showEmail: false
+    imagePos: standard
+    phone: 2818 9404
+    showPhone: false
+    email: Mia-Maja Mogensen <miammogensen@hotmail.com>
+    showEmail: true
     active: true
     order: 25
   - name: Peter Christensen
     role: Bestyrelsesmedlem
     image: /uploads/om-peter.jpg
-    phone: '2074 9403'
-    showPhone: true
-    email: ''
-    showEmail: false
+    imagePos: standard
+    phone: 2074 9403
+    showPhone: false
+    email: '"Peter Christensen (lopekana46@gmail.com)" <lopekana46@gmail.com>'
+    showEmail: true
     active: true
     order: 30
   - name: Rosemarie Schiel
     role: Bestyrelsesmedlem
     image: /uploads/om-rosemarie.jpg
-    phone: '3122 8192'
-    showPhone: true
-    email: ''
-    showEmail: false
+    imagePos: standard
+    phone: 3122 8192
+    showPhone: false
+    email: Rosemarie Schiel <rose@schiel.dk>
+    showEmail: true
     active: true
     order: 35
   - name: Lone Sønderbo
     role: Suppleant
     image: /uploads/om-lone.jpg
+    imagePos: standard
     phone: ''
     showPhone: false
     email: ''
