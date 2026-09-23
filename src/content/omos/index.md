@@ -68,7 +68,7 @@ board:
     imagePos: standard
     phone: 2074 9403
     showPhone: false
-    email: '"Peter Christensen (lopekana46@gmail.com)" <lopekana46@gmail.com>'
+    email: lopekana46@gmail.com
     showEmail: true
     active: true
     order: 30
