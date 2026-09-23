@@ -78,7 +78,7 @@ board:
     imagePos: standard
     phone: 3122 8192
     showPhone: false
-    email: Rosemarie Schiel <rose@schiel.dk>
+    email: rose@schiel.dk
     showEmail: true
     active: true
     order: 35
