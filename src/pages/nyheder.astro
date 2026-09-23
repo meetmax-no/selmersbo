@@ -151,7 +151,7 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
   /* Fast besked */
   .notice {
     background: var(--gold-tint); border: 1px solid var(--gold-line); border-left: 5px solid var(--gold);
-    border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.8rem); scroll-margin-top: 90px;
+    border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.8rem); scroll-margin-top: calc(var(--header-h-small) + 11px);
   }
   .notice.has-media { display: grid; grid-template-columns: 220px 1fr; gap: clamp(1rem, 3vw, 1.6rem); }
   .notice-media { border-radius: 14px; overflow: hidden; align-self: start; }
@@ -163,7 +163,7 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
   /* Nyheder – vist i fuld tekst */
   .news-item {
     background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow-sm); padding: clamp(1.3rem, 3vw, 1.8rem); scroll-margin-top: 90px;
+    box-shadow: var(--shadow-sm); padding: clamp(1.3rem, 3vw, 1.8rem); scroll-margin-top: calc(var(--header-h-small) + 11px);
   }
   .news-item.has-media { display: grid; grid-template-columns: 220px 1fr; gap: clamp(1rem, 3vw, 1.6rem); }
   .news-media { border-radius: 14px; overflow: hidden; align-self: start; }
@@ -177,7 +177,7 @@ if (latest) jump.push({ id: 'program', label: `Månedens program` });
     display: flex; align-items: center; gap: 1.1rem; text-decoration: none;
     background: var(--green-050); border: 1px solid var(--green-200);
     border-radius: var(--radius); padding: clamp(1.3rem, 3vw, 1.7rem); color: var(--ink);
-    scroll-margin-top: 90px;
+    scroll-margin-top: calc(var(--header-h-small) + 11px);
   }
   .program:hover { border-color: var(--green-400); box-shadow: var(--shadow-sm); }
   .program-icon { flex: none; width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; background: var(--green-700); color: #fff; }

@@ -364,3 +364,8 @@ p { margin: 0 0 1rem; max-width: 68ch; }
   transition: top 0.15s ease;
 }
 .skip-link:focus { top: 0; color: #fff; }
+
+/* Topmenuens højde (fast topmenu). Bruges af klæbende kort og anker-hop, så
+   intet gemmer sig under menuen. Computer: 2 rækker, krymper ved scroll. */
+:root { --header-h: 79px; --header-h-small: 79px; }
+@media (min-width: 1101px) { :root { --header-h: 119px; --header-h-small: 97px; } }

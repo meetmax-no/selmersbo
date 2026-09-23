@@ -163,7 +163,7 @@ const docs = [
   .side-figure img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
 
   /* Daglig leder */
-  .leader { display: flex; gap: 1.2rem; align-items: flex-start; max-width: 640px; scroll-margin-top: 90px; }
+  .leader { display: flex; gap: 1.2rem; align-items: flex-start; max-width: 640px; scroll-margin-top: calc(var(--header-h-small) + 11px); }
   .leader:target { box-shadow: 0 0 0 3px var(--green-050); }
   .leader-avatar { flex: none; width: 78px; height: 104px; border-radius: 16px; overflow: hidden; display: grid; place-items: center; background: var(--green-050); color: var(--green-700); border: 1px solid var(--line); }
   .leader-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
@@ -171,7 +171,7 @@ const docs = [
 
   /* Bestyrelsen */
   .board-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
-  .member { scroll-margin-top: 90px; }
+  .member { scroll-margin-top: calc(var(--header-h-small) + 11px); }
   .member:target { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-050); }
   .member-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.7rem; }
   .member-photo { flex: none; width: 66px; height: 88px; border-radius: 12px; object-fit: cover; object-position: center 20%; background: var(--green-050); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }

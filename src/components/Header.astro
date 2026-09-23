@@ -7,7 +7,12 @@ const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === '/' ? path === '/' : href.startsWith('/') && path.startsWith(href);
 ---
-<header class="site-header">
+<!--
+  To etager på computer: øverst logo + Søg + Bliv medlem, nedenunder hele menuen.
+  Øverste række krymper, når man scroller. På mobil/tablet: én række med
+  Bliv medlem, søg-ikon og burger-menu (ren CSS, checkbox).
+-->
+<header class="site-header" data-header>
   <div class="header-inner">
     <a class="brand" href="/" aria-label={`${site.full} – forside`}>
       <span class="brand-mark"><img src="/selmersbo-logo.png" alt="" /></span>
@@ -26,6 +31,13 @@ const isActive = (href: string) =>
       <span></span><span></span><span></span>
     </label>
 
+    <div class="header-actions">
+      <a class="top-search" href="/soeg" aria-current={isActive('/soeg') ? 'page' : undefined}>
+        <Icon name="search" size={20} /> <span>Søg</span>
+      </a>
+      <a class="btn btn--accent top-cta" href="#bliv-medlem">Bliv medlem</a>
+    </div>
+
     <nav class="site-nav" aria-label="Hovedmenu">
       <ul>
         {nav.map((item) => (
@@ -39,34 +51,53 @@ const isActive = (href: string) =>
       <a class="nav-search" href="/soeg" aria-current={isActive('/soeg') ? 'page' : undefined}>
         <Icon name="search" size={20} /> <span>Søg</span>
       </a>
-      <a class="btn btn--accent nav-cta" href="#bliv-medlem">Bliv medlem</a>
     </nav>
   </div>
 </header>
+<!-- Holder pladsen til den faste topmenu, så indholdet ikke hopper, når den krymper. -->
+<div class="header-spacer" aria-hidden="true"></div>
+
+<script>
+  // Krymp øverste række, når man har scrollet lidt ned.
+  const header = document.querySelector('[data-header]');
+  if (header) {
+    let ticking = false;
+    const update = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 30);
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  }
+</script>
 
 <style>
   .site-header {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0;
     z-index: 50;
     background: color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter: saturate(1.4) blur(10px);
     border-bottom: 1px solid var(--line);
   }
+  .header-spacer { height: var(--header-h); }
+
+  /* ---------- Computer: to etager ---------- */
   .header-inner {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 1.25rem;
-    min-height: 78px;
+    column-gap: 1.25rem;
     max-width: 1440px;
     margin-inline: auto;
     padding-inline: clamp(1.1rem, 3vw, 2rem);
   }
 
-  .brand { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .brand { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; height: 72px; }
   .brand-mark {
-    display: grid; place-items: center;
+    display: grid; place-items: center; flex: none;
     width: 52px; height: 52px;
     background: #fff; border: 1px solid var(--line);
     border-radius: 14px; box-shadow: var(--shadow-sm);
@@ -74,32 +105,47 @@ const isActive = (href: string) =>
   .brand-mark img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
   .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
   .brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; color: var(--ink); letter-spacing: -0.01em; }
-  .brand-tag { font-size: 0.82rem; color: var(--muted); font-weight: 500; }
+  .brand-tag { font-size: 0.82rem; color: var(--muted); font-weight: 500; white-space: nowrap; max-height: 1.2em; overflow: hidden; }
 
-  .site-nav { display: flex; align-items: center; gap: 1.1rem; }
-  .site-nav ul { display: flex; gap: 0.95rem; list-style: none; margin: 0; padding: 0; }
+  /* Øverste række, højre side: Søg + Bliv medlem */
+  .header-actions { margin-left: auto; height: 72px; display: flex; align-items: center; gap: 1.2rem; }
+  .top-search { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--ink); text-decoration: none; font-weight: 550; font-size: 1rem; white-space: nowrap; }
+  .top-search :global(svg) { color: var(--green-700); }
+  .top-search:hover, .top-search[aria-current='page'] { color: var(--green-700); }
+  .header-actions a.top-cta { color: #ffffff; border-color: transparent; padding: 0.7rem 1.15rem; min-height: 46px; white-space: nowrap; }
+  .header-actions a.top-cta:hover { color: #ffffff; }
+
+  /* Nederste række: hele menuen */
+  .site-nav { flex-basis: 100%; height: 46px; display: flex; align-items: center; border-top: 1px solid var(--line); }
+  .site-nav ul { display: flex; justify-content: space-between; gap: 0.9rem; width: 100%; list-style: none; margin: 0; padding: 0 0.4rem; }
   .site-nav a {
-    color: var(--ink); text-decoration: none; font-weight: 550; font-size: 0.98rem;
-    padding: 0.35rem 0; border-bottom: 2px solid transparent; white-space: nowrap;
+    color: var(--ink); text-decoration: none; font-weight: 550; font-size: 1.06rem;
+    padding: 0.3rem 0; border-bottom: 2px solid transparent; white-space: nowrap;
   }
-  .site-nav a:not(.nav-cta):hover { color: var(--green-700); border-color: var(--green); }
-  .site-nav a[aria-current='page']:not(.nav-cta) { color: var(--green-700); border-color: var(--green); }
-  /* CTA needs higher specificity than `.site-nav a` so its white text wins */
-  .site-nav a.nav-cta { color: #ffffff; border-color: transparent; padding: 0.7rem 1.15rem; min-height: 46px; }
-  .site-nav a.nav-cta:hover { color: #ffffff; }
+  .site-nav a:hover, .site-nav a[aria-current='page'] { color: var(--green-700); border-color: var(--green); }
+  /* "Søg" står i øverste række på computer – kun i mobilmenuen her */
+  .site-nav .nav-search { display: none; }
 
-  /* Search entry points */
-  .nav-search { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--ink); text-decoration: none; font-weight: 550; font-size: 0.98rem; white-space: nowrap; }
-  .nav-search :global(svg) { color: var(--green-700); }
-  .nav-search:hover, .nav-search[aria-current='page'] { color: var(--green-700); }
-  .header-search-mobile { display: none; }
+  /* Krympet øverste række efter scroll */
+  .brand, .header-actions, .brand-mark, .brand-name, .brand-tag, .header-actions a.top-cta {
+    transition: height 0.25s ease, width 0.25s ease, font-size 0.25s ease, max-height 0.25s ease, opacity 0.2s ease, min-height 0.25s ease, padding 0.25s ease;
+  }
+  .site-header.is-scrolled .brand,
+  .site-header.is-scrolled .header-actions { height: 50px; }
+  .site-header.is-scrolled .brand-mark { width: 38px; height: 38px; border-radius: 11px; }
+  .site-header.is-scrolled .brand-name { font-size: 1.25rem; }
+  .site-header.is-scrolled .brand-tag { max-height: 0; opacity: 0; }
+  .site-header.is-scrolled .header-actions a.top-cta { min-height: 38px; padding: 0.45rem 1rem; }
 
-  /* Mobile menu (CSS-only, checkbox toggle) */
-  .nav-burger { display: none; }
-  .nav-toggle { display: none; }
-  .header-cta-mobile { display: none; }
+  /* Mobil-elementer er skjult på computer */
+  .nav-burger, .nav-toggle, .header-cta-mobile, .header-search-mobile { display: none; }
 
-  @media (max-width: 1360px) {
+  /* ---------- Tablet og mobil: én række + burger-menu ---------- */
+  @media (max-width: 1100px) {
+    .header-inner { flex-wrap: nowrap; justify-content: space-between; min-height: 78px; }
+    .brand { height: auto; }
+    .header-actions { display: none; }
+
     .nav-burger {
       display: inline-flex; flex-direction: column; gap: 5px;
       width: 48px; height: 48px; align-items: center; justify-content: center;
@@ -107,52 +153,59 @@ const isActive = (href: string) =>
     }
     .nav-burger span { width: 22px; height: 2.5px; background: var(--ink); border-radius: 2px; transition: 0.2s; }
 
-    /* Keep the primary CTA visible next to the burger */
+    /* Bliv medlem ved siden af burgeren */
     .header-cta-mobile {
       display: inline-flex; margin-left: auto;
       padding: 0.6rem 1.05rem; min-height: 44px; font-size: 1rem;
       color: #ffffff; border-color: transparent; white-space: nowrap;
     }
     .header-cta-mobile:hover { color: #ffffff; }
-
-    .site-nav {
-      position: absolute; inset: 78px 0 auto 0;
-      flex-direction: column; align-items: stretch; gap: 0.4rem;
-      background: var(--paper); border-bottom: 1px solid var(--line);
-      padding: 1rem clamp(1.1rem, 4vw, 2.5rem) 1.5rem;
-      box-shadow: var(--shadow-md);
-      transform: translateY(-140%); transition: transform 0.25s ease; visibility: hidden;
-    }
-    .site-nav ul { flex-direction: column; gap: 0.2rem; }
-    .site-nav a { padding: 0.75rem 0; font-size: 1.15rem; border-bottom: 1px solid var(--line); }
-    /* The CTA now lives next to the burger, so hide the in-menu copy */
-    .site-nav .nav-cta { display: none; }
-    /* Search appears both as a menu item and as an icon next to the burger */
-    .nav-search { padding: 0.75rem 0; font-size: 1.15rem; border-bottom: 1px solid var(--line); }
     .header-search-mobile {
       display: inline-flex; align-items: center; justify-content: center;
       width: 48px; height: 48px; flex: none; margin-left: 0.5rem;
       border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--green-700);
     }
 
+    .site-nav {
+      position: absolute; inset: 78px 0 auto 0; height: auto;
+      flex-direction: column; align-items: stretch; gap: 0.4rem;
+      background: var(--paper); border-top: none; border-bottom: 1px solid var(--line);
+      padding: 1rem clamp(1.1rem, 4vw, 2.5rem) 1.5rem;
+      box-shadow: var(--shadow-md);
+      transform: translateY(-140%); transition: transform 0.25s ease; visibility: hidden;
+    }
+    .site-nav ul { flex-direction: column; gap: 0.2rem; padding: 0; }
+    .site-nav a { padding: 0.75rem 0; font-size: 1.15rem; border-bottom: 1px solid var(--line); }
+    .site-nav .nav-search { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .site-nav .nav-search :global(svg) { color: var(--green-700); }
+
     .nav-toggle:checked ~ .site-nav { transform: translateY(0); visibility: visible; }
     .nav-toggle:checked ~ .nav-burger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
     .nav-toggle:checked ~ .nav-burger span:nth-child(2) { opacity: 0; }
     .nav-toggle:checked ~ .nav-burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+    /* Mobil krymper ikke */
+    .site-header.is-scrolled .brand-mark { width: 52px; height: 52px; border-radius: 14px; }
+    .site-header.is-scrolled .brand-name { font-size: 1.5rem; }
+    .site-header.is-scrolled .brand-tag { max-height: 1.2em; opacity: 1; }
   }
 
-  /* Very small phones: give the CTA + burger room (search stays in the menu) */
+  /* Meget små telefoner: giv plads til Bliv medlem + burger (søg ligger i menuen) */
   @media (max-width: 430px) {
-    .brand-tag { display: none; }
-    .brand-name { font-size: 1.3rem; }
+    .brand-tag, .site-header.is-scrolled .brand-tag { display: none; }
+    .brand-name, .site-header.is-scrolled .brand-name { font-size: 1.3rem; }
     .header-cta-mobile { padding: 0.55rem 0.85rem; font-size: 0.95rem; }
     .header-search-mobile { display: none; }
   }
   @media (max-width: 380px) {
-    .header-inner { gap: 0.5rem; padding-inline: 0.8rem; }
-    .brand-mark { width: 40px; height: 40px; font-size: 1.25rem; }
-    .brand-name { font-size: 1.1rem; }
+    .header-inner { column-gap: 0.5rem; padding-inline: 0.8rem; }
+    .brand-mark, .site-header.is-scrolled .brand-mark { width: 40px; height: 40px; }
+    .brand-name, .site-header.is-scrolled .brand-name { font-size: 1.1rem; }
     .header-cta-mobile { padding: 0.5rem 0.7rem; font-size: 0.9rem; min-height: 42px; }
     .nav-burger { width: 44px; height: 44px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand, .header-actions, .brand-mark, .brand-name, .brand-tag, .header-actions a.top-cta { transition: none; }
   }
 </style>
