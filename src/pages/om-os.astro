@@ -14,6 +14,12 @@ const tel = (p: string) => `tel:+45${p.replace(/\s/g, '')}`;
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const volParas = d.volunteersText.split(/\n\n+/);
 
+// Kun aktive bestyrelsesmedlemmer, sorteret efter rækkefølge (uden tal → 99).
+const board = d.board.filter((m) => m.active).sort((a, b) => a.order - b.order);
+// Et felt vises kun, hvis det er udfyldt OG "vis"-boksen er krydset af.
+const showTel = (p: { phone?: string; showPhone: boolean }) => !!p.phone && p.showPhone;
+const showMail = (p: { email?: string; showEmail: boolean }) => !!p.email && p.showEmail;
+
 const docs = [
   { href: '/dokumenter/vedtaegter', label: 'Vedtægter', icon: 'book' },
   { href: '/dokumenter/privatlivspolitik', label: 'Privatlivspolitik', icon: 'check' },
@@ -51,9 +57,8 @@ const docs = [
           <h3>{d.leader.name}</h3>
           <p class="role">{d.leader.role}</p>
           <ul class="contact-lines">
-            {d.leader.phone && <li><Icon name="phone" size={18} /> <a href={tel(d.leader.phone)}>{d.leader.phone}</a> <span class="muted">(kontor)</span></li>}
-            {d.leader.mobile && <li><Icon name="phone" size={18} /> <a href={tel(d.leader.mobile)}>{d.leader.mobile}</a> <span class="muted">(mobil)</span></li>}
-            {d.leader.email && <li><Icon name="mail" size={18} /> <a href={`mailto:${d.leader.email}`}>{d.leader.email}</a></li>}
+            {showTel(d.leader) && <li><Icon name="phone" size={18} /> <a href={tel(d.leader.phone!)}>{d.leader.phone}</a></li>}
+            {showMail(d.leader) && <li><Icon name="mail" size={18} /> <a href={`mailto:${d.leader.email}`}>{d.leader.email}</a></li>}
           </ul>
         </div>
       </div>
@@ -65,7 +70,7 @@ const docs = [
     <div class="container">
       <h2 class="block-title">Bestyrelsen</h2>
       <div class="board-grid">
-        {d.board.map((m) => (
+        {board.map((m) => (
           <div class="member card" id={slug(m.name)}>
             <div class="member-head">
               {m.image
@@ -76,10 +81,10 @@ const docs = [
                 <p class="role">{m.role}</p>
               </div>
             </div>
-            {(m.phone || m.mobile) && (
+            {(showTel(m) || showMail(m)) && (
               <ul class="contact-lines">
-                {m.phone && <li><Icon name="phone" size={16} /> <a href={tel(m.phone)}>{m.phone}</a> <span class="muted">(tlf.)</span></li>}
-                {m.mobile && <li><Icon name="phone" size={16} /> <a href={tel(m.mobile)}>{m.mobile}</a> <span class="muted">(mobil)</span></li>}
+                {showTel(m) && <li><Icon name="phone" size={16} /> <a href={tel(m.phone!)}>{m.phone}</a></li>}
+                {showMail(m) && <li><Icon name="mail" size={16} /> <a href={`mailto:${m.email}`}>{m.email}</a></li>}
               </ul>
             )}
           </div>

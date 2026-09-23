@@ -6,50 +6,83 @@ leader:
   name: Anne Hooge-Hansen
   role: Daglig leder
   image: /uploads/om-anne.jpg
+  phone: '4849 4300'
+  showPhone: true
   email: selmersbo@horsholm.dk
-  phone: 4849 4300
-  mobile: ''
+  showEmail: true
 board:
   - name: Mogens Buch-Larsen
     role: Formand
     image: /uploads/om-mogens.jpg
-    phone: ''
-    mobile: 4088 7720
+    phone: '4088 7720'
+    showPhone: true
+    email: ''
+    showEmail: false
+    active: true
+    order: 5
   - name: Jesper Lauritsen
     role: Næstformand
     image: /uploads/om-jesper.jpg
-    phone: ''
-    mobile: 4032 5709
+    phone: '4032 5709'
+    showPhone: true
+    email: ''
+    showEmail: false
+    active: true
+    order: 10
   - name: Hanne Wendt
     role: Bestyrelsesmedlem
     image: /uploads/om-hanne.jpg
-    phone: ''
-    mobile: 2293 3618
+    phone: '2293 3618'
+    showPhone: true
+    email: ''
+    showEmail: false
+    active: true
+    order: 15
   - name: Søren Quist Fog
     role: Bestyrelsesmedlem
     image: /uploads/om-soren.jpg
-    phone: ''
-    mobile: 4161 4056
+    phone: '4161 4056'
+    showPhone: true
+    email: ''
+    showEmail: false
+    active: true
+    order: 20
   - name: Mia-Maja Mogensen
     role: Bestyrelsesmedlem
     image: /uploads/om-mia.jpg
-    phone: ''
-    mobile: 2818 9404
+    phone: '2818 9404'
+    showPhone: true
+    email: ''
+    showEmail: false
+    active: true
+    order: 25
   - name: Peter Christensen
     role: Bestyrelsesmedlem
     image: /uploads/om-peter.jpg
-    phone: ''
-    mobile: 2074 9403
+    phone: '2074 9403'
+    showPhone: true
+    email: ''
+    showEmail: false
+    active: true
+    order: 30
   - name: Rosemarie Schiel
     role: Bestyrelsesmedlem
     image: /uploads/om-rosemarie.jpg
-    phone: ''
-    mobile: 3122 8192
+    phone: '3122 8192'
+    showPhone: true
+    email: ''
+    showEmail: false
+    active: true
+    order: 35
   - name: Lone Sønderbo
     role: Suppleant
     image: /uploads/om-lone.jpg
     phone: ''
-    mobile: ''
+    showPhone: false
+    email: ''
+    showEmail: false
+    active: true
+    order: 40
 volunteersHeading: De frivillige
 volunteersText: |-
   Selmersbo har omkring 25 frivillige, som er en uvurderlig hjælp i det daglige arbejde. De frivilliges arbejde spænder over mange forskellige opgaver, og alle er yderst kompetente til det, de udfører. Bestyrelsen og kommunen giver stor ros for det store arbejde – uden de frivillige ville det ikke være muligt at få dagligdagen til at hænge sammen.

@@ -42,7 +42,7 @@ const omos = (await getCollection('omos'))[0];
 if (omos) {
   idx.push({ t: 'Om os', ty: 'Side', u: '/om-os', x: strip(['bestyrelse daglig leder de frivillige kontakt CVR', omos.data.lead, omos.data.purpose, omos.data.volunteersText]), ic: 'users' });
   // Hver person (ledelse + bestyrelse) som eget søgetræf → hopper til kortet.
-  const people = [omos.data.leader, ...omos.data.board];
+  const people = [omos.data.leader, ...omos.data.board.filter((m) => m.active)];
   for (const m of people)
     idx.push({ t: m.name, ty: m.role || 'Bestyrelse', u: `/om-os#${anchor(m.name)}`, x: strip([m.role, 'bestyrelse ledelse selmersbo']), ic: 'users' });
 }

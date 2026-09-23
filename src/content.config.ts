@@ -181,20 +181,28 @@ const omos = defineCollection({
     title: z.string().default('Aktivhuset Selmersbo'),
     lead: z.string(),
     purpose: z.string(),
+    // Telefon og e-mail vises kun, hvis feltet er udfyldt OG "vis"-boksen er krydset af.
     leader: z.object({
       name: z.string(),
       role: z.string().default('Daglig leder'),
       image: z.string().optional(),
-      email: z.string().optional(),
       phone: z.string().optional(),
-      mobile: z.string().optional(),
+      showPhone: z.boolean().default(true),
+      email: z.string().optional(),
+      showEmail: z.boolean().default(true),
     }),
+    // Inaktive medlemmer skjules på siden (og i søgning) men bliver i CMS.
+    // Sorteres efter order; uden tal → 99 (nederst).
     board: z.array(z.object({
       name: z.string(),
       role: z.string(),
       image: z.string().optional(),
       phone: z.string().optional(),
-      mobile: z.string().optional(),
+      showPhone: z.boolean().default(true),
+      email: z.string().optional(),
+      showEmail: z.boolean().default(true),
+      active: z.boolean().default(true),
+      order: z.number().nullish().transform((v) => v ?? 99),
     })).default([]),
     volunteersHeading: z.string().default('De frivillige'),
     volunteersText: z.string(),
