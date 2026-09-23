@@ -215,8 +215,11 @@ collections:
     format: yaml-frontmatter
     identifier_field: caption
     slug: "{{fields.order}}-{{caption}}"
-    summary: "{{caption}}"
-    sortable_fields: [order, caption]
+    # Listen i CMS viser nummeret foran billedteksten og sorteres som på siden.
+    summary: "{{order}} · {{caption}}"
+    sortable_fields:
+      fields: [order, caption]
+      default: { field: order, direction: ascending }
     fields:
       - { name: image, label: "Billede", widget: image }
       - { name: caption, label: "Billedtekst", widget: string, required: false }
