@@ -9,8 +9,9 @@ const site = await getSettings();
 const fs = (await getEntry('forside', 'index'))!.data;
 const welcomeParas = fs.welcomeText.split(/\n\n+/);
 
-const today = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'][new Date().getDay()];
-const todayHours = site.hours.find((h) => h.day === today);
+// "Åbent i dag" beregnes i den besøgendes browser efter dansk tid (se scriptet
+// ved boksen) – ikke her, for her ville det blive dagen, siden sidst blev bygget.
+const hoursForScript = site.hours.map((h) => ({ day: h.day, time: h.time, closed: !!h.closed }));
 
 // Content from the CMS collections
 const anchor = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -79,9 +80,26 @@ const preview = (chosen.length ? chosen : allActivities).slice(0, 6);
         <Icon name="clock" size={24} />
         <div>
           <span class="quick-label">Åbent i dag</span>
-          <strong>{todayHours ? (todayHours.closed ? 'Lukket' : todayHours.time) : 'Se åbningstider'}</strong>
+          <strong id="today-hours">Se åbningstider</strong>
         </div>
       </div>
+      <script is:inline define:vars={{ hours: hoursForScript }}>
+        (function () {
+          var el = document.getElementById('today-hours');
+          if (!el) return;
+          var names = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag'];
+          var idx;
+          try {
+            // Ugedag i dansk tid – uanset hvor den besøgende er, og hvornår siden blev bygget.
+            var wd = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'Europe/Copenhagen' }).format(new Date());
+            idx = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[wd];
+          } catch (e) {}
+          if (idx === undefined) idx = new Date().getDay();
+          var h = hours.filter(function (x) { return String(x.day).trim().toLowerCase() === names[idx]; })[0];
+          // Dage der ikke står i åbningstiderne (fx weekend), regnes som lukkede.
+          el.textContent = !h || h.closed ? 'Lukket i dag' : h.time;
+        })();
+      </script>
       <a class="quick-item" href={`tel:+45${site.phone.replace(/\s/g, '')}`}>
         <Icon name="phone" size={24} />
         <div>

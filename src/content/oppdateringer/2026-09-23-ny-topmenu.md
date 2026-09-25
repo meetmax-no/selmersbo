@@ -12,3 +12,4 @@ draft: false
 - **Galleriet i CMS** vises nu i samme rækkefølge som på siden (efter *Rækkefølge*), og nummeret står foran billedteksten – fx «5 · Hobbylokale».
 - **Rettelse på Om os:** Lange e-mailadresser blev skåret af i kortene. Nu står der i stedet et link **«Mail til [fornavn]»** – fx «Mail til Mogens» – og selve adressen står ikke synligt på siden.
 - **Nyt felt «Tekst på mail-link»** i CMS (*Sider → Om os*), hvis man vil skrive noget andet, fx «Skriv til formanden» (højst 20 tegn). Står det tomt, bruges «Mail til [fornavn]».
+- **Rettelse på forsiden – «Åbent i dag»:** Boksen viste åbningstiden for den dag, siden sidst blev opdateret – derfor kunne der fx stå *Lukket* en torsdag. Nu beregnes den i den besøgendes browser efter dansk tid, så den altid viser dagens åbningstid. På lukkedage (onsdag og weekend) står der *Lukket i dag*.
