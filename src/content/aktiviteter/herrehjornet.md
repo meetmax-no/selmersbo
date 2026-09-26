@@ -1,9 +1,11 @@
 ---
 title: Herrehjørnet
 icon: users
-image: /uploads/akt-herrehjornet.jpg
+image: /uploads/image2 (1).jpeg
 day: Fredag i ulige uger
 text: Kun for herrer – kaffe og hygge.
+status: ''
+forside: false
 order: 65
 draft: false
 ---
