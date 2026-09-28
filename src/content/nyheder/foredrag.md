@@ -13,9 +13,6 @@ draft: false
 
 Vi glæder os til en efterårs- og vintersæson med spændende foredrag. Alle foredrag holdes i Selmersbo, og alle er velkomne.
 
-**Fredag den 25. september** · _En tandlæge fortæller_
-Preben Olesen ser tilbage på et langt liv som tandlæge.
-
 **Fredag den 30. oktober** · _Svalbard – livet i Arktis_
 Klavs Weis-Fogh tager os med til det høje nord.
 
