@@ -137,7 +137,7 @@ collections:
     sortable_fields: [date, title]
     fields:
       - { name: title, label: "Titel", widget: string, hint: "F.eks. Nyhedsbrev – august 2026" }
-      - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+      - { name: date, label: "Dato", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false, hint: "Brug den 1. i den måned, programmet gælder for (f.eks. 2026-10-01). Datoen bestemmer, hvilken måned der står ved «Månedens program» på forsiden og under Nyheder." }
       - { name: summary, label: "Kort resumé", widget: text, required: false, hint: "Vises på oversigten." }
       - { name: body, label: "Indhold", widget: markdown, hint: "Selve nyhedsbrevet – skrives som læsbar tekst (ingen PDF)." }
       - { name: draft, label: "Kladde (skjul på siden)", widget: boolean, default: false }
