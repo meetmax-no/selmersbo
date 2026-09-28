@@ -1,7 +1,7 @@
 ---
 title: Frokost og fredagshygge
 icon: coffee
-image: /uploads/akt-frokost.jpg
+image: /uploads/image5.jpeg
 day: Hver fredag kl. 12.00
 text: Fælles frokost i caféen.
 status: ''
