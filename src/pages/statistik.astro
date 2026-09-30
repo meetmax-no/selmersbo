@@ -4,16 +4,18 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import { getStats, type Stats } from '../lib/analytics';
+import { getStats, listMonths, type Stats, type RestEntry } from '../lib/analytics';
 
-// Server-renderet og cachet i 10 minutter (stale-while-revalidate i et døgn),
-// så tal fra nyåbnede ting hurtigt dukker op, uden at Vercels API rammes tit.
-Astro.response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=86400');
+// Periode: ingen parameter = de sidste 30 dage; ?periode=2026-09 = den måned.
+// Ukendte/for gamle måneder falder tilbage til de sidste 30 dage.
+const months = listMonths();
+const wanted = Astro.url.searchParams.get('periode');
+const month = months.find((m) => m.key === wanted) ?? null;
 
 // Live besøgstal fra Vercel. Falder tilbage til "tom" tilstand hvis der ikke er
 // token/data endnu, så siden aldrig fejler.
-const EMPTY: Stats = { updated: new Date().toISOString().slice(0, 10), rangeDays: 30, collecting: false, visitors: 0, pageviews: 0, topPages: [], topActivities: [], devices: [] };
-const stats: Stats = (await getStats()) ?? EMPTY;
+const EMPTY: Stats = { updated: new Date().toISOString().slice(0, 10), rangeDays: 30, month, collecting: false, visitors: 0, pageviews: 0, topPages: [], topActivities: [], topExcursions: [], topLetters: [], devices: [] };
+const stats: Stats = (await getStats(month)) ?? EMPTY;
 
 // Pæne danske sidenavne til de mest almindelige stier.
 const BASE_LABELS: Record<string, string> = {
@@ -39,11 +41,34 @@ const label = (p: string) => PAGE_LABELS[p] ?? p;
 
 const hasData = stats.collecting && (stats.visitors > 0 || stats.pageviews > 0);
 
+// Server-renderet og cachet i 10 minutter (stale-while-revalidate i et døgn),
+// så tal fra nyåbnede ting hurtigt dukker op, uden at Vercels API rammes tit.
+// En afsluttet måned ændrer sig ikke og caches et døgn (men kun med tal i).
+const finished = !!month && !month.current && hasData;
+Astro.response.headers.set('Cache-Control', finished
+  ? 'public, s-maxage=86400, stale-while-revalidate=604800'
+  : 'public, s-maxage=600, stale-while-revalidate=86400');
+
 const nf = new Intl.NumberFormat('da-DK');
+const MND = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
+const monthName = (m: { year: number; month: number }) => `${MND[m.month - 1]} ${m.year}`;
+const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+const periodText = month
+  ? `i ${monthName(month)}${month.current ? ' (indtil nu)' : ''}`
+  : `de sidste ${stats.rangeDays} dage`;
+
+// Linje under en top 10: "Øvrige aktiviteter (17): 120 åbninger i alt".
+const restNote = (r: RestEntry | undefined, noun: string) => {
+  if (!r || r.views <= 0) return '';
+  const n = r.others ? '' : ` (${r.items})`;
+  return `Øvrige ${noun}${n}: ${nf.format(r.views)} ${r.views === 1 ? 'åbning' : 'åbninger'} i alt`;
+};
+const restActs = restNote(stats.restActivities, 'aktiviteter');
+const restExc = restNote(stats.restExcursions, 'udflugter');
+const restLet = restNote(stats.restLetters, 'nyhedsbreve');
 const dateStr = (() => {
   const [y, m, d] = stats.updated.split('-').map(Number);
-  const mnd = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
-  return `${d}. ${mnd[m - 1]} ${y}`;
+  return `${d}. ${MND[m - 1]} ${y}`;
 })();
 
 // Top-10-lister: sider (sidebesøg) + åbnede aktiviteter/udflugter/nyhedsbreve (events).
@@ -60,18 +85,33 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
   <PageHero
     eyebrow="For bestyrelsen"
     title="Besøgstal"
-    lead={`Hvor mange bruger selmersbo.dk – de sidste ${stats.rangeDays} dage. Tallene er anonyme og helt uden cookies.`}
+    lead={`Hvor mange bruger selmersbo.dk – ${periodText}. Tallene er anonyme og helt uden cookies.`}
     icon="users" />
 
   <section class="section" style="padding-top:2rem">
     <div class="container">
       <a class="back" href="/menu">← Menu</a>
+      <nav class="periods" aria-label="Vælg periode">
+        <span class="periods-label">Vis tal for</span>
+        <a href="/statistik" aria-current={!month ? 'page' : undefined}>Sidste 30 dage</a>
+        {months.map((m) => (
+          <a href={`/statistik?periode=${m.key}`} aria-current={month?.key === m.key ? 'page' : undefined}>{cap(monthName(m))}</a>
+        ))}
+      </nav>
       {!hasData ? (
-        <div class="empty-box">
-          <span class="empty-ic"><Icon name="clock" size={30} /></span>
-          <h2>Vi er lige begyndt at tælle</h2>
-          <p>Statistikken er sat i gang. Kig forbi igen om en uges tid – så begynder tallene at komme her.</p>
-        </div>
+        month && stats.collecting ? (
+          <div class="empty-box">
+            <span class="empty-ic"><Icon name="clock" size={30} /></span>
+            <h2>Ingen tal for {monthName(month)}</h2>
+            <p>Der er ingen besøg registreret i denne måned endnu.</p>
+          </div>
+        ) : (
+          <div class="empty-box">
+            <span class="empty-ic"><Icon name="clock" size={30} /></span>
+            <h2>Vi er lige begyndt at tælle</h2>
+            <p>Statistikken er sat i gang. Kig forbi igen om en uges tid – så begynder tallene at komme her.</p>
+          </div>
+        )
       ) : (
         <>
           <div class="big-grid">
@@ -117,6 +157,7 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
                   </li>
                 ))}
               </ol>
+              {restActs && <p class="rest-note">{restActs}</p>}
             </div>
           )}
 
@@ -134,6 +175,7 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
                   </li>
                 ))}
               </ol>
+              {restExc && <p class="rest-note">{restExc}</p>}
             </div>
           )}
 
@@ -151,6 +193,7 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
                   </li>
                 ))}
               </ol>
+              {restLet && <p class="rest-note">{restLet}</p>}
             </div>
           )}
 
@@ -206,6 +249,14 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
   .bar-track { background: var(--sand); border-radius: 999px; height: 16px; overflow: hidden; }
   .bar-fill { display: block; height: 100%; background: var(--green); border-radius: 999px; }
   .bar-val { text-align: right; color: var(--muted); font-weight: 600; }
+
+  .rest-note { max-width: none; margin: 1rem 0 0; padding-top: 0.8rem; border-top: 1px solid var(--line); color: var(--muted); font-weight: 600; }
+
+  .periods { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1.4rem; }
+  .periods-label { color: var(--muted); font-weight: 650; margin-right: 0.3rem; }
+  .periods a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font-weight: 650; text-decoration: none; }
+  .periods a:hover { border-color: var(--green-400); }
+  .periods a[aria-current='page'] { background: var(--green-700); border-color: var(--green-700); color: #fff; }
 
   .foot-note { display: flex; align-items: flex-start; gap: 0.5rem; color: var(--muted); font-size: 0.98rem; margin-top: 1.6rem; }
   .foot-note :global(svg) { color: var(--green); flex: none; margin-top: 2px; }
