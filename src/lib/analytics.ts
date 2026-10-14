@@ -38,6 +38,8 @@ export interface Stats {
   topActivities: StatEntry[];
   topExcursions: StatEntry[];
   topLetters: StatEntry[];
+  topNotFound?: StatEntry[];
+  restNotFound?: RestEntry;
   restActivities?: RestEntry;
   restExcursions?: RestEntry;
   restLetters?: RestEntry;
@@ -140,7 +142,7 @@ export async function getStats(month: MonthPeriod | null = null): Promise<Stats 
   const openEvents = (name: string) =>
     q('events/aggregate', { ...msRange, by: 'eventData/navn', limit: '100', filter: `eventName eq '${name}'` }, token);
 
-  const [count, byPath, byDevice, byActivity, byExcursion, byLetter] = await Promise.all([
+  const [count, byPath, byDevice, byActivity, byExcursion, byLetter, byNotFound] = await Promise.all([
     q('visits/count', dateRange, token),
     q('visits/aggregate', { ...msRange, by: 'requestPath', limit: '100' }, token),
     q('visits/aggregate', { ...msRange, by: 'deviceType', limit: '6' }, token),
@@ -148,6 +150,8 @@ export async function getStats(month: MonthPeriod | null = null): Promise<Stats 
     openEvents('Aktivitet åbnet'),
     openEvents('Udflugt åbnet'),
     openEvents('Nyhedsbrev åbnet'),
+    // Adresser der gav "Siden findes ikke" (sendes fra 404-siden).
+    openEvents('Side ikke fundet'),
   ]);
 
   // Kom der intet svar overhovedet, så vis "tom" tilstand.
@@ -183,6 +187,7 @@ export async function getStats(month: MonthPeriod | null = null): Promise<Stats 
   const activities = parseOpens(byActivity);
   const excursions = parseOpens(byExcursion);
   const letters = parseOpens(byLetter);
+  const notFound = parseOpens(byNotFound);
 
   // Antal = besøgende pr. enhed (summerer til ~antal besøgende i alt).
   const devRows = (byDevice ?? []).map((r: any) => ({
@@ -213,6 +218,8 @@ export async function getStats(month: MonthPeriod | null = null): Promise<Stats 
     restActivities: activities.rest,
     restExcursions: excursions.rest,
     restLetters: letters.rest,
+    topNotFound: notFound.top,
+    restNotFound: notFound.rest,
     devices,
   };
 }

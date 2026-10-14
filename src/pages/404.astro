@@ -35,6 +35,13 @@ const links = [
   <CtaBand />
 </BaseLayout>
 
+<script>
+  import { track } from '@vercel/analytics';
+  // Registrér hvilken adresse der ikke fandtes, så den kan ses på Besøgstal
+  // (og evt. omdirigeres til den nye side). Vercel tillader højst 255 tegn.
+  try { track('Side ikke fundet', { navn: (location.pathname + location.search).slice(0, 200) }); } catch {}
+</script>
+
 <style>
   .nf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.8rem; max-width: 620px; }
   .nf-link {

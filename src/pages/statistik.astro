@@ -32,6 +32,7 @@ const BASE_LABELS: Record<string, string> = {
   '/quiz': 'Quiz',
   '/soeg': 'Søg',
   '/statistik': 'Besøgstal',
+  '/404': 'Side ikke fundet',
 };
 // Aktivitets-undersider: byg navn ud fra selve indholdet (fx /aktiviteter/banko → "Banko").
 const acts = await getCollection('aktiviteter');
@@ -58,14 +59,15 @@ const periodText = month
   : `de sidste ${stats.rangeDays} dage`;
 
 // Linje under en top 10: "Øvrige aktiviteter (17): 120 åbninger i alt".
-const restNote = (r: RestEntry | undefined, noun: string) => {
+const restNote = (r: RestEntry | undefined, noun: string, unit: [string, string] = ['åbning', 'åbninger']) => {
   if (!r || r.views <= 0) return '';
   const n = r.others ? '' : ` (${r.items})`;
-  return `Øvrige ${noun}${n}: ${nf.format(r.views)} ${r.views === 1 ? 'åbning' : 'åbninger'} i alt`;
+  return `Øvrige ${noun}${n}: ${nf.format(r.views)} ${r.views === 1 ? unit[0] : unit[1]} i alt`;
 };
 const restActs = restNote(stats.restActivities, 'aktiviteter');
 const restExc = restNote(stats.restExcursions, 'udflugter');
 const restLet = restNote(stats.restLetters, 'nyhedsbreve');
+const restNf = restNote(stats.restNotFound, 'adresser', ['besøg', 'besøg']);
 const dateStr = (() => {
   const [y, m, d] = stats.updated.split('-').map(Number);
   return `${d}. ${MND[m - 1]} ${y}`;
@@ -80,6 +82,8 @@ const maxPages = Math.max(1, ...topPages.map((p) => p.views));
 const maxActs = Math.max(1, ...topActivities.map((p) => p.views));
 const maxExc = Math.max(1, ...topExcursions.map((p) => p.views));
 const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
+const topNotFound = (stats.topNotFound ?? []).slice(0, 10);
+const maxNf = Math.max(1, ...topNotFound.map((p) => p.views));
 ---
 <BaseLayout title="Besøgstal – Selmersbo" description="Besøgstal for selmersbo.dk – anonymt og cookie-frit." noindex={true}>
   <PageHero
@@ -197,6 +201,24 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
             </div>
           )}
 
+          {topNotFound.length > 0 && (
+            <div class="panel">
+              <h2>Sider der ikke findes <span class="tag">Top 10</span></h2>
+              <p class="panel-sub">Adresser folk har prøvet at åbne, men som gav «Siden findes ikke» – oftest gamle links eller bogmærker fra den tidligere hjemmeside.</p>
+              <ol class="bars">
+                {topNotFound.map((p, i) => (
+                  <li>
+                    <span class="rank">{i + 1}</span>
+                    <span class="bar-label bar-label--path">{p.path}</span>
+                    <span class="bar-track"><span class="bar-fill" style={`width:${Math.round((p.views / maxNf) * 100)}%`}></span></span>
+                    <span class="bar-val">{nf.format(p.views)}</span>
+                  </li>
+                ))}
+              </ol>
+              {restNf && <p class="rest-note">{restNf}</p>}
+            </div>
+          )}
+
           {stats.devices.length > 0 && (
             <div class="panel">
               <h2>Telefon eller computer</h2>
@@ -246,6 +268,7 @@ const maxLet = Math.max(1, ...topLetters.map((p) => p.views));
   .bars.plain li { grid-template-columns: 12rem 1fr 6.5rem; }
   .rank { font-weight: 700; color: var(--muted); text-align: center; }
   .bar-label { font-weight: 600; }
+  .bar-label--path { font-weight: 500; font-size: 0.95rem; overflow-wrap: anywhere; }
   .bar-track { background: var(--sand); border-radius: 999px; height: 16px; overflow: hidden; }
   .bar-fill { display: block; height: 100%; background: var(--green); border-radius: 999px; }
   .bar-val { text-align: right; color: var(--muted); font-weight: 600; }
