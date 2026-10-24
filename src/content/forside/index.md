@@ -7,7 +7,7 @@ heroImageAlt: Medlemmer af Selmersbo står samlet udenfor med danske flag og bog
 heroBadge: Alt i ét plan – god tilgængelighed
 highlightsHeading: Aktuelt at læse
 highlights:
-  - label: Se seniorsiden for august og september 2026
+  - label: Se seniorsiden for oktober, november og december
     note: Aktivitetsoversigt for centrene (åbner som PDF)
     file: /uploads/Aktivitetsoversigt okt-dec.pdf
     url: ''
