@@ -21,7 +21,7 @@ highlights:
     note: Kommunens nye side med oplevelser og arrangementer
     file: ''
     url: https://oplev.horsholm.dk
-    icon: calendar
+    icon: external
 welcomeEyebrow: Velkommen
 welcomeTitle: Kære venner af Selmersbo
 welcomeText: |-
