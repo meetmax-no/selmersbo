@@ -20,7 +20,7 @@ highlights:
   - label: Oplev Hørsholm – ny hjemmeside
     note: Kommunens nye side med oplevelser og arrangementer
     file: ''
-    url: https://oplev.horsholm.dk/
+    url: https://oplev.horsholm.dk
     icon: external
 welcomeEyebrow: Velkommen
 welcomeTitle: Kære venner af Selmersbo
