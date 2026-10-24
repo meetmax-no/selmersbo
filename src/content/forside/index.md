@@ -13,7 +13,7 @@ highlights:
     url: ''
     icon: calendar
   - label: Artikel i Ugebladet – august 2026
-    note: Trommens samarbejde med aktivitetscentrene (åbner som PDF)
+    note: Trommens samarbejde med aktivitetscentrene (åbner som PDF), sidste artikel.
     file: /uploads/ugebladet-aug-2026.pdf
     url: ''
     icon: newspaper
