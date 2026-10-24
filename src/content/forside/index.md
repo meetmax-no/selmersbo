@@ -9,7 +9,7 @@ highlightsHeading: Aktuelt at læse
 highlights:
   - label: Se seniorsiden for august og september 2026
     note: Aktivitetsoversigt for centrene (åbner som PDF)
-    file: /uploads/seniorsiden-aug-sep-2026.pdf
+    file: /uploads/Aktivitetsoversigt okt-dec.pdf
     url: ''
     icon: calendar
   - label: Artikel i Ugebladet – august 2026
