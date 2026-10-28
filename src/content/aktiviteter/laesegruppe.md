@@ -1,10 +1,11 @@
 ---
 title: Læsegruppe
 icon: book
-image: /uploads/akt-laesegruppe.jpg
+image: /uploads/Designer.png
 day: En gang om måneden
 text: Vi taler om månedens bog.
 status: Ingen ledige pladser
+forside: false
 order: 95
 draft: false
 ---
