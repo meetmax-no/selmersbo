@@ -1,7 +1,7 @@
 ---
 title: Bibliotek
 icon: book
-image: /uploads/image1.jpeg
+image: /uploads/20260915_142919 (1).jpg
 day: Altid åbent
 text: Gratis bøger fra vores reol – tag med hjem.
 status: ''
