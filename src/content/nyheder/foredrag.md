@@ -13,9 +13,6 @@ draft: false
 
 Vi glæder os til en efterårs- og vintersæson med spændende foredrag. Alle foredrag holdes i Selmersbo, og alle er velkomne.
 
-**Fredag den 30. oktober** · _Svalbard – livet i Arktis_
-Klavs Weis-Fogh tager os med til det høje nord.
-
 **Fredag den 27. november** · _Fra garn til barn_
 Hanne fra Røde Kors fortæller om det frivillige arbejde.
 
