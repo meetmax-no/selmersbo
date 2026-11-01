@@ -12,4 +12,4 @@ draft: false
 
 Jazz på Selmersbo. Tag lidt mad med, og nyd nogle timers jazz i godt selskab.
 
-Næste gang: tirsdag d. 27. oktober kl. 18.00
+Næste gang: tirsdag d. 24. november kl. 18.00
