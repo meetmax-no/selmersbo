@@ -1,10 +1,7 @@
 ---
-status: off
-heading: VIGTIGT
-message: |-
-  Hjælp med at slukke for "branden" vedr. lukning af Selmersbo.
-
-  Kom – og underskriv vores "opråb" i Selmersbo.
-ctaLabel: ''
+status: popup
+heading: Nyhedsbrev for november klar
+message: Så er vi nået til den sidste efterårsmåned. Programmet for november er klar. God fornøjelse.
+ctaLabel: November
 ctaUrl: ''
 ---
