@@ -3,7 +3,10 @@ title: Jazz
 icon: music
 image: /uploads/jazz.jpg
 day: Tirsdage kl. 18.00
-text: Nogle timers jazz – tag lidt mad med.
+text: |-
+  Næste gang: Tirsdag 24. november kl. 18.
+
+  Nogle timers jazz – tag lidt mad med.
 status: ''
 forside: false
 order: 90
